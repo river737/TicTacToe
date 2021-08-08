@@ -4,8 +4,7 @@ import {useRouter} from 'next/router'
 
 const Content = ({player}) => {
   const router = useRouter();
-  function enterlobby(e) {
-    e.preventDefault();
+  function enterlobby() {
     router.push('/lobby');
   }
   return (
@@ -13,7 +12,7 @@ const Content = ({player}) => {
       {player !== '' &&
       <>
         <h1 className={styles.greet}>Hello {player}</h1>
-        <button className={styles.proceed} onClick={(e) => enterlobby(e)}>Continue</button>
+        <button className={styles.proceed} onClick={enterlobby}>Continue</button>
       </>
       }
       {player === '' && <h1>Tic Tac Toe</h1>}

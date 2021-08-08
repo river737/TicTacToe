@@ -9,7 +9,7 @@ export default function SocketFunctions({io, socket}){
         users.id.splice(ind, 1)
 
         if(socket.data?.username) {
-            users.username.splice(ind, 1)
+            users.username.splice(users.username.indexOf(socket.data.username), 1)
         }
     })
 }
@@ -18,11 +18,11 @@ function usernamePhase({io, socket}) {
     socket.on('submit_username', ({username}) => {
         const {users} = io.data
         const res = {}
-        if(users.has(username)) {
+        if(users.username.includes(username)) {
             res.success = false
             res.error = {msg: "Username is taken"}
         } else {
-            io.data.users.add()
+            users.username.push(username)
             socket.data.username = username
             res.success = true
             roomPhase({io, socket})
