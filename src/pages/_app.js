@@ -2,6 +2,7 @@ import '../../styles/globals.css'
 import Header from '../../components/header.js'
 import Footer from '../../components/footer.js'
 import SocketContextProvider from '../contexts/socketContext'
+import {NameProvider} from '../../components/form.js'
 
 
 function MyApp({ Component, pageProps }) {
@@ -9,7 +10,9 @@ function MyApp({ Component, pageProps }) {
     <>
       <Header />
       <SocketContextProvider>
-        <Component {...pageProps} />
+        <NameProvider>
+          <Component {...pageProps} />
+        </NameProvider>
       </SocketContextProvider>
       <Footer />
     </>

@@ -1,25 +1,22 @@
 import styles from '../../styles/Lobby.module.css'
-import Form from '../../components/form.js'
+import {NameContext} from '../../components/form.js'
 import {useRouter} from 'next/router'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react'
 
 export default function Lobby() {
+  const data = useContext(NameContext);
   const router = useRouter();
-  const [playername, thisplayer] = useState('');
-  function player(name) {
-    thisplayer(name);
-  }
-  // useEffect(()=>{
-  //   if(playername === '') {
-  //     router.push('/');
-  //   }
-  // }, [playername]);
+  
+  useEffect(()=>{
+    if(data.name === '') {
+      router.push('/');
+    }
+  }, [data.name]);
   return (
     <div>
-    <div className={styles.lobby}>
-      <h1>Lobby</h1>
-    </div>
-    <Form onPlayer={player} />
+      <div className={styles.lobby}>
+        <h1>Lobby</h1>
+      </div>
     </div>
   )
 }

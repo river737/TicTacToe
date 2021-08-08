@@ -1,50 +1,45 @@
 import styles from '../styles/Home.module.css'
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react'
 
-export const nameContext = createContext();
+export const NameContext = createContext();
 
-export default class Form extends React.Component {
-  state = {
-      name: '',
-      error: false,
-      click: 0
-    }
+export function NameProvider({children}) {
+  const [Name, Player] = useState('');
+  const [currentname, name] = useState('');
+  const [clicks, clicking] = useState(0);
+  const [error, display] = useState(false);
 
-  addingname = (thisname) => {
-    this.state.name = thisname;
+  function addingname(thisname) {
+    name(thisname);
   }
 
-  submit = (thisname) => {
-    if(thisname !== '') {
-      this.state.error = false;
-      this.state.click++;
-    } else {
-      this.state.error = true;
-      this.state.click++;
+  function submit() {
+    clicking(clicks + 1);
+    if(currentname === '') {
+      display(true);
     }
-    this.forceUpdate();
   }
 
-  componentDidUpdate() {
-    if(this.state.name !== '' && this.state.click > 0) {
-      this.props.onPlayer(this.state.name)
+  useEffect(() => {
+    if(currentname !== '' && clicks > 0) {
       const x = document.querySelector(`.${styles.wrapper}`);
       x.style.zIndex="-2";
       x.style.opacity="0";
+      Player(currentname);
     }
-  }
+  }, [clicks])
 
-  render() {
-    const thiserror = this.state.error;
-    return (
-      <div className={styles.wrapper}>
-        <div className={styles.login}>
-          <h1>One more step...</h1>
-          <input type="text" className={styles.input} onChange={(e) => this.addingname(e.target.value)} placeholder="Enter a name" />
-          <button className={styles.button} onClick={() => this.submit(this.state.name)}>Submit</button>
-          {thiserror && <h3>Error! Name cannot be empty!</h3>}
+  return (
+      <NameContext.Provider value={{name: Name}}>
+        <div className={styles.wrapper}>
+          <div className={styles.login}>
+            <h1>One more step...</h1>
+            <input type="text" className={styles.input} onChange={(e) => addingname(e.target.value)} placeholder="Enter a name" />
+            <button className={styles.button} onClick={() => submit()}>Submit</button>
+            {error && <h3>Error! Name cannot be empty!</h3>}
+          </div>
         </div>
-      </div>
+        {children}
+      </NameContext.Provider>
     )
-  }
 }
