@@ -18,7 +18,7 @@ export function NameProvider({children}) {
   function submit() {
     if(name !== '') { // prevent submit if the username is blank
       socket.emit('submit_username', {username: name})
-    }
+    } else setError({verify: true, msg: `Error! Name cannot be empty!`})
   }
 
   useEffect(()=>{
@@ -46,7 +46,7 @@ export function NameProvider({children}) {
               error.verify && 
                 <h3>
                   {
-                    error.msg!=='' ? error.msg : `Error! Name cannot be empty!`
+                    error.msg
                   }
                 </h3>
             }
