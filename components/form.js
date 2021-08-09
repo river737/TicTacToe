@@ -3,20 +3,23 @@ import React, { createContext, useState, useEffect, useContext } from 'react'
 
 import { SocketContext } from '../src/contexts/socketContext';
 
-export const NameContext = createContext();
+export const InfoContext = createContext();
 
-export function NameProvider({children}) {
-  const [name, setName] = useState('');
+export function InfoProvider({children}) {
+  //2 types of player, joiner and creator
+  // winQuant is the number of symbols set in a row to win
+  // winner will be used for result and future purposes
+  const [data, setData] = useState({name: '', playerType: "joiner", createGridLength: 0, winQuant: 0, winner: null});
   const [error, setError] = useState({verify: false, msg: ''});
   const {socket} = useContext(SocketContext)
 
   function inputChange(e) { // handles the username input change
-    setName(e.target.value);
+    setData({name: e.target.value, playerType: "joiner", createGridLength: 0, winQuant: 0, winner: null});
     setError({verify: false})
   }
 
   function submit() {
-    if(name !== '') { // prevent submit if the username is blank
+    if(data.name !== '') { // prevent submit if the username is blank
       socket.emit('submit_username', {username: name})
     } else setError({verify: true, msg: `Error! Name cannot be empty!`})
   }
@@ -36,14 +39,14 @@ export function NameProvider({children}) {
   }, [])
 
   return (
-      <NameContext.Provider value={{name}}>
+      <InfoContext.Provider value={data}>
         <div className={styles.wrapper}>
           <div className={styles.login}>
             <h1>One more step...</h1>
             <input type="text" className={styles.input} onChange={inputChange} placeholder="Enter a name" />
             <button className={styles.button} onClick={submit}>Submit</button>
             {
-              error.verify && 
+              error.verify &&
                 <h3>
                   {
                     error.msg
@@ -53,6 +56,6 @@ export function NameProvider({children}) {
           </div>
         </div>
         {children}
-      </NameContext.Provider>
+      </InfoContext.Provider>
     )
 }
