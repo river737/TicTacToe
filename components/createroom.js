@@ -1,7 +1,7 @@
 import styles from '../styles/Create.module.css'
 import {useState, useEffect, useContext} from 'react'
 import {useRouter} from 'next/router'
-import {InfoContext} from './form.js'
+import {InfoContext} from '../src/contexts/infoContext'
 
 export default function CreateRoom() {
 

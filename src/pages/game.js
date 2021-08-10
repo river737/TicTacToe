@@ -1,5 +1,5 @@
 import styles from '../../styles/Game.module.css'
-import {InfoContext} from '../../components/form.js'
+import {InfoContext} from '../contexts/infoContext'
 import {useRouter} from 'next/router'
 import {useState, useEffect, useContext} from 'react'
 import detector from '../../gamelogic/rule.js'

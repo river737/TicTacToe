@@ -1,5 +1,5 @@
 import styles from '../../styles/Lobby.module.css'
-import {InfoContext} from '../../components/form.js'
+import {InfoContext} from '../contexts/infoContext'
 import {useRouter} from 'next/router'
 import CreateRoom from '../../components/createroom.js'
 import {useState, useEffect, useContext} from 'react'
