@@ -1,9 +1,11 @@
+import Link from 'next/link'
+
+import {useRouter} from 'next/router'
+import {useState, useEffect, useContext} from 'react'
+
 import styles from '../../styles/Lobby.module.css'
 import {InfoContext} from '../../components/form.js'
-import {useRouter} from 'next/router'
 import CreateRoom from '../../components/createroom.js'
-import {useState, useEffect, useContext} from 'react'
-import Link from 'next/link'
 
 export default function Lobby() {
   const {data, setData} = useContext(InfoContext);

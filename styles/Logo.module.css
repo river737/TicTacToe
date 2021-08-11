@@ -1,0 +1,18 @@
+.logo {
+    display: grid;
+    
+}
+
+.logo > * {
+    justify-self: center;
+    font-weight: 800;
+}
+
+.logo > *:first-child {
+    font-size: 16px;
+}
+
+.logo > *:last-child {
+    margin-top: -4px;
+    font-size: 24px;
+}

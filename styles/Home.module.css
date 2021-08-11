@@ -1,18 +1,8 @@
-.container {
-  min-height: 100vh;
-  padding: 0 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
 .wrapper {
   width: 100%;
   height: 100%;
-  background: #ff4162;
-  position: absolute;
+  background: radial-gradient(rgb(var(--yellow)), rgb(var(--red)));
+  position: fixed;
   z-index: 2;
   opacity: 1;
   animation: change 1s ease 1s, clear 1s linear 0s;
@@ -20,17 +10,51 @@
 }
 
 .login {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center
+}
+
+.login > div {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
   padding: 20px;
-  width: 80%;
-  height: 80%;
-  background: rgb(240,240,240);
+  width: 400px;
+  height: 50%;
+  background: rgba(var(--white), 0.9);
   position: absolute;
-  top: 10%;
-  left: 10%;
   z-index: 2;
   opacity: 1;
   animation: appear 1s ease 1s, clear 1s linear 0s;
   -webkit-animation: appear 1s ease 1s, clear 1s linear 0s;
+}
+
+.loginTop {
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgb(var(--grey));
+  padding-bottom: 20px;
+}
+
+.loginBody {
+  flex: 1;
+  display: grid;
+  row-gap: 20px;
+  grid-template-rows: repeat(2, auto) 1fr;
+}
+
+.loginBody > label {
+  display: block;
+}
+
+.loginBody > label .inputTitle {
+  font-weight: 800;
+  font-size: 12px;
+  margin-left: 2px;
+  margin-bottom: 2px;
+  display: block;
 }
 
 .title {
@@ -48,35 +72,85 @@
   color: red;
 }
 
-.input {
-  width: 60%;
-  font-size: 14px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  outline: none;
+.inputContainer {
+  --border: 2px solid #ddd;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  border: var(--border);
+  border-radius: var(--radius);
   padding: 8px 12px;
+  background: rgb(var(--grey));
   transition: 0.3s;
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.input {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  outline: none;
 }
 
 .input:focus {
-  border: 2px solid rgb(var(--lightBlue));
+  --border: 2px solid rgba(var(--black), 0.2);
+}
+
+.inputError {
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.errorIcon {
+  color: #df5a5e;
+  font-size: 16px;
+  align-self: center;
+}
+
+.errorMsg {
+  width: max-content;
+  display: block;
+  background: #df5a5e;
+  color: rgb(var(--white));
+  padding: 4px 8px;
+  position: absolute; 
+  left: calc(100% + 23px);
+  border-radius: var(--radius);
+  font-size: 13px;
 }
 
 .button {
+  display: block;
+  font-weight: 700;
+  width: 100%;
   cursor: pointer;
   padding: 10px 20px;
-  background: rgb(var(--white));
-  border: 1px solid rgb(var(--black));
-  border-radius: 8px;
-  color: rgb(var(--black));
+  background: rgb(var(--black)); 
+  border-radius: var(--radius);
+  color: rgb(var(--white));
   font-size: 14px;
   transition: all 0.5s ease;
 }
 
 .button:hover {
-  background: rgb(var(--black));
-  color: rgb(var(--white));
+  opacity: 0.85;
+  
   transition: all 0.5s ease;
+}
+
+.copyright {
+  user-select: none;
+  align-self: flex-end;
+  font-size: 13px;
+  display: block;
+  text-align: center;
+  color: rgba(var(--black), 0.5)
+}
+
+.copyright i {
+  margin: 0px 0.2em
 }
 
 @keyframes appear {
