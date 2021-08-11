@@ -1,5 +1,5 @@
-import styles from '../styles/Extention.module.css'
-
+import styles from '../../styles/Extention.module.css'
+//need?
 export default function Footer() {
   return (
     <div className={styles.footer}>

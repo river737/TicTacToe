@@ -1,4 +1,4 @@
-import styles from '../styles/Create.module.css'
+import styles from '../../styles/Create.module.css'
 import {useState, useEffect, useContext} from 'react'
 import {useRouter} from 'next/router'
 import {InfoContext} from './form.js'

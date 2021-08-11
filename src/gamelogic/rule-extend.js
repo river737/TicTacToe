@@ -1,4 +1,4 @@
-import styles from '../styles/Game.module.css'
+import styles from '../../styles/Game.module.css'
 
 export default function Paint(i, j, grid, size, wrapper, type) {
   const color = "blue"

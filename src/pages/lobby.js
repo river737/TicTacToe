@@ -4,8 +4,8 @@ import {useRouter} from 'next/router'
 import {useState, useEffect, useContext} from 'react'
 
 import styles from '../../styles/Lobby.module.css'
-import {InfoContext} from '../../components/form.js'
-import CreateRoom from '../../components/createroom.js'
+import {InfoContext} from '../components/form.js'
+import CreateRoom from '../components/createroom.js'
 
 export default function Lobby() {
   const {data, setData} = useContext(InfoContext);
@@ -14,7 +14,8 @@ export default function Lobby() {
   const [creating, setCreating] = useState(true);
 
   const create = async () => {
-    setData({name: data.name, playerType: "creator", winner: null})
+    data.playerType="creator";
+    setData(data);
     setPlayer({
       type: "creator",
       create: true
