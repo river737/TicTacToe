@@ -7,62 +7,41 @@ export default function CreateRoom() {
 
   const router = useRouter();
   const data = useContext(InfoContext);
-  const [length, setLength] = useState(null);
-  const [winQuant, setWinQuant] = useState(null);
-  const [error, setError] = useState({error: false, submitted: false});
+  const [privategame, setPrivategame] = useState(false);
+  const [password, setPassword] = useState('');
 
-  function gridlength(val) {
-    setLength(parseFloat(val));
+  function createprivate() {
+    setPrivategame(true);
   }
 
-  function quant(val) {
-    setWinQuant(parseFloat(val))
+  function createpublic() {
+    router.push('/game');
   }
 
-  function submit(val) {
-    if(Number.isInteger(length) && length > 0 && length < 14 && Number.isInteger(winQuant) && winQuant > 0 && winQuant <= length) {
-      data.createGridLength = length;
-      data.winQuant = winQuant;
-      setError({error: false, submitted: true});
-    } else {
-      setError({error: true, submitted: false});
-    }
+  function submit() {
+    router.push('/game');
   }
-
-  useEffect(() => {
-    if(!error.error && error.submitted) {
-      const x = document.querySelector(`.${styles.content}`);
-      const y = document.querySelector(`.${styles.background}`);
-      x.parentNode.removeChild(x);
-      y.parentNode.removeChild(y);
-      router.push('/game');
-    }
-  }, [error.submitted])
 
   return (
-    <>
-    <div className={styles.content}>
+      <div className={styles.content}>
 
-      <div className={styles.wrap}>
-        <h2>Grid's length</h2>
-        <input className={styles.input} type="text" onChange={(e) => gridlength(e.target.value)} />
+      {!privategame &&
+        <>
+          <h2>Only accessable by password... sure?</h2>
+          <button onClick={createprivate}>Create Private Room</button>
+          <h2>Careful! Anyone can access your game</h2>
+          <button onClick={createpublic}>Create Public Room</button>
+        </>
+      }
+
+        {privategame &&
+          <>
+            <h2>Just one more step... set a password</h2>
+            <input onChange={(e) => setPassword(e.target.value)} type="text" />
+            <h2>Err... dont forget to copy your password!</h2>
+            <button onClick={submit}>Confirm</button>
+          </>
+        }
       </div>
-
-      <h2>Note: the actual grid's size will square the grid's length.</h2>
-
-      <div className={styles.wrap}>
-        <h2>Quantity in a row to win</h2>
-        <input className={styles.input} type="text" onChange={(e) => quant(e.target.value)} />
-      </div>
-
-      <button className={styles.button} onClick={() => submit()}>Confirm</button>
-
-      {error.error && <h2>Ooops! Make sure they are numbers and "Quantity in a row to win" cannot exceed "Grid's length"</h2>}
-
-    </div>
-
-    <div className={styles.background}>
-    </div>
-    </>
   )
 }

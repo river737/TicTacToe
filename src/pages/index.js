@@ -4,7 +4,7 @@ import {InfoContext} from '../../components/form.js'
 import {useState, useContext} from 'react'
 
 export default function Home() {
-  const data = useContext(InfoContext);
+  const {data, setData} = useContext(InfoContext);
 
   return (
     <div className={styles.container}>
