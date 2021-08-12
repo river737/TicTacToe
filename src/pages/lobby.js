@@ -9,12 +9,13 @@ import CreateRoom from '../../components/createroom.js'
 
 export default function Lobby() {
   const {data, setData} = useContext(InfoContext);
+  const {name} = data
   const router = useRouter();
   const [player, setPlayer] = useState({type: 'joiner', create: false});
   const [creating, setCreating] = useState(true);
 
   const create = async () => {
-    setData({name: data.name, playerType: "creator", winner: null})
+    setData({playerType: "creator", winner: null})
     setPlayer({
       type: "creator",
       create: true
@@ -36,15 +37,58 @@ export default function Lobby() {
       {
         creating &&
         <>
-          <div className={styles.lobby}>
-            <h1>Lobby</h1>
+          <div className={styles.header}>
+            <div className={styles.headerLeft}>
+              <button className={`${styles.user}`}>
+                Welcome, {name}!
+              </button>
+            </div>
+            <div className={styles.headerRight}>
+              <span className={styles.medals} title="Total games won">
+                <i className="fa fa-medal"/> 2
+              </span>
+              <span className={styles.coins} title="Coins earned from winning Tic Tac Toe games">
+                <i className="fa fa-coins"/> 3196
+              </span>
+            </div>
           </div>
+
+          <div className={styles.body}>
+            <div className={styles.bodyLeft}>
+
+            </div>
+            <div className={styles.bodyMid}>
+              <div>
+                <div className={styles.gameCover}>
+                  
+                </div>
+                <div className={styles.gameNav}>
+                  <button>
+                    <i className="fa fa-chevron-left"/>
+                  </button>
+
+                  <button className={styles.gameNavBtn}>Single Player</button>
+
+                  <button>
+                    <i className="fa fa-chevron-right"/>
+                  </button>
+                  
+                </div>
+              </div>
+            </div>
+            <div className={styles.bodyRight}>
+
+            </div>
+
+          </div>
+          
           <div className={styles.join}>
-            <button onClick={create}>Create a room</button>
+            <button onClick={create}>Create Room</button>
             <button onClick={join}>Join</button>
           </div>
-          {player.create &&
-          <CreateRoom />}
+          { 
+            player.create && <CreateRoom />
+          }
         </>
       }
       {

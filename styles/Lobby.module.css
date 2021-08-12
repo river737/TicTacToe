@@ -1,10 +1,135 @@
-.lobby {
-  width: 80%;
-  height: 90px;
-  margin-top: 100px;
-  margin-left: 10%;
-  background: none;
-  border-bottom: 3px solid black;
+.content {
+  background: var(--whiteBackground);
+  border-radius: var(--radius);
+  width: 86vw;
+  height: 86vh;
+  position: relative;
+  padding: 20px;
+}
+
+.header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.headerLeft {
+  justify-self: left;
+}
+
+.user {
+  --bg: rgba(var(--lightGrey));
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--bg);
+  padding: 4px 10px;
+  border: 1px solid var(--bg);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.user:hover {
+  --bg: rgb(var(--lightGreyHover));
+}
+
+.user:active {
+  margin: 1px;
+  border: 0px;
+}
+
+.headerRight {
+  justify-self: right;
+}
+
+.headerRight > * {
+  font-weight: 600;
+  padding: 4px 10px;
+  font-size: 14px;
+  background: rgb(var(--lightGrey));
+  border-radius: var(--radius);
+  user-select: none;
+}
+
+.headerRight > *:not(:first-child) {
+  margin-left: 20px;
+}
+
+.headerRight i {
+  margin-right: 2px;
+}
+
+.coins i {
+  color: #ca993b;
+}
+
+.medals i {
+  color: #ca993b;
+}
+
+.body {
+  margin-top: 40px;
+  column-gap: 40px;
+  display: grid;
+  grid-template-columns: minmax(160px, 200px) 1fr minmax(160px, 200px);
+}
+
+.bodyLeft {
+  
+}
+
+.bodyMid {
+  display: flex;
+  justify-content: center;
+}
+
+.bodyMid > div {
+  display: grid;
+  row-gap: 20px;
+  max-width: 360px;
+  width: 100%;
+}
+
+.gameCover {
+  border-top: 10px solid;
+  width: 86%;
+  justify-self: cener;
+  height: 330px;
+  background: rgb(var(--lightGrey));
+  border-radius: var(--radius);
+  display: grid;
+  place-items: center;
+}
+
+.gameNav {
+  --size: 50px;
+  display: grid;
+  grid-auto-rows: var(--size);
+  grid-template-columns: var(--size) 1fr var(--size);
+  column-gap: 12px;
+}
+
+.gameNav > * {
+  cursor: pointer;
+}
+
+.gameNav > *:hover {
+  opacity: 0.9;
+}
+
+.gameNavBtn {
+  background: rgb(var(--yellow));
+  padding: 10px 20px;
+  border-radius: 40px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.gameNav >*:not(.gameNavBtn) {
+  border-radius: 50%;
+  color: rgb(var(--white));
+  font-size: 20px;
+  background: rgb(var(--lightBlue));
+  border: 1px solid rgb(var(--grey));
 }
 
 .content h1 {

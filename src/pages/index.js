@@ -43,9 +43,6 @@ export default function Home() {
 
   return (
     <>
-      <div>
-        <span className={styles.title}>Tic Tac Toe</span>
-      </div>
       <div className={styles.wrapper}>
         <div className={styles.login}>
           <div>

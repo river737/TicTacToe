@@ -18,14 +18,19 @@ function usernamePhase({io, socket}) {
     socket.on('submit_username', ({username}) => {
         const {users} = io.data
         const res = {}
-        if(users.username.includes(username)) {
+        if(socket.data?.username) {
             res.success = false
-            res.error = {msg: "Username is taken"}
+            res.error = {msg: "You already have a username"}
         } else {
-            users.username.push(username)
-            socket.data.username = username
-            res.success = true
-            roomPhase({io, socket})
+            if(users.username.includes(username)) {
+                res.success = false
+                res.error = {msg: "Username is taken"}
+            } else {
+                users.username.push(username)
+                socket.data.username = username
+                res.success = true
+                roomPhase({io, socket})
+            }
         }
         socket.emit('submit_username_response', res)
     })

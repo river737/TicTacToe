@@ -1,12 +1,9 @@
 .wrapper {
   width: 100%;
   height: 100%;
-  background: radial-gradient(rgb(var(--yellow)), rgb(var(--red)));
   position: fixed;
   z-index: 2;
   opacity: 1;
-  animation: change 1s ease 1s, clear 1s linear 0s;
-  -webkit-animation: change 1s ease 1s, clear 1s linear 0s;
 }
 
 .login {
@@ -24,7 +21,7 @@
   padding: 20px;
   width: 400px;
   height: 50%;
-  background: rgba(var(--white), 0.9);
+  background: var(--whiteBackground);
   position: absolute;
   z-index: 2;
   opacity: 1;
@@ -83,6 +80,7 @@
   background: rgb(var(--grey));
   transition: 0.3s;
   display: grid;
+  gap: 12px;
   grid-template-columns: 1fr auto;
 }
 
@@ -122,6 +120,7 @@
 }
 
 .button {
+  border: 2px solid rgb(var(--grey));
   display: block;
   font-weight: 700;
   width: 100%;
@@ -151,33 +150,4 @@
 
 .copyright i {
   margin: 0px 0.2em
-}
-
-@keyframes appear {
-  from {
-    background: rgb(var(--white));
-    opacity: 0;
-  }
-  to {
-    background: rgb(240,240,240);
-    opacity: 1;
-  }
-}
-
-@keyframes change {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes clear {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 0;
-  }
 }
