@@ -66,6 +66,11 @@ export default function Lobby() {
                 Welcome, {name}!
               </button>
             </div>
+            <div className={styles.headerMid}>
+              <div>
+
+              </div>
+            </div>
             <div className={styles.headerRight}>
               <span className={styles.medals} title="Total games won">
                 <i className="fa fa-medal"/> 2

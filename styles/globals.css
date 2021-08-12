@@ -9,12 +9,13 @@
   --white: 245, 248, 251;
   --red: 255, 65, 97;
   --yellow: 255, 190, 65;
-  --grey: 191, 187, 187;
-  --lightGrey: 218, 210, 210;
-  --lightGreyHover: 207, 200, 201;
+  --grey: 187, 187, 187;
+  --lightGrey: 224, 224, 224;
+  --lightGreyHover: 212, 212, 212;
   --lightBlue: 120, 181, 225;
-  --whiteBackground: rgba(var(--white), 0.9);
+  --whiteBackground: rgba(var(--white), 1);
   --radius: 3px;
+  --boxShadow: 2px 2px 5px rgba(var(--black), 0.3);
 }
 
 html,
