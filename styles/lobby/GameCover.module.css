@@ -1,0 +1,61 @@
+.gameCover {
+    padding: 8px;
+    position: relative;
+    border-top: 10px solid;
+    width: 86%;
+    justify-self: center;
+    height: 330px;
+    background: rgb(var(--lightGrey));
+    border-radius: var(--radius);
+    display: grid;
+    place-items: center;
+  }
+  
+  .coverDisplay {
+    font-size: 60px;
+  }
+  
+  .coverTitle {
+    font-size: 24px;
+    font-weight: 800;
+  }
+  
+  .coverDescription {
+    text-align: center;
+  }
+  
+  .gameNav {
+    --size: 50px;
+    border-radius: 50%;
+    color: rgb(var(--white));
+    font-size: 20px;
+    background: rgb(var(--lightBlue));
+    border: 1px solid rgb(var(--grey));
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: var(--size);
+    height: var(--size);
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  
+  .gameNav:hover {
+    opacity: 0.9;
+  }
+  
+  .gameNav.left {
+    left: calc(-1 * (var(--size) / 2));
+  }
+  
+  .gameNav.right {
+    right: calc(-1 * (var(--size) / 2));
+  }
+  
+  .gameStartBtn {
+    background: rgb(var(--yellow));
+    padding: 10px 20px;
+    border-radius: 40px;
+    font-size: 17px;
+    font-weight: 700;
+  }
