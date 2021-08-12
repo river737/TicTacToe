@@ -2,33 +2,37 @@ import {useState, useContext, useEffect} from 'react'
 import {useRouter} from 'next/router'
 
 import { SocketContext } from '../contexts/socketContext';
-import {InfoContext} from '../../components/form.js'
+import {InfoContext} from '../components/form.js'
 
 import styles from '../../styles/Home.module.css'
 
-import Logo from '../../components/Logo'
+import Logo from '../components/Logo'
 
 export default function Home() {
-  
+
   const router = useRouter()
   const {data, setData} = useContext(InfoContext);
   const {name} = data
-  
   const [error, setError] = useState({verify: false, msg: ''});
   const {socket} = useContext(SocketContext)
-  
+
   const inputChange = (e) => { // handles the username input change
     setData({name: e.target.value});
     setError({verify: false})
   }
-  
+
   const submit = () => {
     if(name !== '') { // prevent submit if the username is blank
+      data.identified = true;
+      setData(data);
       socket.emit('submit_username', {username: name})
     } else setError({verify: true, msg: `Error! Name cannot be empty!`})
   }
-  
-  
+
+  useEffect(() => {
+    if(data.identified) router.push('/lobby')
+  }, [])
+
   useEffect(()=>{
     socket.on('submit_username_response', (res) => { // waiting for a response from the server after submitting
       if(res.success) {
@@ -42,7 +46,6 @@ export default function Home() {
   }, [])
 
   return (
-    <>
       <div className={styles.wrapper}>
         <div className={styles.login}>
           <div>
@@ -70,10 +73,8 @@ export default function Home() {
                 2021
               </span>
             </div>
-            
           </div>
         </div>
       </div>
-    </>
   )
 }

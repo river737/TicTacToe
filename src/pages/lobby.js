@@ -4,8 +4,8 @@ import {useRouter} from 'next/router'
 import {useState, useEffect, useContext} from 'react'
 
 import styles from '../../styles/Lobby.module.css'
-import {InfoContext} from '../../components/form.js'
-import CreateRoom from '../../components/createroom.js'
+import {InfoContext} from '../components/form.js'
+import CreateRoom from '../components/createroom.js'
 
 export default function Lobby() {
   const {data, setData} = useContext(InfoContext);
@@ -14,7 +14,7 @@ export default function Lobby() {
   const [player, setPlayer] = useState({type: 'joiner', create: false});
   const [creating, setCreating] = useState(true);
 
-  const create = async () => {
+  const create = () => {
     setData({playerType: "creator", winner: null})
     setPlayer({
       type: "creator",
@@ -47,7 +47,7 @@ export default function Lobby() {
               <span className={styles.medals} title="Total games won">
                 <i className="fa fa-medal"/> 2
               </span>
-              <span className={styles.coins} title="Coins earned from winning Tic Tac Toe games">
+              <span className={styles.coins} title="Coins earned from playing">
                 <i className="fa fa-coins"/> 3196
               </span>
             </div>

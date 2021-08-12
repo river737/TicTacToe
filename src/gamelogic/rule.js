@@ -1,7 +1,6 @@
 import Paint from './rule-extend.js'
 
 export default function detector(grid, size, wrapper) {
-  console.log(grid)
   const x = size - 5;
   for(let i = 0; i < size; i++) {
     for(let j = 0; j < size; j++) {

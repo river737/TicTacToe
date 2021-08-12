@@ -1,9 +1,9 @@
 import styles from '../../styles/Game.module.css'
-import {InfoContext} from '../../components/form.js'
+import {InfoContext} from '../components/form.js'
 import {useRouter} from 'next/router'
 import {useState, useEffect, useContext, useReducer, useRef} from 'react'
-import detector from '../../gamelogic/rule.js'
-import DisplayWinner from '../../gamelogic/result.js'
+import detector from '../gamelogic/rule.js'
+import DisplayWinner from '../gamelogic/result.js'
 
 function reducer(newarr, action) {
   switch(action.type) {
@@ -53,7 +53,7 @@ export default function Game() {
 
   useEffect(()=>{
     const x = detector(newarr, size, gridwrapper.current.childNodes);
-    if(x.win !== null) setTimeout(setWinner(x.win), 1000);
+    if(x.win !== null) setTimeout(() => setWinner(x.win), 1000);
   }, [newarr])
 
   return (

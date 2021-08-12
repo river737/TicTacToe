@@ -92,7 +92,7 @@
 .gameCover {
   border-top: 10px solid;
   width: 86%;
-  justify-self: cener;
+  justify-self: center;
   height: 330px;
   background: rgb(var(--lightGrey));
   border-radius: var(--radius);

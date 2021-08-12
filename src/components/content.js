@@ -1,4 +1,4 @@
-import styles from '../styles/Extention.module.css'
+import styles from '../../styles/Extention.module.css'
 import {useRouter} from 'next/router'
 
 const Content = ({player}) => {

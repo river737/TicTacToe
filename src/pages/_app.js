@@ -1,6 +1,6 @@
 import '../../styles/globals.css'
 import SocketContextProvider from '../contexts/socketContext'
-import {InfoProvider} from '../../components/form'
+import {InfoProvider} from '../components/form'
 
 
 function MyApp({ Component, pageProps }) {
