@@ -7,6 +7,7 @@
     height: 330px;
     background: rgb(var(--lightGrey));
     border-radius: var(--radius);
+    box-shadow: var(--boxShadow);
     display: grid;
     place-items: center;
     z-index: 2;
