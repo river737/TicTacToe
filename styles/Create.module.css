@@ -1,25 +1,39 @@
 .content {
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   position: absolute;
   z-index: 5;
-  top: 100px;
-  left: 10%;
-  background: rgb(25,25,50);
-  border: 5px solid black;
+  top: 0px;
+  left: 0px;
+  background: white;
+  display: flex;
+  justify-content: center;
+  animation: appear 0.5s ease;
+}
+
+.fill {
+  width: 500px;
+  height: 600px;
+  background: rgb(20,20,30);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  align-self: center;
 }
 
-.content h2 {
-  color: white;
+.content h1, .content h2, .content a {
+  font-size: 30px;
+  color: rgb(200,200,200)
 }
 
 .content button {
-  padding: 20px 30px;
-  font-size: 30px;
+  padding: 10px 20px;
+  font-size: 20px;
+  border: 3px solid black;
+  background: white;
+  color: black;
+  border-radius: 20px;
 }
 
 .content button:hover {
@@ -31,53 +45,12 @@
   width: 300px;
   height: 30px;
   background: white;
+  border: 2px solid black;
   border-radius: 15px;
   padding-left: 30px;
 }
 
-.background {
-  width: 100%;
-  height: 100%;
-  background: white;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  z-index: 3;
-}
-
-.wrap {
-  width: 60%;
-  height: 20%;
-  border: 3px solid black;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.wrap h2 {
-  font-size: 30px;
-  color: black;
-}
-
-.input {
-  width: 200px;
-  height: 30px;
-  border: 2px solid blue;
-  padding-left: 30px;
-}
-
-.input:focus {
-  outline: none;
-}
-
-.button {
-  padding: 20px 30px;
-  border: 5px solid black;
-  background: white;
-}
-
-.button:hover {
-  background: black;
-  color: white;
+@keyframes appear {
+  from {transform: scale(0, 0) rotate(180deg)}
+  to {transform: scale(1, 1) rotate(360deg)}
 }

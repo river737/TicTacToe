@@ -15,6 +15,7 @@ export default function Lobby() {
   const [gameCover, setGameCover] = useState({activeIndex: 0, content: [{iconClassName: "fa fa-robot", title: "Single Player", description: "Compete to your heart's content against the computer", action: {text: "Start Game"}}]})
   const [player, setPlayer] = useState({type: 'joiner', create: false});
   const [creating, setCreating] = useState(true);
+  const [style, setStyle] = useState(false);
 
   const gameNavClick = (n) => {
     setGameCover(g => {
@@ -45,18 +46,19 @@ export default function Lobby() {
     if(data.name === '') {
       router.push('/');
     }
+    setStyle(true)
     setGameCover(g => {
       const content = g.content.concat([
         {iconClassName: "fa fa-dice", title: "Classic", description: "Compete with a random player online and earn coins!", action: {text: "Play Classic"}},
-        {iconClassName:"fa fa-layer-group", title: "Existing Room", description: "Join an existing room with a secret room ID", action: {text: "Join Room"}},
-        {iconClassName: "fa fa-users", title: "Multiplayer", description: "Create private a room and invite friends to play with!", action: {text: "Create Room"}}
+        {iconClassName:"fa fa-layer-group", title: "Existing Room", description: "Join an existing room", action: {text: "Join Room"}},
+        {iconClassName: "fa fa-users", title: "Multiplayer", description: "Create private a room with a password!", action: {text: "Create Room"}}
       ])
       return {activeIndex: g.activeIndex, content}
     })
   }, [setGameCover]);
 
   return (
-    <div className={styles.content}>
+    <div className={style ? styles.content : ""}>
       {
         creating &&
         <>
@@ -90,7 +92,7 @@ export default function Lobby() {
                     {username: 'goku'},
                     {username: 'vegeta'},
                     {username: 'gohan'}
-                  ].map(({username}, i) => 
+                  ].map(({username}, i) =>
                     <div key={i}>
                       <span>{username}</span>
                     </div>
@@ -102,7 +104,7 @@ export default function Lobby() {
             </div>
             <div className={styles.bodyMid}>
               <div>
-                <GameCover {...gameCover.content[gameCover.activeIndex]} gameNavClick={gameNavClick}/> 
+                <GameCover {...gameCover.content[gameCover.activeIndex]} gameNavClick={gameNavClick}/>
               </div>
             </div>
             <div className={styles.bodyRight}>
@@ -110,21 +112,7 @@ export default function Lobby() {
             </div>
 
           </div>
-          
-          <div className={styles.join}>
-            <button onClick={create}>Create Room</button>
-            <button onClick={join}>Join</button>
-          </div>
-          { 
-            player.create && <CreateRoom />
-          }
-        </>
-      }
-      {
-        !creating &&
-        <>
-          <br /><br /><br /><br /><br /><br />
-          <p>Ooops! No game is available. Click here to go <Link href="/"><a style={{color:"blue"}}>back</a></Link></p>
+
         </>
       }
     </div>

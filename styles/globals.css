@@ -46,11 +46,12 @@ button {
 
 .container {
   min-height: 100vh;
-  min-width: 100vw; 
+  min-width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: radial-gradient(rgb(var(--yellow)), rgb(var(--red)));
+  background: url("../src/asset/animated.gif");
+  background-size: cover;
 }

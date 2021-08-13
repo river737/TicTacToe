@@ -9,21 +9,50 @@
     border-radius: var(--radius);
     display: grid;
     place-items: center;
+    z-index: 2;
+    transition: all 0.5s linear;
   }
-  
+.gameCover:hover {
+  transform: scale(1.5, 1.5);
+  top: calc(50% - 165px);
+  transition: all 0.5s linear;
+}
+
+.hide {
+  width: 0px;
+  height: 0px;
+  background: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  opacity: 0.5;
+  transition: all 0.2s linear;
+}
+
+.gameCover:hover + .hide {
+  width: 100%;
+  height: 100%;
+  top: 0%;
+  left: 0%;
+  background: black;
+  transition: all 0.2s linear;
+}
+
+
   .coverDisplay {
     font-size: 60px;
   }
-  
+
   .coverTitle {
     font-size: 24px;
     font-weight: 800;
   }
-  
+
   .coverDescription {
     text-align: center;
   }
-  
+
   .gameNav {
     --size: 50px;
     border-radius: 50%;
@@ -39,23 +68,28 @@
     cursor: pointer;
     border-radius: 50%;
   }
-  
-  .gameNav:hover {
-    opacity: 0.9;
-  }
-  
+
   .gameNav.left {
     left: calc(-1 * (var(--size) / 2));
   }
-  
+
   .gameNav.right {
     right: calc(-1 * (var(--size) / 2));
   }
-  
+
+  .gameNav:active {
+    background: green;
+  }
+
   .gameStartBtn {
     background: rgb(var(--yellow));
     padding: 10px 20px;
     border-radius: 40px;
     font-size: 17px;
     font-weight: 700;
+  }
+
+  .gameStartBtn:hover {
+    background: black;
+    color: white;
   }
