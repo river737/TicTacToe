@@ -50,8 +50,8 @@ export default function Lobby() {
     setGameCover(g => {
       const content = g.content.concat([
         {iconClassName: "fa fa-dice", title: "Classic", description: "Compete with a random player online and earn coins!", action: {text: "Play Classic"}},
-        {iconClassName:"fa fa-layer-group", title: "Existing Room", description: "Join an existing room", action: {text: "Join Room"}},
-        {iconClassName: "fa fa-users", title: "Multiplayer", description: "Create private a room with a password!", action: {text: "Create Room"}}
+        {iconClassName:"fa fa-layer-group", title: "Existing Room", description: "Join an existing room with a secret room ID", action: {text: "Join Room"}},
+        {iconClassName: "fa fa-users", title: "Multiplayer", description: "Create a private room to play and invite friends to play with!", action: {text: "Create Room"}}
       ])
       return {activeIndex: g.activeIndex, content}
     })

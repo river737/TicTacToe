@@ -55,7 +55,6 @@ export default function GameCover({iconClassName, title, description, gameNavCli
                 <i className="fa fa-chevron-right"/>
             </button>
         </div>
-        <div className={styles.hide}></div>
         {
           type !== '' && <CreateRoom type={type}/>
         }
