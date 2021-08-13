@@ -63,7 +63,7 @@ export default function Game() {
         {
           newarr.map(items => {
             return items.map(item => {
-              return <div className={styles.grids} style={{top:length*item.i+"px", left:length*item.j+"px", background:"white"}} key={item.key} onClick={() => display(item.i, item.j)}>{item.fill}</div>
+              return <div className={styles.grids} style={{top:length*item.i+"px", left:length*item.j+"px"}} key={item.key} onClick={() => display(item.i, item.j)}>{item.fill}</div>
             })
           }
           )

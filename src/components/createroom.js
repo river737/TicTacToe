@@ -1,8 +1,7 @@
 import styles from '../../styles/Create.module.css'
 import {useState, useEffect, useContext, useRef} from 'react'
 import {useRouter} from 'next/router'
-import {InfoContext} from './form.js'
-import Link from 'next/link'
+//import {InfoContext} from './form.js'
 
 const play = {
   single: "Single Player",
@@ -11,8 +10,9 @@ const play = {
   multiplayer: "Multiplayer"
 }
 
-export default function CreateRoom({type}) {
-
+export default function CreateRoom(props) {
+  let type = props.type;
+  let setType = props.settype;
   const router = useRouter();
 //  const data = useContext(InfoContext);
   const [style, setStyle] = useState(false);
@@ -31,7 +31,8 @@ export default function CreateRoom({type}) {
   }
 
   function back() {
-    router.push('/');
+    setStyle(false);
+    setType("");
   }
 
   useEffect(() => {
@@ -44,24 +45,21 @@ export default function CreateRoom({type}) {
 
           {type===play.single &&
             <>
-              <h1>No game available</h1>
-              <h1>Only multiplayer game is available</h1>
-              <Link href="/"><a style={{color: "blue"}}>back</a></Link>
+              <h1>No game is available. Only multiplayer game is available</h1>
+              <button onClick={back}>Back</button>
             </>
           }
           {type===play.classic &&
             <>
-              <h1>No player available</h1>
-              <h1>Only multiplayer game is available</h1>
-              <Link href="/"><a style={{color: "blue"}}>back</a></Link>
+              <h1>No player is available. Only multiplayer game is available</h1>
+              <button onClick={back}>Back</button>
             </>
           }
 
           {type===play.existed &&
             <>
-              <h1>No room available</h1>
-              <h1>Only multiplayer game is available</h1>
-              <Link href="/"><a style={{color: "blue"}}>back</a></Link>
+              <h1>No room is available. Only multiplayer game is available</h1>
+              <button onClick={back}>Back</button>
             </>
           }
 

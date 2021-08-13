@@ -53,6 +53,6 @@ button {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: url("../src/asset/animated.gif");
+  background: linear-gradient(to left, rgb(52, 229, 235), rgb(120, 66, 255));
   background-size: cover;
 }

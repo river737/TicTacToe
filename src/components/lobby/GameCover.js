@@ -56,7 +56,7 @@ export default function GameCover({iconClassName, title, description, gameNavCli
             </button>
         </div>
         {
-          type !== '' && <CreateRoom type={type}/>
+          type !== '' && <CreateRoom type={type} settype={setType} />
         }
       </>
     )

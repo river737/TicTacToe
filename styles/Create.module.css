@@ -5,45 +5,52 @@
   z-index: 5;
   top: 0px;
   left: 0px;
-  background: white;
+  background: linear-gradient(to left, rgb(52, 229, 235), rgb(120, 66, 255));
   display: flex;
-  justify-content: center;
-  animation: appear 0.5s ease;
+  justify-content: space-around;
+  align-items: center;
+  animation: appear 0.5s linear;
 }
 
 .fill {
-  width: 500px;
-  height: 600px;
-  background: rgb(20,20,30);
+  width: 350px;
+  height: 450px;
+  background: rgb(var(--white));
+  border-radius: 20px;
+  border-top: 30px solid rgb(var(--lightBlue));
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  align-self: center;
+  gap: 20px;
+  border-bottom: 30px solid rgb(var(--lightBlue));
 }
 
 .content h1, .content h2, .content a {
-  font-size: 30px;
+  font-size: 20px;
   color: rgb(200,200,200)
 }
 
 .content button {
-  padding: 10px 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 320px;
   font-size: 20px;
-  border: 3px solid black;
+  border: 3px solid green;
   background: white;
-  color: black;
+  color: green;
+  font-weight: bold;
   border-radius: 20px;
 }
 
 .content button:hover {
-  background: black;
+  background: green;
   color: white;
 }
 
 .content input {
-  width: 300px;
-  height: 30px;
+  width: 320px;
+  height: 35px;
   background: white;
   border: 2px solid black;
   border-radius: 15px;
