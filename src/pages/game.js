@@ -28,7 +28,7 @@ export default function Game() {
   for(let i = 0; i < size; i++) {
     arr[i] = new Array();
     for(let j = 0; j < size; j++) {
-      arr[i][j] = {i: i, j: j, key: key, fill: ''};
+      arr[i][j] = {i: i, j: j, fill: ''};
       key+=1;
     }
   }
@@ -54,7 +54,7 @@ export default function Game() {
   useEffect(()=>{
     const x = detector(newarr, size, gridwrapper.current.childNodes);
     if(x.win !== null) setTimeout(() => setWinner(x.win), 1000);
-  }, [newarr])
+  }, [newarr]);
 
   return (
     <>
@@ -63,7 +63,7 @@ export default function Game() {
         {
           newarr.map(items => {
             return items.map(item => {
-              return <div className={styles.grids} style={{top:length*item.i+"px", left:length*item.j+"px"}} key={item.key} onClick={() => display(item.i, item.j)}>{item.fill}</div>
+              return <div className={styles.grids} key={key} onClick={() => display(item.i, item.j)}>{item.fill}</div>
             })
           }
           )
