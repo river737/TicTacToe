@@ -69,6 +69,14 @@
     border-radius: 50%;
   }
 
+  .gameNav:hover {
+    opacity: 0.9;
+  }
+
+  .gameNav:active {
+    --size: 48px;
+  }
+
   .gameNav.left {
     left: calc(-1 * (var(--size) / 2));
   }
@@ -85,11 +93,17 @@
     background: rgb(var(--yellow));
     padding: 10px 20px;
     border-radius: 40px;
-    font-size: 17px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--boxShadow);
   }
 
   .gameStartBtn:hover {
-    background: black;
-    color: white;
+    background: rgb(242, 180, 60);
+  }
+
+  .gameStartBtn:active {
+    padding: 9px 19px;
+    margin: 1px;
   }

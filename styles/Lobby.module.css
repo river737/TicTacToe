@@ -11,11 +11,29 @@
 .header {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .headerLeft {
   justify-self: left;
+}
+
+.headerMid {
+  width: 125%;
+  justify-self: center;
+  position: relative;
+}
+
+.headerMid > div {
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+  box-shadow: var(--boxShadow);
+
+  bottom: 0px;
+  height: calc(100% + 20px);
+  position: absolute;
+  background: rgb(var(--lightGrey));
+  width: 100%;
 }
 
 .user {
