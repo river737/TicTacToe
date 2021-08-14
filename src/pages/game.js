@@ -23,13 +23,11 @@ export default function Game() {
   const gridwrapper = useRef();
   const [winner, setWinner] = useState(null);
   const size = 15, length = 50;
-  let key = 0;
   let arr = [];
   for(let i = 0; i < size; i++) {
     arr[i] = new Array();
     for(let j = 0; j < size; j++) {
-      arr[i][j] = {i: i, j: j, fill: ''};
-      key+=1;
+      arr[i][j] = {fill: ''};
     }
   }
 
@@ -37,7 +35,6 @@ export default function Game() {
 
   useEffect(() => {
     if(data.name==='') router.push('/');
-    else gridwrapper.current.style.left=`calc(50% - ${size*length/2}px)`;
   }, [data.name]);
 
   function display(i, j) {
@@ -61,9 +58,9 @@ export default function Game() {
       <div className={styles.grid} ref={wrapper}>
         <div className={styles.box} ref={gridwrapper}>
         {
-          newarr.map(items => {
-            return items.map(item => {
-              return <div className={styles.grids} key={key} onClick={() => display(item.i, item.j)}>{item.fill}</div>
+          newarr.map((items, i) => {
+            return items.map((item, j) => {
+              return <div className={styles.grids} key={i*size+j} onClick={() => display(i, j)}>{item.fill}</div>
             })
           }
           )
@@ -71,7 +68,7 @@ export default function Game() {
         </div>
         <button onClick={back} className={styles.button}>Terminate game</button>
       </div>
-      {(winner!==null) && <DisplayWinner passdata={{name: data.name, win: winner, setWin: setWinner}}/>}
+      {(winner!==null) && <DisplayWinner passdata={{name: data.name, win: winner, setWin: setWinner}} />}
     </>
   )
 }
