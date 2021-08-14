@@ -1,7 +1,7 @@
 import styles from '../../styles/Create.module.css'
 import {useState, useEffect, useContext, useRef} from 'react'
 import {useRouter} from 'next/router'
-//import {InfoContext} from './form.js'
+import {InfoContext} from './form.js'
 
 const play = {
   single: "Single Player",
@@ -11,10 +11,10 @@ const play = {
 }
 
 export default function CreateRoom(props) {
+  const {data, setData} = useContext(InfoContext);
   let type = props.type;
   let setType = props.settype;
   const router = useRouter();
-//  const data = useContext(InfoContext);
   const [style, setStyle] = useState(false);
   const [password, setPassword] = useState('');
   const ref = useRef()
@@ -27,6 +27,8 @@ export default function CreateRoom(props) {
   }
 
   function submit() {
+    data.gameIsSet = true;
+    setData(data);
     router.push('/game');
   }
 

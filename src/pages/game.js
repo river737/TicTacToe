@@ -46,8 +46,6 @@ export default function Game() {
     }
   }
 
-
-
   const [newarr, dispatch] = useReducer(reducer, arr);
 
   function display(i, j) {
@@ -60,6 +58,13 @@ export default function Game() {
   function back() {
     router.push('/')
   }
+
+  useEffect(() => {
+    console.log(data)
+    if(!data.gameIsSet) {
+      router.push('/');
+    }
+  }, [data.gameIsSet])
 
   useEffect(()=>{
     const x = detector(newarr, size, gridwrapper.current.childNodes);

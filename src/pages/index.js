@@ -17,7 +17,8 @@ export default function Home() {
   const {socket} = useContext(SocketContext)
 
   const inputChange = (e) => { // handles the username input change
-    setData({name: e.target.value});
+    data.name = e.target.value;
+    setData(data);
     setError({verify: false})
   }
 
@@ -30,8 +31,9 @@ export default function Home() {
   }
 
   useEffect(() => {
+    console.log(data)
     if(data.identified) router.push('/lobby')
-  }, [])
+  })
 
   useEffect(()=>{
     socket.on('submit_username_response', (res) => { // waiting for a response from the server after submitting
@@ -46,7 +48,7 @@ export default function Home() {
     return () => socket.off('submit_username_response')
   }, [name])
 
-  
+
 
   return (
       <div className={styles.wrapper}>

@@ -25,7 +25,7 @@ export default function Lobby() {
   const {data, setData} = useContext(InfoContext);
   const {name} = data
   const [gameCover, setGameCover] = useState({activeIndex: 0, content: [{iconClassName: "fa fa-robot", title: "Single Player", description: "Compete to your heart's content against the computer", action: {text: "Start Game"}}]})
-  const [player, setPlayer] = useState({type: 'joiner', create: false});
+//  const [player, setPlayer] = useState({type: 'joiner', create: false});
   const [creating, setCreating] = useState(true);
   const [style, setStyle] = useState(false);
 
@@ -43,11 +43,12 @@ export default function Lobby() {
   }
 
   const create = () => {
-    setData({playerType: "creator", winner: null})
-    setPlayer({
-      type: "creator",
-      create: true
-    });
+    data.playerType = "creator";
+    setData(data);
+    // setPlayer({
+    //   type: "creator",
+    //   create: true
+    // });
   }
 
   function join() {
