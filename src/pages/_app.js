@@ -5,9 +5,9 @@ import {useEffect} from 'react'
 
 function MyApp({ Component, pageProps }) {
   useEffect(()=>{
-    document.cookie = 'username=;sameSite=Strict'
+    document.cookie = 'username=;path=/;sameSite=Strict'
     return () => {
-      document.cookie = 'username=;sameSite=Strict'
+      document.cookie = 'username=;path=/;sameSite=Strict'
     }
   },[])
   return (

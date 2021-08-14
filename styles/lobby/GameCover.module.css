@@ -5,7 +5,7 @@
     width: 86%;
     justify-self: center;
     height: 330px;
-    background: rgb(var(--lightGrey));
+    background: rgb(var(--darkBlue));
     border-radius: var(--radius);
     box-shadow: var(--boxShadow);
     display: grid;
@@ -58,12 +58,8 @@
     right: calc(-1 * (var(--size) / 2));
   }
 
-  .gameNav:active {
-    background: green;
-  }
-
   .gameStartBtn {
-    background: rgb(var(--yellow));
+    background: rgb(var(--purple));
     padding: 10px 20px;
     border-radius: 40px;
     font-size: 15px;
@@ -73,7 +69,7 @@
   }
 
   .gameStartBtn:hover {
-    background: rgb(242, 180, 60);
+    background: rgba(var(--purple), 0.85);
   }
 
   .gameStartBtn:active {

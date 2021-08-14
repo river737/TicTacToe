@@ -79,7 +79,8 @@ export default function Lobby() {
             </div>
             <div className={styles.headerMid}>
               <div>
-
+                <span>Searching for Opponent</span>
+                <span>Estimated Time: 0:09</span>
               </div>
             </div>
             <div className={styles.headerRight}>

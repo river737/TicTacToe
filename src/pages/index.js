@@ -13,6 +13,7 @@ export default function Home() {
   const router = useRouter()
   const {data, setData} = useContext(InfoContext);
   const {name} = data
+  const [input, setInput] = useState({active: false})
   const [error, setError] = useState({verify: false, msg: ''});
   const {socket} = useContext(SocketContext)
 
@@ -46,6 +47,14 @@ export default function Home() {
     return () => socket.off('submit_username_response')
   }, [name])
 
+  const inputFocus = () => {
+    setInput({active: true})
+  }
+
+  const inputBlur = () => {
+    setInput({active: false})
+  }
+
   
 
   return (
@@ -58,8 +67,8 @@ export default function Home() {
             <div className={styles.loginBody}>
               <label>
                 <span className={styles.inputTitle}>USERNAME</span>
-                <div className={styles.inputContainer}>
-                  <input type="text" className={styles.input} onChange={inputChange} value={name} placeholder="Enter a name" />
+                <div className={`${styles.inputContainer} ${input.active ? styles.inputActive : ''}`}>
+                  <input type="text" className={styles.input} onFocus={inputFocus} onBlur={inputBlur} onChange={inputChange} value={name} placeholder="Enter a name" />
                   {
                     error.verify &&
                       <span className={styles.inputError}>

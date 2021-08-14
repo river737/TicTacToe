@@ -67,7 +67,7 @@ export default function Game() {
   }, [newarr]);
 
   return (
-    <>
+    <div className={styles.gameContainer}>
       <div className={styles.grid}>
         <div className={styles.box} ref={gridwrapper}>
         {
@@ -79,9 +79,20 @@ export default function Game() {
           )
         }
         </div>
-        <button onClick={back} className={styles.button}>Terminate game</button>
+        
+      </div>
+      <div className={styles.sidebar}>
+        <div>
+          <div className={styles.sidebarTop}>
+            <div></div>
+          </div>
+          <div className={styles.sidebarBody}>
+            <button onClick={back} className={styles.button}>Terminate game</button>
+          </div>
+        </div>
+        
       </div>
       {(winner!==null) && <DisplayWinner passdata={{name: data.name, win: winner, setWin: setWinner}} />}
-    </>
+    </div>
   )
 }

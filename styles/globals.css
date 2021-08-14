@@ -6,7 +6,7 @@
   Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   --lightBlue: 106, 146, 208;
   --black: 35, 36, 37;
-  --white: 245, 248, 251;
+  --white: 254, 254, 254;
   --red: 255, 65, 97;
   --yellow: 255, 190, 65;
   --grey: 187, 187, 187;
@@ -16,6 +16,11 @@
   --whiteBackground: rgba(var(--white), 1);
   --radius: 3px;
   --boxShadow: 2px 2px 5px rgba(var(--black), 0.3);
+
+  --purple: 152, 79, 253;
+  --blue: 105, 126, 236;
+  --blue2: 80, 99, 176;
+  --darkBlue: 53, 67, 108;
 }
 
 html,
@@ -23,13 +28,13 @@ body {
   padding: 0;
   margin: 0;
   font-family: var(--font);
-  color: rgb(var(--black));
+  color: rgb(var(--white));
 }
 
 input, textarea {
   font-family: var(--font);
   background: transparent;
-
+  color: rgb(var(--white));
 }
 
 a {
@@ -43,6 +48,7 @@ a {
 
 button {
   border: none;
+  color: rgb(var(--white));
 }
 
 .container {
@@ -53,6 +59,5 @@ button {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(to left, rgb(52, 229, 235), rgb(120, 66, 255));
-  background-size: cover;
+  background-image: linear-gradient(to top, rgb(var(--purple)), rgb(var(--blue)));
 }
