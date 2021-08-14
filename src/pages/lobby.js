@@ -1,6 +1,3 @@
-import Link from 'next/link'
-
-import {useRouter} from 'next/router'
 import {useState, useEffect, useContext} from 'react'
 
 import styles from '../../styles/Lobby.module.css'
@@ -8,10 +5,25 @@ import {InfoContext} from '../components/form.js'
 import CreateRoom from '../components/createroom.js'
 import GameCover from '../components/lobby/GameCover'
 
+export async function getServerSideProps(ctx) {
+  const {req} = ctx
+  const {cookie} = req.headers
+  const username = cookie.split(';').find(row => row.startsWith('username='))?.split('=')[1]
+  if(username===undefined || username==='') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  } else {
+    return {props: {}}
+  }
+}
+
 export default function Lobby() {
   const {data, setData} = useContext(InfoContext);
   const {name} = data
-  const router = useRouter();
   const [gameCover, setGameCover] = useState({activeIndex: 0, content: [{iconClassName: "fa fa-robot", title: "Single Player", description: "Compete to your heart's content against the computer", action: {text: "Start Game"}}]})
   const [player, setPlayer] = useState({type: 'joiner', create: false});
   const [creating, setCreating] = useState(true);
@@ -43,9 +55,6 @@ export default function Lobby() {
   }
 
   useEffect(()=>{
-    if(data.name === '') {
-      router.push('/');
-    }
     setStyle(true)
     setGameCover(g => {
       const content = g.content.concat([

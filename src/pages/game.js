@@ -15,11 +15,26 @@ function reducer(newarr, action) {
   }
 }
 
+export async function getServerSideProps(ctx) {
+  const {req} = ctx
+  const {cookie} = req.headers
+  const username = cookie.split(';').find(row => row.startsWith('username='))?.split('=')[1]
+  if(username===undefined || username==='') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  } else {
+    return {props: {}}
+  }
+}
+
 export default function Game() {
   const {data, setData} = useContext(InfoContext);
   const router = useRouter();
   const [turn, setTurn] = useState('x');
-  const wrapper = useRef();
   const gridwrapper = useRef();
   const [winner, setWinner] = useState(null);
   const size = 15, length = 50;
@@ -31,11 +46,9 @@ export default function Game() {
     }
   }
 
-  const [newarr, dispatch] = useReducer(reducer, arr);
 
-  useEffect(() => {
-    if(data.name==='') router.push('/');
-  }, [data.name]);
+
+  const [newarr, dispatch] = useReducer(reducer, arr);
 
   function display(i, j) {
     if(newarr[i][j].fill==='') {
@@ -55,7 +68,7 @@ export default function Game() {
 
   return (
     <>
-      <div className={styles.grid} ref={wrapper}>
+      <div className={styles.grid}>
         <div className={styles.box} ref={gridwrapper}>
         {
           newarr.map((items, i) => {

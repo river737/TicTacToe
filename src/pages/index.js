@@ -36,6 +36,7 @@ export default function Home() {
   useEffect(()=>{
     socket.on('submit_username_response', (res) => { // waiting for a response from the server after submitting
       if(res.success) {
+        document.cookie = `username=${name};path=/;max-age=86400;sameSite=Strict;`
         router.push('/lobby')
       } else { // an error occured
         const {msg} = res.error
@@ -43,7 +44,9 @@ export default function Home() {
       }
     })
     return () => socket.off('submit_username_response')
-  }, [])
+  }, [name])
+
+  
 
   return (
       <div className={styles.wrapper}>
