@@ -1,0 +1,80 @@
+.header {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: rgb(var(--darkBlue));
+  }
+  
+  .headerLeft {
+    padding: 20px;
+    justify-self: left;
+  }
+  
+  .headerMid {
+    width: 125%;
+    justify-self: center;
+    position: relative;
+    padding: 8px;
+  }
+  
+  .headerMid > div {
+    height: 100%;
+    padding: 4px;
+    font-size: 14px;
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+    box-shadow: var(--boxShadow);
+    height: 100%;
+    background: rgb(var(--blue2));
+    width: 100%;
+    text-align: center;
+  }
+  
+  .headerMid > div > span {
+    display: block;
+  }
+  
+  .user {
+    --bg: rgba(var(--blue2));
+    font-size: 14px;
+    background: var(--bg);
+    padding: 4px 10px;
+    border: 1px solid var(--bg);
+    border-radius: 40px;
+    cursor: pointer;
+  }
+  
+  .user:active {
+    margin: 1px;
+    border: 0px;
+  }
+  
+  .headerRight {
+    padding: 20px;
+    justify-self: right;
+  }
+  
+  .headerRight > * {
+    font-weight: 600;
+    padding: 4px 10px;
+    font-size: 14px;
+    background: rgb(var(--blue2));
+    border-radius: var(--radius);
+    user-select: none;
+  }
+  
+  .headerRight > *:not(:first-child) {
+    margin-left: 20px;
+  }
+  
+  .headerRight i {
+    margin-right: 2px;
+  }
+  
+  .coins i {
+    color: rgb(var(--yellow));
+  }
+  
+  .medals i {
+    color: rgb(var(--yellow));
+  }

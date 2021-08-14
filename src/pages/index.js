@@ -1,7 +1,7 @@
 import {useState, useContext, useEffect} from 'react'
 
 import Login from '../components/login/login'
-import Lobby from '../components/lobby/lobby'
+import Lobby from '../components/lobby/Lobby'
 import Game from '../components/game/game'
 
 import { InfoContext } from '../contexts/infoContext'

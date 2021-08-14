@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext, useRef} from 'react'
+import {useState, useContext, useRef} from 'react'
 
 import {InfoContext} from '../contexts/infoContext.js'
 import { RouteContext } from '../contexts/routeContext'
@@ -14,9 +14,8 @@ const play = {
 
 export default function CreateRoom(props) {
   const {setRoute} = useContext(RouteContext)
-  const {data, setData} = useContext(InfoContext);
+  const {setData} = useContext(InfoContext);
   let {type, setType} = props;
-  const [style, setStyle] = useState(false);
   const [password, setPassword] = useState('');
   const ref = useRef()
 
@@ -42,16 +41,11 @@ export default function CreateRoom(props) {
   }
 
   function back() {
-    setStyle(false);
     setType("");
   }
 
-  useEffect(() => {
-    setStyle(true);
-  }, [style])
-
   return (
-      <div className={style ? styles.content : ""}>
+      <div className={styles.content}>
         <div className={styles.fill}>
 
           {type===play.single &&
