@@ -49,6 +49,7 @@
 }
 
 .content input {
+  color: black;
   width: 320px;
   height: 35px;
   background: white;

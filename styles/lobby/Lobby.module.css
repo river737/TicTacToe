@@ -35,13 +35,10 @@
   height: 100%;
   background: rgb(var(--blue2));
   width: 100%;
-}
-
-.headerMid > div > div {
   text-align: center;
 }
 
-.headerMid > div > div > span {
+.headerMid > div > span {
   display: block;
 }
 

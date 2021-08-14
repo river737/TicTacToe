@@ -1,13 +1,17 @@
 import styles from '../../styles/Game.module.css'
-import {useRouter} from 'next/router'
-import {useEffect, useRef} from 'react'
+import {useEffect, useRef, useContext} from 'react'
+import { RouteContext } from '../contexts/routeContext';
 
 export default function DisplayWinner({passdata}) {
-  const router = useRouter();
+  const {setRoute} = useContext(RouteContext)
 
   function returnhome() {
     passdata.setWin(null);
-    router.push('/');
+    setRoute(obj => {
+      const objx = {...obj}
+      objx.name = 'lobby'
+      return objx
+    })
   }
 
   return (

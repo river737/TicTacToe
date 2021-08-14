@@ -2,12 +2,11 @@ export default function SocketFunctions({io, socket}){
     io.data.users.id.push(socket.id)
 
     usernamePhase({io, socket})
-
     socket.on('disconnecting', () => {
         const {users} = io.data
         const ind = users.id.indexOf(socket.id)
         users.id.splice(ind, 1)
-
+        
         if(socket.data?.username) {
             users.username.splice(users.username.indexOf(socket.data.username), 1)
         }
@@ -15,7 +14,7 @@ export default function SocketFunctions({io, socket}){
 }
 
 function usernamePhase({io, socket}) {
-    socket.on('submit_username', ({username}) => {
+    socket.on('submit_username', ({username, type}) => {
         const {users} = io.data
         const res = {}
         if(socket.data?.username) {
@@ -29,10 +28,14 @@ function usernamePhase({io, socket}) {
                 users.username.push(username)
                 socket.data.username = username
                 res.success = true
-                roomPhase({io, socket})
             }
         }
-        socket.emit('submit_username_response', res)
+        if(!type) {
+            socket.emit('submit_username_response', res)
+        }
+    })
+    socket.on('room_phase', () => {
+        roomPhase({io, socket})
     })
 }
 

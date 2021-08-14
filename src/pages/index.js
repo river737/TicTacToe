@@ -1,92 +1,80 @@
 import {useState, useContext, useEffect} from 'react'
-import {useRouter} from 'next/router'
 
-import { SocketContext } from '../contexts/socketContext';
-import {InfoContext} from '../components/form.js'
+import Login from '../components/login/login'
+import Lobby from '../components/lobby/lobby'
+import Game from '../components/game/game'
 
-import styles from '../../styles/Home.module.css'
+import { InfoContext } from '../contexts/infoContext'
+import { SocketContext } from '../contexts/socketContext'
+import {RouteContext} from '../contexts/routeContext'
 
-import Logo from '../components/Logo'
-
-export default function Home() {
-
-  const router = useRouter()
-  const {data, setData} = useContext(InfoContext);
-  const {name} = data
-  const [input, setInput] = useState({active: false})
-  const [error, setError] = useState({verify: false, msg: ''});
-  const {socket} = useContext(SocketContext)
-
-  const inputChange = (e) => { // handles the username input change
-    setData({name: e.target.value});
-    setError({verify: false})
+export async function getServerSideProps(ctx) {
+  const {req} = ctx
+  const {cookie} = req.headers
+  const username = cookie?.split(';').find(row => row.startsWith('username='))?.split('=')[1]
+  const redirectLogin = {
+    props: {
+      route: {name: 'login'}
+    }
   }
-
-  const submit = () => {
-    if(name !== '') { // prevent submit if the username is blank
-      data.identified = true;
-      setData(data);
-      socket.emit('submit_username', {username: name})
-    } else setError({verify: true, msg: `Error! Name cannot be empty!`})
-  }
-
-  useEffect(() => {
-    if(data.identified) router.push('/lobby')
-  }, [])
-
-  useEffect(()=>{
-    socket.on('submit_username_response', (res) => { // waiting for a response from the server after submitting
-      if(res.success) {
-        document.cookie = `username=${name};path=/;max-age=86400;sameSite=Strict;`
-        router.push('/lobby')
-      } else { // an error occured
-        const {msg} = res.error
-        setError({verify: true, msg});
-      }
-    })
-    return () => socket.off('submit_username_response')
-  }, [name])
-
-  const inputFocus = () => {
-    setInput({active: true})
-  }
-
-  const inputBlur = () => {
-    setInput({active: false})
-  }
-
   
+  if(username===undefined || username === '' || username==='undefined') {
+    return redirectLogin
+  }
 
+  try {
+    const {res} = ctx
+    const {users} = res.socket.server.io.data
+    if(users.username.includes(username)) {
+      return redirectLogin
+    } else {
+      return {
+        props: {
+          route: {name: 'lobby'},
+          username
+        }
+      }
+      
+    }
+  }
+
+  catch(err) {
+    return redirectLogin
+  }
+}
+
+export default function Home({route: routeX, username}) {
+  const {setData} = useContext(InfoContext)
+  const {socket} = useContext(SocketContext)
+  const [route, setRoute] = useState({name: routeX.name})
+  let component
+  switch(route.name) {
+    case 'login':
+      component = <Login />
+      break;
+    case 'lobby':
+      component = <Lobby />
+      break;
+    case 'game':
+      component = <Game />
+      break;
+    default:
+      component = <Login />
+      break;
+  }
+  useEffect(()=>{
+    if(username) {
+      socket.emit('submit_username', {username, type: 'previous user'})
+      setData(obj => {
+        const objx = {...obj}
+        objx.name = username
+        return objx
+      })
+    }
+  }, [setData])
   return (
-      <div className={styles.wrapper}>
-        <div className={styles.login}>
-          <div>
-            <div className={styles.loginTop}>
-              <Logo />
-            </div>
-            <div className={styles.loginBody}>
-              <label>
-                <span className={styles.inputTitle}>USERNAME</span>
-                <div className={`${styles.inputContainer} ${input.active ? styles.inputActive : ''}`}>
-                  <input type="text" className={styles.input} onFocus={inputFocus} onBlur={inputBlur} onChange={inputChange} value={name} placeholder="Enter a name" />
-                  {
-                    error.verify &&
-                      <span className={styles.inputError}>
-                        <i className={`fa fa-exclamation-circle ${styles.errorIcon}`}/>
-                        <span className={styles.errorMsg}>{error.msg}</span>
-                      </span>
-                  }
-                </div>
-              </label>
-              <button className={styles.button} onClick={submit}>CONTINUE</button>
-              <span className={styles.copyright}>
-                Copyright
-                <i className="far fa-copyright"/>
-                2021
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <RouteContext.Provider value={{setRoute}}>
+      {component}
+    </RouteContext.Provider>
   )
 }

@@ -1,7 +1,9 @@
-import styles from '../../styles/Create.module.css'
 import {useState, useEffect, useContext, useRef} from 'react'
-import {useRouter} from 'next/router'
-//import {InfoContext} from './form.js'
+
+import {InfoContext} from '../contexts/infoContext.js'
+import { RouteContext } from '../contexts/routeContext'
+
+import styles from '../../styles/Create.module.css'
 
 const play = {
   single: "Single Player",
@@ -11,10 +13,9 @@ const play = {
 }
 
 export default function CreateRoom(props) {
-  let type = props.type;
-  let setType = props.settype;
-  const router = useRouter();
-//  const data = useContext(InfoContext);
+  const {setRoute} = useContext(RouteContext)
+  const {data, setData} = useContext(InfoContext);
+  let {type, setType} = props;
   const [style, setStyle] = useState(false);
   const [password, setPassword] = useState('');
   const ref = useRef()
@@ -27,7 +28,17 @@ export default function CreateRoom(props) {
   }
 
   function submit() {
-    router.push('/game');
+    setData(d => {
+      const obj = {...d}
+      obj.gameIsSet = true
+      return obj
+    });
+    setRoute(obj => {
+      const objx = {...obj}
+      objx.name = 'game'
+      
+      return objx
+    })
   }
 
   function back() {
@@ -66,7 +77,7 @@ export default function CreateRoom(props) {
           {type===play.multiplayer &&
             <>
               <h2>Set a password</h2>
-              <input onChange={(e) => setPassword(e.target.value)} ref={ref} type="text" />
+              <input onChange={(e) => setPassword(e.target.value)} ref={ref} type="text" value={password} />
               <button onClick={copy}>Copy to clipboard</button>
               <button onClick={submit}>Confirm</button>
               <button onClick={back}>Back</button>

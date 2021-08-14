@@ -1,31 +1,18 @@
 import {useState, useEffect, useContext} from 'react'
 
-import styles from '../../styles/Lobby.module.css'
-import {InfoContext} from '../components/form.js'
-import CreateRoom from '../components/createroom.js'
-import GameCover from '../components/lobby/GameCover'
+import styles from '../../../styles/lobby/Lobby.module.css'
 
-export async function getServerSideProps(ctx) {
-  const {req} = ctx
-  const {cookie} = req.headers
-  const username = cookie.split(';').find(row => row.startsWith('username='))?.split('=')[1]
-  if(username===undefined || username==='') {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  } else {
-    return {props: {}}
-  }
-}
+import {InfoContext} from '../../contexts/infoContext.js'
+import { SocketContext } from '../../contexts/socketContext'
+
+import GameCover from './GameCover'
 
 export default function Lobby() {
+  const {socket} = useContext(SocketContext)
   const {data, setData} = useContext(InfoContext);
   const {name} = data
   const [gameCover, setGameCover] = useState({activeIndex: 0, content: [{iconClassName: "fa fa-robot", title: "Single Player", description: "Compete to your heart's content against the computer", action: {text: "Start Game"}}]})
-  const [player, setPlayer] = useState({type: 'joiner', create: false});
+//  const [player, setPlayer] = useState({type: 'joiner', create: false});
   const [creating, setCreating] = useState(true);
   const [style, setStyle] = useState(false);
 
@@ -43,10 +30,10 @@ export default function Lobby() {
   }
 
   const create = () => {
-    setData({playerType: "creator", winner: null})
-    setPlayer({
-      type: "creator",
-      create: true
+    setData(obj => {
+      const objx = {...obj}
+      objx.playerType= "creator"
+      return objx
     });
   }
 
@@ -65,6 +52,10 @@ export default function Lobby() {
       return {activeIndex: g.activeIndex, content}
     })
   }, [setGameCover]);
+
+  useEffect(()=>{
+    socket.emit('room_phase')
+  }, [])
 
   return (
     <div className={style ? styles.content : ""}>

@@ -1,9 +1,12 @@
-import styles from '../../styles/Game.module.css'
-import {InfoContext} from '../components/form.js'
-import {useRouter} from 'next/router'
 import {useState, useEffect, useContext, useReducer, useRef} from 'react'
-import detector from '../gamelogic/rule.js'
-import DisplayWinner from '../gamelogic/result.js'
+
+import {InfoContext} from '../../contexts/infoContext.js'
+import { RouteContext } from '../../contexts/routeContext.js'
+
+import styles from '../../../styles/Game.module.css'
+
+import detector from '../../gamelogic/rule.js'
+import DisplayWinner from '../../gamelogic/result.js'
 
 function reducer(newarr, action) {
   switch(action.type) {
@@ -15,29 +18,16 @@ function reducer(newarr, action) {
   }
 }
 
-export async function getServerSideProps(ctx) {
-  const {req} = ctx
-  const {cookie} = req.headers
-  const username = cookie.split(';').find(row => row.startsWith('username='))?.split('=')[1]
-  if(username===undefined || username==='') {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  } else {
-    return {props: {}}
-  }
-}
-
 export default function Game() {
+  const {setRoute} = useContext(RouteContext)
   const {data, setData} = useContext(InfoContext);
-  const router = useRouter();
+
   const [turn, setTurn] = useState('x');
-  const gridwrapper = useRef();
   const [winner, setWinner] = useState(null);
-  const size = 15, length = 50;
+
+  const gridwrapper = useRef();
+
+  const size = 15
   let arr = [];
   for(let i = 0; i < size; i++) {
     arr[i] = new Array();
@@ -45,8 +35,6 @@ export default function Game() {
       arr[i][j] = {fill: ''};
     }
   }
-
-
 
   const [newarr, dispatch] = useReducer(reducer, arr);
 
@@ -58,8 +46,14 @@ export default function Game() {
   }
 
   function back() {
-    router.push('/')
+    setRoute({name: 'game'})
   }
+
+  // useEffect(() => {
+  //   if(!data.gameIsSet) {
+  //     setRoute({name: 'lobby'})
+  //   }
+  // }, [data.gameIsSet, setRoute])
 
   useEffect(()=>{
     const x = detector(newarr, size, gridwrapper.current.childNodes);
