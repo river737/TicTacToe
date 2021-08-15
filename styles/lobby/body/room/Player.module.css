@@ -13,9 +13,19 @@
     border-bottom: 1px solid rgba(var(--white), 0.2);
 }
 
+.player.empty {
+    border: 2px dashed rgb(var(--darkBlue));
+    background: rgba(var(--darkBlue), 0.5)
+}
+
+.player.empty > *{
+    visibility: hidden;
+}
+
 
 
 .username {
+    height: 28px;
     text-align: center;
     font-size: 20px;
     font-weight: 600;

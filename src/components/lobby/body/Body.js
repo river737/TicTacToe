@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react"
-
-
+import { useEffect } from "react"
 
 import GameCover from "./GameCover"
 import Room from "./room/Room"
-import JoinRoom from './JoinRoom'
+import JoinRoom from './room/JoinRoom'
 
 import styles from '../../../../styles/lobby/body/Body.module.css'
 
 
 export default function LobbyBody({setPage, gameCover, setGameCover}) {
-
     const gameNavClick = (n) => {
         setGameCover(g => {
             let length = g.content.length
@@ -25,7 +22,9 @@ export default function LobbyBody({setPage, gameCover, setGameCover}) {
 
     useEffect(()=>{
         setGameCover(g => {
-            const content = g.content.concat([
+            let content = g.content
+            if(g.content.length===1) 
+            content = g.content.concat([
                 {
                     iconClassName: "fa fa-dice", title: "Classic", description: "Compete with a random player online and earn coins!", 
                     action: {text: "Play Classic"}
@@ -49,7 +48,7 @@ export default function LobbyBody({setPage, gameCover, setGameCover}) {
                         click: () => {
                             setPage({
                                 opened: true,
-                                component: <Room {...{setPage}}/>
+                                component: <Room {...{setPage, type: "create"}}/>
                             })
                         }
                     }

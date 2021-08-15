@@ -40,25 +40,51 @@ function usernamePhase({io, socket}) {
 }
 
 function roomPhase({io, socket}) {
-    socket.on('create room', ({config}) => {
+    socket.on('create_room', () => {
         let room = require('crypto').randomBytes(5).toString('hex')
-        io.data.rooms[room] = {config, players: {}}
+        io.data.rooms[room] = {players: {}}
         joinRoom({io, socket, room})
-        socket.emit('create_room_response', {success: true})
+        socket.emit('create_room_response', {success: true, room})
     })
-    socket.on('join private room', ({room}) => {
+    socket.on('leave_room', ({room}) => {
+        const res = {success: true}
+        leaveRoom({io, socket, room})
+        socket.emit('leave_room_response', res)
+    })
+    socket.on('join_room', ({room}) => {
         const res = {}
-        const {rooms} = io.data.rooms
+        const {rooms} = io.data
 
         if(rooms[room]) {
-            joinRoom({io, socket, room})
-            res.success = true
+            const {players} = rooms[room]
+            const playersID = Object.keys(players)
+            if(playersID.length>=2) {
+                res.success = false
+                res.error = {msg: "Room Full"}
+            } else {
+                const opponent = players[playersID[0]]
+                res.success = true
+                res.roomData = {
+                    id: room,
+                    opponent: {
+                        username: opponent.username
+                    }
+                }
+                socket.to(playersID[0]).emit('join_room_response', {
+                    roomData: {
+                        opponent: {username: socket.data.username}
+                    }
+                })
+                joinRoom({io, socket, room})
+            }
+            
+            
         } else {
             res.success = false
             res.error = {msg: "Room not found"}
         }
         
-        socket.emit('join_private_room_response', res)
+        socket.emit('join_room_response', res)
     })
     socket.on('join random room', () => {
         const res = {success: false}
@@ -81,11 +107,26 @@ function roomPhase({io, socket}) {
         }
         socket.emit('join_random_room_response', res)
     })
+    socket.on('start_game', () => {
+        gamePhase({io, socket})
+    })
 }
 
 function joinRoom({io, socket, room}) {
-    io.data.rooms[room].players[socket.id] = {}
-    gamePhase({io, socket})
+    socket.join(room)
+    io.data.rooms[room].players[socket.id] = {username: socket.data.username}
+}
+
+function leaveRoom({io, socket, room}) {
+    const roomX = io.data.rooms[room]
+    delete roomX.players[socket.id]
+    const playersID = Object.keys(roomX.players)
+    if(playersID.length===0) {
+        delete io.data.rooms[room]
+    } else {
+        socket.to(playersID[0]).emit('opponent_left_room')
+    }
+    socket.leave(room)
 }
 
 function gamePhase({io, socket}) {

@@ -2,7 +2,7 @@ import styles from '../../../../../styles/lobby/body/room/Player.module.css'
 
 export default function Player({icon, username='', stats={winRate: 0, gamesPlayed: 0}}) {
     return (
-        <div className={styles.player}>
+        <div className={`${styles.player} ${username==='' ? styles.empty : ''}`}>
             <div>
                 <div className={styles.profilePic}>
                     {icon}

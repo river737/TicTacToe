@@ -1,0 +1,96 @@
+.header {
+    display: grid;
+    margin: 20px;
+}
+
+.headerLeft button {
+    background: rgb(var(--darkBlue));
+    font-size: 15px;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.headerLeft button i {
+    margin-right: 5px;
+}
+
+.headerLeft button:hover {
+    opacity: 0.85;
+}
+
+.headerLeft button:active {
+    padding: 5px 11px;
+    margin: 1px;
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+}
+
+.form {
+    border-radius: var(--radius);
+    width: 400px;
+    background-color: rgb(var(--darkBlue));
+    padding: 20px;
+    display: grid;
+    gap: 20px;
+}
+
+.form label {
+    display: block;
+}
+
+.form label span {
+    display: block;
+    text-transform: capitalize;
+}
+
+.formTitle {
+    text-align: center;
+    font-size: 20px;
+    padding-bottom: 20px;
+    font-weight: 700;
+    border-bottom: 1px solid rgb(var(--grey));
+}
+
+.textBox {
+    --border: 1px solid rgba(var(--white), 0.2);
+    align-items: center;
+    position: relative;
+    width: 100%;
+    border: var(--border);
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    transition: 0.3s;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 1fr auto;
+}
+
+.textBox input {
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    outline: none;
+}
+
+.body button {
+    text-transform: capitalize;
+    border: 1px solid rgb(var(--grey));
+    display: block;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    padding: 10px 20px;
+    background: rgb(var(--purple));
+    border-radius: var(--radius);
+    color: rgb(var(--white));
+    font-size: 14px;
+    transition: all 0.5s ease;
+}
+
+.body button:hover {
+    opacity: 0.85;
+}
