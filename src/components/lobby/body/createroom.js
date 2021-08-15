@@ -1,9 +1,9 @@
 import {useState, useContext, useRef} from 'react'
 
-import {InfoContext} from '../contexts/infoContext.js'
-import { RouteContext } from '../contexts/routeContext'
+import {InfoContext} from '../../../contexts/infoContext.js'
+import { RouteContext } from '../../../contexts/routeContext'
 
-import styles from '../../styles/Create.module.css'
+import styles from '../../../../styles/Create.module.css'
 
 const play = {
   single: "Single Player",

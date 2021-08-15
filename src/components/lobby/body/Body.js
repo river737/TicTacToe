@@ -3,13 +3,13 @@ import { useEffect, useState } from "react"
 
 
 import GameCover from "./GameCover"
+import Room from "./room/Room"
+import JoinRoom from './JoinRoom'
 
 import styles from '../../../../styles/lobby/body/Body.module.css'
 
 
-export default function LobbyBody() {
-
-    const [gameCover, setGameCover] = useState({activeIndex: 0, content: [{iconClassName: "fa fa-robot", title: "Single Player", description: "Compete to your heart's content against the computer", action: {text: "Start Game"}}]})
+export default function LobbyBody({setPage, gameCover, setGameCover}) {
 
     const gameNavClick = (n) => {
         setGameCover(g => {
@@ -26,9 +26,34 @@ export default function LobbyBody() {
     useEffect(()=>{
         setGameCover(g => {
             const content = g.content.concat([
-                {iconClassName: "fa fa-dice", title: "Classic", description: "Compete with a random player online and earn coins!", action: {text: "Play Classic"}},
-                {iconClassName:"fa fa-layer-group", title: "Existing Room", description: "Join an existing room with a secret room ID", action: {text: "Join Room"}},
-                {iconClassName: "fa fa-users", title: "Multiplayer", description: "Create a private room to play and invite friends to play with!", action: {text: "Create Room"}}
+                {
+                    iconClassName: "fa fa-dice", title: "Classic", description: "Compete with a random player online and earn coins!", 
+                    action: {text: "Play Classic"}
+                },
+                {
+                    iconClassName:"fa fa-layer-group", title: "Existing Room", description: "Join an existing room with a secret room ID", 
+                    action: {
+                        text: "Join Room",
+                        click: () => {
+                            setPage({
+                                opened: true,
+                                component: <JoinRoom {...{setPage}}/>
+                            })
+                        }
+                    }
+                },
+                {
+                    iconClassName: "fa fa-users", title: "Multiplayer", description: "Create a private room to play and invite friends to play with!", 
+                    action: {
+                        text: "Create Room",
+                        click: () => {
+                            setPage({
+                                opened: true,
+                                component: <Room {...{setPage}}/>
+                            })
+                        }
+                    }
+                }
             ])
             return {activeIndex: g.activeIndex, content}
         })
@@ -60,7 +85,7 @@ export default function LobbyBody() {
             </div>
             <div className={styles.bodyMid}>
             <div>
-                <GameCover {...gameCover.content[gameCover.activeIndex]} gameNavClick={gameNavClick}/>
+                <GameCover {...gameCover.content[gameCover.activeIndex]} {...{gameNavClick, setPage}}/>
             </div>
             </div>
             <div className={styles.bodyRight}>

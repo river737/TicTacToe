@@ -3,6 +3,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     background: rgb(var(--darkBlue));
+    margin-bottom: 40px;
   }
   
   .headerLeft {

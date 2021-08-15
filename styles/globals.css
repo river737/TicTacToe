@@ -61,3 +61,12 @@ button {
   height: 100vh;
   background-image: linear-gradient(to top, rgb(var(--purple)), rgb(var(--blue)));
 }
+
+.preventOverflow {
+  --lines: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: var(--lines);
+  -webkit-box-orient: vertical;
+}
