@@ -1,7 +1,6 @@
 import {useState, useEffect, useContext, useReducer, useRef} from 'react'
 
 import {InfoContext} from '../../contexts/infoContext.js'
-import { RouteContext } from '../../contexts/routeContext.js'
 
 import styles from '../../../styles/Game.module.css'
 
@@ -18,9 +17,8 @@ function reducer(newarr, action) {
   }
 }
 
-export default function Game() {
-  const {setRoute} = useContext(RouteContext)
-  const {data, setData} = useContext(InfoContext);
+export default function Game({setPage}) {
+  const {data} = useContext(InfoContext);
 
   const [turn, setTurn] = useState('x');
   const [winner, setWinner] = useState(null);
@@ -46,14 +44,8 @@ export default function Game() {
   }
 
   function back() {
-    setRoute({name: 'game'})
+    setPage({opened: false})
   }
-
-  // useEffect(() => {
-  //   if(!data.gameIsSet) {
-  //     setRoute({name: 'lobby'})
-  //   }
-  // }, [data.gameIsSet, setRoute])
 
   useEffect(()=>{
     const x = detector(newarr, size, gridwrapper.current.childNodes);

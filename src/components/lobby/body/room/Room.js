@@ -4,12 +4,11 @@ import styles from '../../../../../styles/lobby/body/Room.module.css'
 
 import { SocketContext } from '../../../../contexts/socketContext'
 import { InfoContext } from '../../../../contexts/infoContext'
-import { RouteContext } from '../../../../contexts/routeContext'
 
 import Player from './Player'
+import Game from '../../../game/game'
 
 export default function Room({setPage, type = "create", roomData={}}) {
-    const {setRoute} = useContext(RouteContext)
     const {socket} = useContext(SocketContext)
     const {data} = useContext(InfoContext)
     const {name} = data
@@ -30,7 +29,7 @@ export default function Room({setPage, type = "create", roomData={}}) {
 
     }
     const startGame = () => {
-        socket.emit('start_game')
+        socket.emit('start_game', {room: room.id})
     }
     useEffect(()=>{
         let mounted = true // for preventing state update when the component is unmounting
@@ -123,15 +122,29 @@ export default function Room({setPage, type = "create", roomData={}}) {
                 return obj
             })
         })
+        
+        socket.on('opponent_start_game', res => {
+            console.log("opponent_start_game")
+            setStart(s => {
+                const obj = {...s}
+                if(obj.phase === 1) obj.phase  = 3
+                else if(obj.phase === 2) obj.phase = 4
+                return obj
+            })
+        })
         socket.on('start_game_response', res => {
+            console.log("start_game_response")
             if(res.success) {
-                setRoute({name: 'game'})
-            } else {
                 setStart(s => {
                     const obj = {...s}
+                    if(obj.phase ===1) obj.phase = 2
+                    if(obj.phase===3) obj.phase = 4
                     return obj
                 })
             }
+        })
+        socket.on('warp_to_game', res => {
+            setPage({opened: true, component: <Game {...{setPage}}/>})
         })
         
         
@@ -141,6 +154,8 @@ export default function Room({setPage, type = "create", roomData={}}) {
             socket.off('create_room_response')
             socket.off('join_room_response')
             socket.off('opponent_left_room')
+            socket.off('start_game_response')
+            socket.off('warp_to_game')
         }
     }, [])
     return (
@@ -167,7 +182,7 @@ export default function Room({setPage, type = "create", roomData={}}) {
                     </div>
                     <Player {...room.players[1]}/>
                     <div className={styles.startBtn}>
-                        <button onClick={startGame}>
+                        <button onClick={startGame} disabled={start.phase !== 1 && start.phase !== 3}>
                             {
                                 start.phase === 0 ? 
                                     '2 Players Required'

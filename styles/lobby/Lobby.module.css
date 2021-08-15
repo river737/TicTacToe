@@ -3,7 +3,7 @@
   display: flex;
   border-radius: var(--radius);
   width: 100vw;
-  height: 100vh;
+  flex: 1;
   position: relative;
   animation: appear 1s ease;
 }

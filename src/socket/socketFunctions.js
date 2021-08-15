@@ -36,10 +36,13 @@ function usernamePhase({io, socket}) {
     })
     socket.on('room_phase', () => {
         roomPhase({io, socket})
+        socket.off('room_phase', () => {})
+        socket.off('submit_username', () => {})
     })
 }
 
 function roomPhase({io, socket}) {
+    
     socket.on('create_room', () => {
         let room = require('crypto').randomBytes(5).toString('hex')
         io.data.rooms[room] = {players: {}}
@@ -86,7 +89,7 @@ function roomPhase({io, socket}) {
         
         socket.emit('join_room_response', res)
     })
-    socket.on('join random room', () => {
+    socket.on('join_random_room', () => {
         const res = {success: false}
 
         const {rooms} = io.data
@@ -107,14 +110,42 @@ function roomPhase({io, socket}) {
         }
         socket.emit('join_random_room_response', res)
     })
-    socket.on('start_game', () => {
-        gamePhase({io, socket})
+    socket.on('start_game', ({room}) => {
+        console.log("start_game", room)
+        const res = {success: true}
+        const roomX = io.data.rooms[room]
+        const {players} = roomX
+        const playersID = Object.keys(roomX.players)
+        const ind = playersID.indexOf(socket.id)
+        
+
+        players[socket.id].start = true
+        
+        
+        if(playersID.map(id => players[id].start).includes(false) && playersID.length===2) {
+            const opponentID = playersID[ind ===1 ? 0 : 1]
+            socket.emit('start_game_response', res)
+            console.log(opponentID)
+            socket.to(opponentID).emit('opponent_start_game', {})
+        }  else {
+            io.to(room).emit('warp_to_game')
+            deleteRoomPhaseEvents({socket})
+            gamePhase({io, socket})
+        }
     })
+}
+
+function deleteRoomPhaseEvents({socket}) {
+    socket.off('start_game', () => {})
+    socket.off('join_random_room', () => {})
+    socket.off('join_room', () => {})
+    socket.off('leave_room', () => {})
+    socket.off('create_room', () => {})
 }
 
 function joinRoom({io, socket, room}) {
     socket.join(room)
-    io.data.rooms[room].players[socket.id] = {username: socket.data.username}
+    io.data.rooms[room].players[socket.id] = {username: socket.data.username, start: false}
 }
 
 function leaveRoom({io, socket, room}) {

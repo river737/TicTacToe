@@ -1,18 +1,21 @@
 .gameContainer {
-  width: 86vw;
-  height: 86vh;
-  background: rgb(var(--white));
   border-radius: var(--radius);
   overflow: hidden;
-  display: flex;
+  min-height: 100%;
+  max-height: 1px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 20px;
+  column-gap: 20px;
+  padding-top: 0px;
 }
 
 .grid {
-  flex: 1;
-  display: block;
   overflow: scroll;
   max-height: 100%;
   scrollbar-width: none;
+  background: rgb(var(--white));
+  border-radius: var(--radius);
 }
 
 .grid::-webkit-scrollbar {
@@ -23,7 +26,7 @@
   display: grid;
   grid-template-columns: repeat(15, 50px);
   grid-auto-rows: 50px;
-  background: repeating-linear-gradient(to right, black, transparent 1px 50px), repeating-linear-gradient(to bottom, black, transparent 1px 50px), linear-gradient(to left, black 0px 1px, transparent 1px), linear-gradient(to top, black 0px 1px, transparent 1px);
+  background: repeating-linear-gradient(to right, black, transparent 1px 50px), repeating-linear-gradient(to bottom, black, transparent 1px 50px);
   width: max-content;
   height: max-content;
   font-size: 22px;

@@ -5,7 +5,6 @@ import { SocketContext } from "../../contexts/socketContext"
 import styles from '../../../styles/lobby/Lobby.module.css'
 
 import LobbyBody from './body/Body'
-import LobbyHeader from './Header'
 
 export default function Lobby() {
   const {socket} = useContext(SocketContext)
@@ -17,7 +16,6 @@ export default function Lobby() {
   }, [])
   return (
     <div className={styles.content}>
-      <LobbyHeader />
       {
         page.opened ? 
           page.component

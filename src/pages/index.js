@@ -2,6 +2,7 @@ import {useState, useContext, useEffect} from 'react'
 
 import Login from '../components/login/login'
 import Lobby from '../components/lobby/Lobby'
+import LobbyHeader from '../components/lobby/Header'
 import Game from '../components/game/game'
 
 import { InfoContext } from '../contexts/infoContext'
@@ -47,21 +48,7 @@ export default function Home({route: routeX, username}) {
   const {setData} = useContext(InfoContext)
   const {socket} = useContext(SocketContext)
   const [route, setRoute] = useState({name: routeX.name})
-  let component
-  switch(route.name) {
-    case 'login':
-      component = <Login />
-      break;
-    case 'lobby':
-      component = <Lobby />
-      break;
-    case 'game':
-      component = <Game />
-      break;
-    default:
-      component = <Login />
-      break;
-  }
+  
   useEffect(()=>{
     if(username) {
       socket.emit('submit_username', {username, type: 'previous user'})
@@ -74,7 +61,14 @@ export default function Home({route: routeX, username}) {
   }, [setData])
   return (
     <RouteContext.Provider value={{setRoute}}>
-      {component}
+      {
+        route.name !== 'login' ?
+          <>
+            <LobbyHeader />
+            <Lobby />
+          </>
+        : <Login />
+      }
     </RouteContext.Provider>
   )
 }

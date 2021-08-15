@@ -22,7 +22,7 @@ export default (req, res)  => {
           },
           players: {
             "socket_id": {
-              
+              start: true || false
             }
           }
         }
