@@ -3,12 +3,14 @@ import {useState, useContext, useEffect} from 'react'
 
 import { SocketContext } from '../../contexts/socketContext'
 import { InfoContext } from '../../contexts/infoContext'
+import {RouteContext} from '../../contexts/routeContext'
 
 import styles from '../../../styles/login/Login.module.css'
 
 import Logo from '../Logo'
 
-export default function Login({setRoute}) {
+export default function Login() {
+    const {setRoute} = useContext(RouteContext)
     const {data, setData} = useContext(InfoContext);
     const {name} = data
     const [input, setInput] = useState({active: false})
