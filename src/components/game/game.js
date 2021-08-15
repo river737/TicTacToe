@@ -1,6 +1,7 @@
 import {useState, useEffect, useContext, useReducer, useRef} from 'react'
 
 import {InfoContext} from '../../contexts/infoContext.js'
+import { SocketContext } from '../../contexts/socketContext.js'
 
 import styles from '../../../styles/Game.module.css'
 
@@ -17,7 +18,8 @@ function reducer(newarr, action) {
   }
 }
 
-export default function Game({setPage}) {
+export default function Game({setPage, room, type}) {
+  const {socket} = useContext(SocketContext)
   const {data} = useContext(InfoContext);
 
   const [turn, setTurn] = useState('x');
@@ -36,11 +38,17 @@ export default function Game({setPage}) {
 
   const [newarr, dispatch] = useReducer(reducer, arr);
 
-  function display(i, j) {
-    if(newarr[i][j].fill==='') {
-      dispatch({type:'add', append:{i: i, j: j}, symbol:turn});
-      setTurn(turn==='o' ? 'x':'o');
+  const myIndex = type === 'create' ? 0 : 1
+  function display(i=0, j=0) {
+    const isMyTurn = room.players[myIndex].mark === turn
+    if(newarr[i][j].fill==='' && isMyTurn) {
+      socket.emit('place_mark', {room: room.id, mark: turn, pos: {i, j}})
     }
+  }
+
+  function displayX({i=0, j=0, mark=''}) {
+    dispatch({type:'add', append: {i, j}, symbol: mark});
+    setTurn(turn => turn==='o' ? 'x' : 'o');
   }
 
   function back() {
@@ -51,6 +59,22 @@ export default function Game({setPage}) {
     const x = detector(newarr, size, gridwrapper.current.childNodes);
     if(x.win !== null) setTimeout(() => setWinner(x.win), 1000);
   }, [newarr]);
+
+  useEffect(()=>{
+    socket.on('place_mark_response', (res) => {
+      if(res.success) {
+        const {i, j} = res.pos
+        displayX({i, j, mark: res.mark})
+      }
+    })
+    return () => {
+      socket.off('place_mark_response')
+    }
+  }, [dispatch])
+
+  useEffect(()=>{
+    socket.emit('game_phase', {room: room.id})
+  }, [])
 
   return (
     <div className={styles.gameContainer}>

@@ -111,7 +111,6 @@ function roomPhase({io, socket}) {
         socket.emit('join_random_room_response', res)
     })
     socket.on('start_game', ({room}) => {
-        console.log("start_game", room)
         const res = {success: true}
         const roomX = io.data.rooms[room]
         const {players} = roomX
@@ -125,13 +124,15 @@ function roomPhase({io, socket}) {
         if(playersID.map(id => players[id].start).includes(false) && playersID.length===2) {
             const opponentID = playersID[ind ===1 ? 0 : 1]
             socket.emit('start_game_response', res)
-            console.log(opponentID)
             socket.to(opponentID).emit('opponent_start_game', {})
         }  else {
             io.to(room).emit('warp_to_game')
-            deleteRoomPhaseEvents({socket})
-            gamePhase({io, socket})
+            
         }
+    })
+    socket.on('game_phase', ({room}) => {
+        deleteRoomPhaseEvents({socket})
+        gamePhase({io, socket})
     })
 }
 
@@ -161,18 +162,20 @@ function leaveRoom({io, socket, room}) {
 }
 
 function gamePhase({io, socket}) {
-    socket.on('place mark', ({room, position}) => {
+    socket.on('place_mark', data => {
+        const {room, pos, mark} = data
         const res = {}
         const {rooms} = io.data
-        const {players} = rooms[room]
+        const {players={}} = rooms[room]
 
         if(Object.keys(players).includes(socket.id)) { // check if the user is in the room
             res.success = true
-            res.pos = position
+            res.pos = pos
+            res.mark = mark
         } else {
             res.success = false
             res.error = {msg: "User validation failed"}
         }
-        io.to(room).emit('place mark response', res)
+        io.to(room).emit('place_mark_response', res)
     })
 }
