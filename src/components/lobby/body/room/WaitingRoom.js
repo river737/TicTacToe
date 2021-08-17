@@ -1,160 +1,14 @@
-import { useContext, useState, useEffect } from 'react'
+import styles from '../../../../../styles/lobby/body/room/WaitingRoom.module.css'
 
-import styles from '../../../../../styles/lobby/body/WaitingRoom.module.css'
+import BodyRight from './waitingRoom/BodyRight'
+import BodyLeft from './waitingRoom/BodyLeft'
 
-import Player from './Player'
-
-import { SocketContext } from '../../../../contexts/socketContext'
-import { InfoContext } from '../../../../contexts/infoContext'
+import WaitingRoomHook from '../../../../hooks/WaitingRoomHook'
 
 export default function WaitingRoom({start, setStart, room, setRoom, setPage, roomData, type}) {
-    const {socket} = useContext(SocketContext)
-    const {data} = useContext(InfoContext)
-    const {name} = data
-    const back = () => {
-        socket.emit('leave_room', {room: room.id})
-    }
-    const minimize = () => {
-
-    }
-    const startGame = () => {
-        socket.emit('start_game', {room: room.id})
-    }
-    useEffect(()=>{
-        let mounted = true // for preventing state update when the component is unmounting
-        if(type==='create') {
-            socket.emit('create_room')
-            socket.on('create_room_response', res => {
-                if(res.success) {
-                    const {room} = res
-                    if(mounted) {
-                        setRoom(r => {
-                            const obj = {...r}
-                            obj.players = [
-                                {
-                                    username: `${name} (me)`,
-                                    icon: <i className="fa fa-user-astronaut"/>,
-                                    stats: {
-                                        winRate: 53,
-                                        gamesPlayed: 21
-                                    },
-                                    mark: 'x'
-                                }
-                            ]
-                            obj.id = room
-                            return obj
-                        })
-                    }
-                } else {
-                    alert(res.error.msg)
-                }
-            })
-            socket.on('join_room_response', ({roomData}) => {
-                const {opponent} = roomData
-                
-                setRoom(r => {
-                    const obj = {...r}
-                    if(obj.players.length < 2) {
-                        setStart(s => {
-                            const obj = {...s}
-                            obj.phase = 1
-                            return obj
-                        })
-                        obj.players = obj.players.concat({
-                            icon: <i className="fa fa-user-secret"/>,
-                            username: opponent.username,
-                            stats: {
-                                winRate: 67,
-                                gamesPlayed: 9
-                            },
-                            mark: 'o'
-                        })
-                    }
-                    return obj
-                })
-            })
-            
-        } else if(type==='join') {
-            setRoom(r => {
-                const {id, opponent} = roomData
-                const obj = {...r}
-                obj.id = id
-                obj.players = [
-                    {
-                        username: opponent.username,
-                        icon: <i className="fa fa-user-astronaut"/>,
-                        stats: {
-                            winRate: 53,
-                            gamesPlayed: 21
-                        },
-                        mark: 'x'
-                    },
-                    {
-                        username: `${name} (me)`,
-                        icon: <i className="fa fa-user-secret"/>,
-                        stats: {
-                            winRate: 68,
-                            gamesPlayed: 91
-                        },
-                        mark: 'o'
-                    }
-                ]
-                return obj
-            })
-        }
-        socket.on('leave_room_response', res => {
-            if(res.success) {
-                setPage({opened: false})
-            }
-        })
-        socket.on('opponent_left_room', () => {
-            setRoom(r => {
-                const obj = {...r}
-                const index = type === 'create' ? 0 : 1
-                obj.players = [obj.players[index]]
-                return obj
-            })
-        })
-        
-        socket.on('opponent_start_game', res => {
-            console.log("opponent_start_game")
-            setStart(s => {
-                const obj = {...s}
-                if(obj.phase === 1) obj.phase  = 3
-                else if(obj.phase === 2) obj.phase = 4
-                return obj
-            })
-        })
-        socket.on('start_game_response', res => {
-            console.log("start_game_response")
-            if(res.success) {
-                setStart(s => {
-                    const obj = {...s}
-                    if(obj.phase ===1) obj.phase = 2
-                    if(obj.phase===3) obj.phase = 4
-                    return obj
-                })
-            }
-        })
-        socket.on('warp_to_game', res => {
-            setStart(s => {
-                const obj = {...s}
-                obj.phase = 4
-                return obj
-            })
-        })
-        
-        
-        return () => {
-            mounted = false
-            socket.off('leave_room_response')
-            socket.off('create_room_response')
-            socket.off('join_room_response')
-            socket.off('opponent_left_room')
-            socket.off('start_game_response')
-            socket.off('warp_to_game')
-        }
-    }, [])
+    
+    const {back, minimize, startGame} = WaitingRoomHook({setPage, setRoom, setStart, roomData, type, room})
+    
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -172,42 +26,8 @@ export default function WaitingRoom({start, setStart, room, setRoom, setPage, ro
                 </div>
             </div>
             <div className={styles.body}>
-                <div className={styles.bodyLeft}>
-                    <Player {...room.players[0]}/>
-                    <div className={styles.versus}>
-                        VS
-                    </div>
-                    <Player {...room.players[1]}/>
-                    <div className={styles.startBtn}>
-                        <button onClick={startGame} disabled={start.phase !== 1 && start.phase !== 3}>
-                            {
-                                start.phase === 0 ? 
-                                    '2 Players Required'
-                                : start.phase === 1 ? 
-                                    'Start Game'
-                                : start.phase === 2 ? 
-                                    'Waiting for Opponent'
-                                : start.phase === 3 ? 
-                                    'Opponent is Waiting. Start Now!'
-                                : <i className="fa fa-spin fa-circle-notch" />
-                            }
-                        </button>
-                    </div>
-                </div>
-                <div className={styles.bodyRight}>
-                    <div className={styles.invite}>
-                        <span className={styles.widgetTitle}>Invite Players</span>
-                        <div className={styles.textBox}>
-                            <span className={styles.left}>{room.id}</span>
-                            <button>
-                                <i className="fa fa-copy" />
-                            </button>
-                        </div>
-                        <div className={styles.widgetDescription}>
-                            Copy the room ID above
-                        </div>
-                    </div>
-                </div>
+                <BodyLeft {...{room, start, startGame}}/>
+                <BodyRight {...{room}}/>
             </div>
         </div>
     )

@@ -33,7 +33,7 @@ export default function JoinRoom({setPage}) {
         return () => {
             socket.off('join_room_response')
         }
-    }, [])
+    }, [socket, setPage])
     
     return (
         <div className={styles.container}>

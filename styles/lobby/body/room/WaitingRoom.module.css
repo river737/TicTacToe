@@ -1,0 +1,50 @@
+.container {
+    flex: 1;
+    width:100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    row-gap: 20px;
+}
+
+.header {
+    padding: 0px 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.header button {
+    background: rgb(var(--darkBlue));
+    font-size: 15px;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.header button i {
+    margin-right: 8px;
+}
+
+.header button:hover {
+    opacity: 0.85;
+}
+
+.header button:active {
+    margin: 1px;
+    padding: 5px 11px;
+}
+
+.headerLeft {
+    justify-self: left;
+}
+
+.headerRight {
+    justify-self: flex-end;
+}
+
+.body {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 20px;
+    padding: 20px;
+}

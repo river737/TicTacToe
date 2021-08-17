@@ -56,7 +56,7 @@ export default function LobbyBody({setPage, gameCover, setGameCover}) {
             ])
             return {activeIndex: g.activeIndex, content}
         })
-    }, [setGameCover]);
+    }, [setGameCover, setPage]);
     return (
         <div className={styles.body}>
             <div className={styles.bodyLeft}>

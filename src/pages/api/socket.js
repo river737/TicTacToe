@@ -4,7 +4,7 @@ import {Server} from 'socket.io'
 
 import SocketFunctions from '../../socket/socketFunctions'
 
-export default (req, res)  => {
+export default function handle(req, res) {
   if(!res.socket?.server?.io) {
     console.log("Socket Server Initialized")
     const socketServer = res.socket.server

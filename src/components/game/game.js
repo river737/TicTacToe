@@ -70,11 +70,11 @@ export default function Game({setPage, room, type}) {
     return () => {
       socket.off('place_mark_response')
     }
-  }, [dispatch])
+  }, [dispatch, socket])
 
   useEffect(()=>{
     socket.emit('game_phase', {room: room.id})
-  }, [])
+  }, [socket, room.id])
 
   return (
     <div className={styles.gameContainer}>

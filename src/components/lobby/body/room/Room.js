@@ -1,10 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
-
-
-
-import { SocketContext } from '../../../../contexts/socketContext'
-import { InfoContext } from '../../../../contexts/infoContext'
-
+import { useState } from 'react'
 
 import Game from '../../../game/game'
 import WaitingRoom from './WaitingRoom'

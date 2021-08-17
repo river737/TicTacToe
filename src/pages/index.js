@@ -50,15 +50,21 @@ export default function Home({route: routeX, username}) {
   const [route, setRoute] = useState({name: routeX.name})
   
   useEffect(()=>{
+    let mounted = true
     if(username) {
       socket.emit('submit_username', {username, type: 'previous user'})
+      if(mounted)
       setData(obj => {
         const objx = {...obj}
         objx.name = username
         return objx
       })
     }
-  }, [setData])
+    return () => {
+      mounted = false
+      socket.off('submit_username')
+    }
+  }, [setData, username, socket])
   return (
     <RouteContext.Provider value={{setRoute}}>
       {

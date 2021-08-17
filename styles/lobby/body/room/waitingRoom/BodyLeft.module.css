@@ -1,0 +1,47 @@
+.bodyLeft {
+    height: max-content;
+    align-self: center;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 80px 40px;
+    align-items: center;
+}
+
+.versus {
+    font-size: 40px;
+    font-weight: 700;
+    place-self: center;
+}
+
+.startBtn {
+    justify-self: center;
+    grid-column: span 3;
+}
+
+.startBtn button {
+    padding: 10px 30px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: var(--radius);
+    color: rgb(var(--black));
+    background: rgb(var(--yellow));
+    cursor: pointer;
+}
+
+.startBtn button:hover {
+    opacity: 0.9;
+}
+
+.startBtn button:active {
+    padding: 9px 29px;
+    margin: 1px;
+}
+
+.startBtn button:disabled {
+    background: rgba(var(--yellow), 0.3);
+    color: rgba(var(--black), 0.7);
+    border: 1px dashed rgba(var(--yellow), 0.4);
+    cursor: not-allowed;
+}

@@ -33,7 +33,6 @@ export default function Login() {
                 objx.identified= true
                 return objx
             });
-            console.log(name)
             socket.emit('submit_username', {username: name})
         } else setError({verify: true, msg: `Error! Name cannot be empty!`})
     }
@@ -41,7 +40,6 @@ export default function Login() {
     useEffect(()=>{
         socket.on('submit_username_response', (res) => { // waiting for a response from the server after submitting
             if(res.success) {
-                console.log(name)
                 document.cookie = `username=${name};path=/;max-age=86400;sameSite=Strict;`
                 setRoute({name: 'lobby'})
             } else { // an error occured
@@ -50,7 +48,7 @@ export default function Login() {
             }
         })
         return () => socket.off('submit_username_response')
-    }, [name])
+    }, [name, setRoute, socket])
 
     const inputFocus = () => {
         setInput({active: true})

@@ -13,7 +13,7 @@ export default function Lobby() {
 
   useEffect(()=>{
     socket.emit('room_phase')
-  }, [])
+  }, [socket])
   return (
     <div className={styles.content}>
       {
