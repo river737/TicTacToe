@@ -8,13 +8,13 @@ import styles from '../../../styles/Game.module.css'
 import detector from '../../gamelogic/rule.js'
 import DisplayWinner from '../../gamelogic/result.js'
 
-function reducer(newarr, action) {
+function reducer(grids, action) {
   switch(action.type) {
     case 'add':
-      newarr[action.append.i][action.append.j].fill = action.symbol;
-      return [...newarr];
+      grids[action.append.i][action.append.j] = action.symbol;
+      return [...grids];
     default:
-       return [...newarr];
+       return [...grids];
   }
 }
 
@@ -27,21 +27,21 @@ export default function Game({setPage, room, type}) {
 
   const gridwrapper = useRef();
 
-  const size = 15
+  const size = 20
   let arr = [];
   for(let i = 0; i < size; i++) {
     arr[i] = new Array();
     for(let j = 0; j < size; j++) {
-      arr[i][j] = {fill: ''};
+      arr[i][j] = '';
     }
   }
 
-  const [newarr, dispatch] = useReducer(reducer, arr);
+  const [grids, dispatch] = useReducer(reducer, arr);
 
   const myIndex = type === 'create' ? 0 : 1
   function display(i=0, j=0) {
     const isMyTurn = room.players[myIndex].mark === turn
-    if(newarr[i][j].fill==='' && isMyTurn) {
+    if(grids[i][j]==='' && isMyTurn) {
       socket.emit('place_mark', {room: room.id, mark: turn, pos: {i, j}})
     }
   }
@@ -56,9 +56,9 @@ export default function Game({setPage, room, type}) {
   }
 
   useEffect(()=>{
-    const x = detector(newarr, size, gridwrapper.current.childNodes);
+    const x = detector(grids, size, gridwrapper.current.childNodes);
     if(x.win !== null) setTimeout(() => setWinner(x.win), 1000);
-  }, [newarr]);
+  }, [grids]);
 
   useEffect(()=>{
     socket.on('place_mark_response', (res) => {
@@ -79,11 +79,11 @@ export default function Game({setPage, room, type}) {
   return (
     <div className={styles.gameContainer}>
       <div className={styles.grid}>
-        <div className={styles.box} ref={gridwrapper}>
+        <div className={styles.box} ref={gridwrapper} style={{'--column': size}}>
         {
-          newarr.map((items, i) => {
-            return items.map((item, j) => {
-              return <div className={styles.grids} key={i*size+j} onClick={() => display(i, j)}>{item.fill}</div>
+          grids.map((items, i) => {
+            return items.map((mark, j) => {
+              return <div key={`${i}-${j}`} onClick={() => display(i, j)}>{mark}</div>
             })
           }
           )
