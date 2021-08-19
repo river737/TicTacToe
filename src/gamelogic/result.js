@@ -16,8 +16,18 @@ export default function DisplayWinner({passdata}) {
 
   return (
     <div className={styles.display} >
-      <h1>Congrats {passdata.name}! {passdata.win} win!</h1>
-      <button onClick={returnhome}>Return</button>
+    {
+      passdata.type==='multiplayer' ?
+      <>
+        <h1>Congrats {passdata.name}! {passdata.win} win!</h1>
+        <button onClick={returnhome}>Return</button>
+      </> :
+      <>
+        <h1>Congrats {passdata.name}! {passdata.win} win!</h1>
+        <button onClick={returnhome}>Return</button>
+      </>
+    }
+
     </div>
   )
 }

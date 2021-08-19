@@ -89,7 +89,7 @@ export default function Game({setPage, room, type}) {
           )
         }
         </div>
-        
+
       </div>
       <div className={styles.sidebar}>
         <div>
@@ -100,9 +100,9 @@ export default function Game({setPage, room, type}) {
             <button onClick={back} className={styles.button}>Terminate game</button>
           </div>
         </div>
-        
+
       </div>
-      {(winner!==null) && <DisplayWinner passdata={{name: data.name, win: winner, setWin: setWinner}} />}
+      {(winner!==null) && <DisplayWinner passdata={{name: data.name, win: winner, setWin: setWinner, type:'multiplayer'}} />}
     </div>
   )
 }
