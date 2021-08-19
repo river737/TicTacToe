@@ -59,16 +59,16 @@ export default function Game() {
 
   function showhint() {
     var a = botmove(symb, grids, size, 'hint');
-    gridwrapper.current.childNodes[a.i*size+a.j].style.background="green";
+    gridwrapper.current.childNodes[a.i*size+a.j].className=styles.hint;
     setTimeout(() => {
-      gridwrapper.current.childNodes[a.i*size+a.j].style.background="none";
+      gridwrapper.current.childNodes[a.i*size+a.j].className='';
     }, 1000);
   }
 
   function lastmove() {
-    gridwrapper.current.childNodes[prevbot.i*size+prevbot.j].style.background="grey";
+    gridwrapper.current.childNodes[prevbot.i*size+prevbot.j].className=styles.lastmove;
     setTimeout(() => {
-      gridwrapper.current.childNodes[prevbot.i*size+prevbot.j].style.background="none";
+      gridwrapper.current.childNodes[prevbot.i*size+prevbot.j].className='';
     }, 1000);
   }
 
@@ -101,7 +101,7 @@ export default function Game() {
   return (
     <>
     {difficulty==='' ?
-      <Difficulty {...{difficulty, setDifficulty}} />
+      <Difficulty {...{setDifficulty}} />
       : symb!=='' ?
       <div className={styles.gameContainer}>
         <div className={styles.grid}>
@@ -133,7 +133,7 @@ export default function Game() {
         </div>
         {(winner!==null) && <DisplayWinner passdata={{name: data.name, win: winner, setWin: setWinner, type:'bot'}} />}
       </div> :
-      <Choose {...{symb, thissymb}} />}
+      <Choose {...{thissymb}} />}
   </>
   )
 }

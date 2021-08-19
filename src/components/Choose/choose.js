@@ -1,5 +1,5 @@
 import style from '../../../styles/Choose/choose.module.css'
-export default function Choose({symb, thissymb}) {
+export default function Choose({thissymb}) {
   return (
     <div className={style.page}>
        <h1>Pick one</h1>

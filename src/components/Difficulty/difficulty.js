@@ -1,16 +1,16 @@
 import styles from '../../../styles/mode/mode.module.css'
-export default function Difficulty({difficulty, setDifficulty}) {
+export default function Difficulty({setDifficulty}) {
 
   function easy() {
     setDifficulty('easy');
   }
 
   function medium() {
-    setDifficulty('easy');
+    setDifficulty('medium');
   }
 
   function hard() {
-    setDifficulty('easy');
+    setDifficulty('hard');
   }
 
   return (

@@ -2,15 +2,11 @@ var move = 0;
 let arr = ['o', 'x'];
 export default function botmove(x, grids, size, type) {
   const mark = x==='x'?'o':'x';
-  if(type === 'hint' && x==='o') {
+  if((type === 'hint' && x==='o')||(type !== 'hint' && x==='x')) {
     arr = ['o', 'x'];
-  } else if(type === 'hint' && x==='x') {
+  } else if((type === 'hint' && x==='x')||(type !== 'hint' && x==='o')) {
     arr = ['x', 'o'];
-  } else if(type !== 'hint' && x==='o'){
-    arr = ['x', 'o'];
-  } else if(type !== 'hint' && x==='x'){
-    arr = ['o', 'x'];
-  }
+  } 
   if(x==='o' && move===0) {
     move++;
     return {i:10, j:10}
