@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-import Game from '../../../game/game'
+import Multiplayer from '../../../game/Multiplayer'
 import WaitingRoom from './WaitingRoom'
 
-export default function Room({setPage, type = "create", roomData={}}) {
+export default function Room({type = "create", roomData={}}) {
 
 
     const [start, setStart] = useState({phase: type === 'create' ? 0 : 1})
@@ -18,7 +18,7 @@ export default function Room({setPage, type = "create", roomData={}}) {
     
     return (
         start.phase !== 4 ?
-            <WaitingRoom {...{start, setStart, room, setRoom, setPage, roomData, type}}/>
-        : <Game {...{room, type, setPage}}/>
+            <WaitingRoom {...{start, setStart, room, setRoom, roomData, type}}/>
+        : <Multiplayer {...{room, type}}/>
     )
 }

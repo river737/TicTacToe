@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react"
 
 import { SocketContext } from "../../contexts/socketContext"
+import { PageContext } from "../../contexts/pageContext"
 
 import styles from '../../../styles/lobby/Lobby.module.css'
 
 import LobbyBody from './body/Body'
-import Bot from '../../components/game/bot.js'
+import Bot from '../game/bot.js'
 
 export default function Lobby() {
   const {socket} = useContext(SocketContext)
@@ -16,13 +17,13 @@ export default function Lobby() {
         {
           iconClassName: "fa fa-robot",
           title: "Single Player",
-          description: "Compete to your heart's content against the computer",
+          description: "Compete to your heart's content against the computerx",
           action: {
             text: "Start Game",
             click: () => {
               setPage({
                   opened: true,
-                  component: <Bot />
+                  component: <Bot {...{setPage}}/>
               })
             }
           }
@@ -35,11 +36,13 @@ export default function Lobby() {
   }, [socket])
   return (
     <div className={styles.content}>
-      {
-        page.opened ?
-          page.component
-        : <LobbyBody {...{setPage, gameCover, setGameCover}}/>
-      }
+      <PageContext.Provider value={{setPage}}>
+        {
+          page.opened ?
+            page.component
+          : <LobbyBody {...{gameCover, setGameCover}}/>
+        }
+      </PageContext.Provider>
 
     </div>
   )

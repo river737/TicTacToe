@@ -21,6 +21,18 @@
   --blue: 105, 126, 236;
   --blue2: 80, 99, 176;
   --darkBlue: 53, 67, 108;
+
+  --padding: 20px;
+}
+
+@media screen and (max-width: 799px) {
+  :root {
+    --padding: 10px;
+  }
+}
+
+html {
+  background-image: linear-gradient(to top, rgb(var(--purple)), rgb(var(--blue)));
 }
 
 html,
@@ -29,6 +41,7 @@ body {
   margin: 0;
   font-family: var(--font);
   color: rgb(var(--white));
+  overflow: hidden;
 }
 
 input, textarea {
@@ -59,7 +72,7 @@ button {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: linear-gradient(to top, rgb(var(--purple)), rgb(var(--blue)));
+  
 }
 
 .preventOverflow {

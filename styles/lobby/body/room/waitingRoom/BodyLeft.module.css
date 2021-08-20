@@ -45,3 +45,9 @@
     border: 1px dashed rgba(var(--yellow), 0.4);
     cursor: not-allowed;
 }
+
+@media screen and (max-width: 799px) {
+    .bodyLeft {
+        gap: 40px 20px;
+    }
+}

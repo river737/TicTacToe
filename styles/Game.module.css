@@ -6,7 +6,7 @@
   display: grid;
   grid-template-columns: 1fr auto;
   padding: 20px;
-  column-gap: 20px;
+  gap: 20px;
   padding-top: 0px;
   animation: zoom 0.5s ease;
 }
@@ -131,4 +131,25 @@
 @keyframes zoom {
   from {transform: scale(0, 0);}
   to {transform: scale(1, 1);}
+}
+
+@media screen and (max-width: 799px){
+  .gameContainer {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 60px;
+  }
+  .sidebar {
+    --width: calc(100% + 40px);
+    padding: 0px;
+    margin: -20px;
+    margin-top: 0px;
+    width: var(--width);
+    min-width: var(--width);
+    max-width: var(--width);
+  }
+
+  .sidebar > div {
+    max-height: 100%;
+    overflow: scroll;
+  }
 }

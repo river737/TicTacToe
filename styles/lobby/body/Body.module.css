@@ -11,39 +11,6 @@
     margin-left: 20px;
   }
   
-  .sideTabs {
-    width: max-content;
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-rows: 30px;
-    grid-auto-columns: 50px;
-    overflow: hidden;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-  }
-  
-  .activeUsers {
-    color: green;
-  }
-  
-  .sideTabs > * {
-    display: grid;
-    place-items: center;
-    background: rgb(var(--darkBlue));
-  }
-  
-  .sideList {
-    display: grid;
-    grid-auto-rows: 40px;
-  }
-  
-  .sideList > * {
-    padding: 6px 8px;
-    display: grid;
-    align-items: center;
-    background: rgb(var(--darkBlue))
-  }
-  
   .bodyMid {
     display: flex;
     justify-content: center;
@@ -58,4 +25,13 @@
   
   .bodyRight {
     margin-right: 20px;
+  }
+
+  @media screen and (max-width: 799px) {
+    .body {
+      grid-template-columns: 1fr;
+    }
+    .bodyLeft, .bodyRight {
+      display: none;
+    }
   }

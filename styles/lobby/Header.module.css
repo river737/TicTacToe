@@ -79,3 +79,16 @@
   .medals i {
     color: rgb(var(--yellow));
   }
+
+  @media screen and (max-width: 799px) {
+    .header {
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 20px;
+    }
+    .headerMid {
+      grid-row-start: 2;
+      grid-column: span 2;
+      width: 100%;
+      display: none;
+    }
+  }

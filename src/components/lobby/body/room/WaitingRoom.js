@@ -5,9 +5,9 @@ import BodyLeft from './waitingRoom/BodyLeft'
 
 import WaitingRoomHook from '../../../../hooks/WaitingRoomHook'
 
-export default function WaitingRoom({start, setStart, room, setRoom, setPage, roomData, type}) {
+export default function WaitingRoom({start, setStart, room, setRoom, roomData, type}) {
     
-    const {back, minimize, startGame} = WaitingRoomHook({setPage, setRoom, setStart, roomData, type, room})
+    const {back, minimize, startGame} = WaitingRoomHook({setRoom, setStart, roomData, type, room})
     
     return (
         <div className={styles.container}>

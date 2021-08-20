@@ -56,3 +56,11 @@
     font-size: 14px;
     margin-top: 12px;
 }
+
+@media screen and (max-width: 799px) {
+    .bodyRight {
+        display: grid;
+        align-items: center;
+        max-width: 100%;
+    }
+}

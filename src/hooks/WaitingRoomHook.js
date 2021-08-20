@@ -2,8 +2,10 @@ import { useEffect, useContext } from "react";
 
 import { SocketContext } from "../contexts/socketContext";
 import { InfoContext } from "../contexts/infoContext";
+import { PageContext } from "../contexts/pageContext";
 
-export default function WaitingRoomHook({setStart, setRoom, setPage, type, roomData, room}) {
+export default function WaitingRoomHook({setStart, setRoom, type, roomData, room}) {
+    const {setPage} = useContext(PageContext)
     const {socket} = useContext(SocketContext)
     const {data} = useContext(InfoContext)
     const {name} = data

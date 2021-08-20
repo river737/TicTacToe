@@ -159,4 +159,16 @@
     90% {transform: scale(1.1, 1.1)}
     to {transform: scale(1, 1)}
   }
+
+  @media screen and (max-width: 799px) {
+    .login {
+      padding: 20px;
+      width: initial;
+      position: initial;
+    }
+    .login > div {
+      width: 100%;
+      position: initial;
+    }
+  }
   

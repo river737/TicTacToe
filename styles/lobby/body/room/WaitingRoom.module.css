@@ -7,7 +7,7 @@
 }
 
 .header {
-    padding: 0px 20px;
+    padding: 0px var(--padding);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
 }
@@ -45,6 +45,12 @@
     height: 100%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 20px;
-    padding: 20px;
+    column-gap: var(--padding);
+    padding: var(--padding);
+}
+
+@media screen and (max-width: 799px) {
+    .body {
+        grid-template-columns: 1fr;
+    }
 }

@@ -7,6 +7,11 @@ export default function SocketFunctions({io, socket}){
         const ind = users.id.indexOf(socket.id)
         users.id.splice(ind, 1)
         
+        socket.rooms?.forEach(id => {
+            if(io.data.rooms[id]) {
+                leaveRoom({io, socket, room:id})
+            }
+        })
         if(socket.data?.username) {
             users.username.splice(users.username.indexOf(socket.data.username), 1)
         }
@@ -131,17 +136,14 @@ function roomPhase({io, socket}) {
         }
     })
     socket.on('game_phase', ({room}) => {
-        deleteRoomPhaseEvents({socket})
+        socket.off('start_game', () => {})
+        socket.off('join_random_room', () => {})
+        socket.off('join_room', () => {})
+        socket.off('leave_room', () => {})
+        socket.off('create_room', () => {})
+
         gamePhase({io, socket})
     })
-}
-
-function deleteRoomPhaseEvents({socket}) {
-    socket.off('start_game', () => {})
-    socket.off('join_random_room', () => {})
-    socket.off('join_room', () => {})
-    socket.off('leave_room', () => {})
-    socket.off('create_room', () => {})
 }
 
 function joinRoom({io, socket, room}) {

@@ -1,12 +1,14 @@
 import { useContext, useState, useEffect } from 'react'
 
 import { SocketContext } from '../../../../contexts/socketContext'
+import { PageContext } from '../../../../contexts/pageContext'
 
 import Room from './Room'
 
 import styles from '../../../../../styles/lobby/body/room/JoinRoom.module.css'
 
-export default function JoinRoom({setPage}) {
+export default function JoinRoom() {
+    const {setPage} = useContext(PageContext)
     const {socket} = useContext(SocketContext)
 
     const [roomID, setRoomID] = useState('')

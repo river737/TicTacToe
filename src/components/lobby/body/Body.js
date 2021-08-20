@@ -1,13 +1,16 @@
-import { useEffect } from "react"
+import { useEffect, useContext } from "react"
 
 import GameCover from "./GameCover"
 import Room from "./room/Room"
 import JoinRoom from './room/JoinRoom'
 
+import { PageContext } from "../../../contexts/pageContext"
+
 import styles from '../../../../styles/lobby/body/Body.module.css'
 
 
-export default function LobbyBody({setPage, gameCover, setGameCover}) {
+export default function LobbyBody({gameCover, setGameCover}) {
+    const {setPage} = useContext(PageContext)
     const gameNavClick = (n) => {
         setGameCover(g => {
             let length = g.content.length
@@ -36,7 +39,7 @@ export default function LobbyBody({setPage, gameCover, setGameCover}) {
                         click: () => {
                             setPage({
                                 opened: true,
-                                component: <JoinRoom {...{setPage}}/>
+                                component: <JoinRoom />
                             })
                         }
                     }
@@ -48,7 +51,7 @@ export default function LobbyBody({setPage, gameCover, setGameCover}) {
                         click: () => {
                             setPage({
                                 opened: true,
-                                component: <Room {...{setPage, type: "create"}}/>
+                                component: <Room {...{type: "create"}}/>
                             })
                         }
                     }
@@ -60,31 +63,11 @@ export default function LobbyBody({setPage, gameCover, setGameCover}) {
     return (
         <div className={styles.body}>
             <div className={styles.bodyLeft}>
-            <div className={styles.sideTabs}>
-                <span className={styles.activeUsers}>
-                <i className="fa fa-circle"/>
-                </span>
-
-            </div>
-            <div className={styles.sideList}>
-                {
-                    [
-                        {username: 'goku'},
-                        {username: 'vegeta'},
-                        {username: 'gohan'}
-                    ].map(({username}, i) =>
-                        <div key={i}>
-                        <span>{username}</span>
-                        </div>
-                    )
-                }
-
-            </div>
-
+                
             </div>
             <div className={styles.bodyMid}>
             <div>
-                <GameCover {...gameCover.content[gameCover.activeIndex]} {...{gameNavClick, setPage}}/>
+                <GameCover {...gameCover.content[gameCover.activeIndex]} {...{gameNavClick}}/>
             </div>
             </div>
             <div className={styles.bodyRight}>
