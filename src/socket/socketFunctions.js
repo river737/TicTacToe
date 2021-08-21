@@ -169,15 +169,26 @@ function gamePhase({io, socket}) {
         const res = {}
         const {rooms} = io.data
         const {players={}} = rooms[room]
+        const playersID = Object.keys(players)
 
-        if(Object.keys(players).includes(socket.id)) { // check if the user is in the room
+        if(playersID.includes(socket.id)) { // check if the user is in the room
             res.success = true
             res.pos = pos
             res.mark = mark
+
+            const opponent = playersID[playersID.indexOf(socket.id) === 0 ? 1 : 0]
+            socket.to(opponent).emit('place_mark_response', res)
         } else {
             res.success = false
             res.error = {msg: "User validation failed"}
+            socket.emit('place_mark_response', res)
+            return
         }
-        io.to(room).emit('place_mark_response', res)
+    })
+    socket.on('leave_game', ({room}) => {
+        socket.off('leave_game', ()=>{})
+        socket.off('place_mark', () => {})
+        roomPhase({io, socket})
+        leaveRoom({io, socket, room})
     })
 }

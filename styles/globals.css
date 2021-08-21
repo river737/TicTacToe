@@ -79,7 +79,7 @@ button {
   --lines: 1;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
+  display: -webkit-box!important;
   -webkit-line-clamp: var(--lines);
   -webkit-box-orient: vertical;
 }

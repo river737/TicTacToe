@@ -11,12 +11,18 @@ import Difficulty from '../Difficulty/difficulty'
 function reducer(grids, action) {
   switch(action.type) {
     case 'add':
-      grids[action.append.i][action.append.j] = action.symbol;
-      return [...grids];
+      const {i, j} = action.append
+      const arr = grids.map(row => [...row]) // deep copy the "grids" array to prevent unexpected bugs
+      arr[i][j] = action.symbol
+      return arr
     default:
-       return [...grids];
+       return grids;
   }
 }
+
+/* 
+  Grid wrapper is not gonna work here
+*/
 
 export default function Bot({setPage}) {
   const [symb, thissymb] = useState('');
@@ -33,39 +39,33 @@ export default function Bot({setPage}) {
   const [grids, dispatch] = useReducer(reducer, arr);
 
   function display(i, j) {
+    
     if(grids[i][j]==='' && myturn) {
-      setMyturn(false);
+      setMyturn(false)
       dispatch({type:'add', append: {i, j}, symbol: symb});
-      setPrevplayer({i:i,j:j});
+      setPrevplayer({i, j});
+      return
     }
   }
-
-  useEffect(() => {
-    if(symb==='o') {
-      const x = botmove(symb, grids, size);
-      dispatch({type:'add', append: {i:x.i, j:x.j}, symbol: symb==='o'?'x':'o'});
-    }
-  }, [symb])
-
   
 
   useEffect(()=>{
     if(!myturn) {
-      var a = botmove(symb, grids, size, 'move');
-      dispatch({type:'add', append: {i:a.i, j:a.j}, symbol: symb==='o'?'x':'o'});
+      const {i, j} = botmove(symb, grids, size, 'move');
+      dispatch({type:'add', append: {i, j}, symbol: symb==='o'?'x':'o'});
       setMyturn(true);
-      setPrevbot({i:a.i, j:a.j});
+      setPrevbot({i, j});
     }
 
   }, [grids, symb]);
-  const sidebar = <Sidebar {...{setPage, botmove, gridwrapper, prevbot, size, prevplayer}}/>
+  const sidebar = <Sidebar {...{grids, symb, setPage, botmove, gridwrapper, prevbot, size, prevplayer}}/>
   return (
     <>
       {
         difficulty==='' ?
           <Difficulty {...{setDifficulty}} />
         : symb!=='' ?
-          <Game {...{grids, display, sidebar, type: 'bot'}}/>
+          <Game {...{size, grids, display, sidebar, type: 'bot', ref: gridwrapper}}/>
         :
           <Choose {...{thissymb}} />
       }
@@ -73,7 +73,7 @@ export default function Bot({setPage}) {
   )
 }
 
-function Sidebar({setPage, botmove, gridwrapper, prevbot, size, prevplayer}) {
+function Sidebar({grids, symb, setPage, botmove, gridwrapper, prevbot, size, prevplayer}) {
   function showhint() {
     const a = botmove(symb, grids, size, 'hint');
     const classToggle = ()=>{

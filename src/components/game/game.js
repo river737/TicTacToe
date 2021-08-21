@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext, useRef} from 'react'
+import {useState, useEffect, useContext, forwardRef} from 'react'
 
 import {InfoContext} from '../../contexts/infoContext.js'
 
@@ -7,24 +7,20 @@ import styles from '../../../styles/Game.module.css'
 import detector from '../../gamelogic/rule.js'
 import DisplayWinner from '../../gamelogic/result.js'
 
-export default function Game({display, sidebar, grids, type="multiplayer" || "bot"}) {
-  const size = 20
-
+const Game = forwardRef(({size= 20, display, sidebar, grids, type="multiplayer" || "bot"}, ref) => {
   const {data} = useContext(InfoContext);
   
   const [winner, setWinner] = useState(null);
 
-  const gridwrapper = useRef();
-
   useEffect(()=>{
-    const x = detector(grids, size, gridwrapper.current.childNodes);
+    const x = detector(grids, size, ref?.current?.childNodes);
     if(x.win !== null) setTimeout(() => setWinner(x.win), 1000);
   }, [grids]);
 
   return (
     <div className={styles.gameContainer}>
       <div className={styles.grid}>
-        <div className={styles.box} ref={gridwrapper} style={{'--column': size}}>
+        <div className={styles.box} ref={ref} style={{'--column': size}}>
           {
             grids.map((items, i) => {
               return items.map((mark, j) => {
@@ -44,4 +40,6 @@ export default function Game({display, sidebar, grids, type="multiplayer" || "bo
       {(winner!==null) && <DisplayWinner passdata={{name: data.name, win: winner, setWin: setWinner, type}} />}
     </div>
   )
-}
+})
+
+export default Game

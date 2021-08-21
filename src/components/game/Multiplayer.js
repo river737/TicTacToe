@@ -1,20 +1,25 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, useRef } from "react"
 
 import { SocketContext } from "../../contexts/socketContext"
-import { PageContext } from "../../contexts/pageContext"
 
 import Game from "./game"
+import MultiplayerSidebar from "./MultiplayerSidebar"
 
 export default function Multiplayer({room, type}) {
     const size = 20
     const [turn, setTurn] = useState('x');
+    const [moves, setMoves] = useState([])
     const [grids, setGrids] = useState(new Array(size).fill(new Array(size).fill('')))
     const {socket} = useContext(SocketContext)
     const myIndex = type === 'create' ? 0 : 1
 
+    const gridWrapper = useRef()
+
     const displayX = ({i=0, j=0, mark=''}) => {
+        // const {mark} = room.players[myIndex]
+        
         setGrids(g => {
-            const arr = g.map(a => a.map(val => val))
+            const arr = g.map(a => [...a])
             arr[i][j] = mark
             return arr
         })
@@ -24,6 +29,7 @@ export default function Multiplayer({room, type}) {
     const display = (i=0, j=0) => {
         const isMyTurn = room.players[myIndex].mark === turn
         if(grids[i][j]==='' && isMyTurn) {
+            displayX({i, j, mark: turn})
             socket.emit('place_mark', {room: room.id, mark: turn, pos: {i, j}})
         }
     }
@@ -34,6 +40,9 @@ export default function Multiplayer({room, type}) {
             if(res.success) {
                 const {i, j} = res.pos
                 displayX({i, j, mark: res.mark})
+            } else {
+                const {error} = res
+                alert(error.msg)
             }
         })
         return () => {
@@ -45,22 +54,17 @@ export default function Multiplayer({room, type}) {
         socket.emit('game_phase', {room: room.id})
     }, [socket, room.id])
 
-    const sidebar = <Sidebar {...{room}}/>
-    return (
-        <Game {...{display, grids, sidebar, type: "multiplayer"}}/>
-    )
-}
+    useEffect(()=>{
+        socket.on('opponent_left_room', ()=>{
+            alert('opponent left the game')
+        })
+        return () => {
+            socket.off('opponent_left_room')
+        }
+    }, [socket])
 
-function Sidebar({room}) {
-    const {setPage} = useContext(PageContext)
-    const {socket} = useContext(SocketContext)
-    const terminate = () => {
-        socket.emit('leave_game', {room: room.id})
-        setPage({opened: false})
-    }
+    const sidebar = <MultiplayerSidebar {...{room}}/>
     return (
-        <div>
-            <button onClick={terminate}>Terminate</button>
-        </div>
+        <Game {...{size, display, grids, sidebar, type: "multiplayer", ref: gridWrapper}}/>
     )
 }
