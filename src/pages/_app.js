@@ -1,15 +1,18 @@
 import '../../styles/globals.css'
 import SocketContextProvider from '../contexts/socketContext'
-import {InfoProvider} from '../contexts/infoContext'
+import InfoProvider from '../contexts/infoContext'
+import AlertContextProvider from '../contexts/alertContext'
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
       <SocketContextProvider>
         <InfoProvider>
-          <div className='container'>
-            <Component {...pageProps} />
-          </div>
+          <AlertContextProvider>
+            <div className='container'>
+              <Component {...pageProps} />
+            </div>
+          </AlertContextProvider>
         </InfoProvider>
       </SocketContextProvider>
     </>

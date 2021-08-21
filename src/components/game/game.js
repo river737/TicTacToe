@@ -7,15 +7,15 @@ import styles from '../../../styles/Game.module.css'
 import detector from '../../gamelogic/rule.js'
 import DisplayWinner from '../../gamelogic/result.js'
 
-const Game = forwardRef(({size= 20, display, sidebar, grids, type="multiplayer" || "bot"}, ref) => {
+const Game = forwardRef(({lastMove={}, clicks=0, size= 20, display, sidebar, grids, type="multiplayer" || "bot"}, ref) => {
   const {data} = useContext(InfoContext);
   
   const [winner, setWinner] = useState(null);
 
   useEffect(()=>{
-    const audio = ref?.current?.parentNode?.previousElementSibling
-    audio?.play()
-    console.log(audio)
+    if(clicks>0) {
+      ref?.current?.parentNode?.previousElementSibling?.play()
+    }
     const x = detector(grids, size, ref?.current?.childNodes);
     if(x.win !== null) setTimeout(() => setWinner(x.win), 1000);
   }, [grids]);
@@ -43,7 +43,7 @@ const Game = forwardRef(({size= 20, display, sidebar, grids, type="multiplayer" 
         </div>
 
       </div>
-      {(winner!==null) && <DisplayWinner passdata={{name: data.name, win: winner, setWin: setWinner, type}} />}
+      {(winner!==null) && <DisplayWinner passdata={{name: lastMove.player || data.name, win: winner, setWin: setWinner, type}} />}
     </div>
   )
 })

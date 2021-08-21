@@ -1,0 +1,105 @@
+.alert {
+    position: fixed;
+    top: calc(66px + var(--padding));
+    left: 20px;
+    width: 300px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 8px 6px;
+    column-gap: 10px;
+    border-radius: 14px;
+    box-shadow: var(--boxShadow);
+    background: rgb(var(--bg));
+    z-index: 3;
+    color: rgb(var(--color));
+    border: 1px solid rgb(var(--iconBg));
+}
+
+.left {
+    place-self: center;
+}
+
+.left > span {
+    display: block;
+    background: rgb(var(--iconBg));
+    padding: 6px;
+    border-radius: 12px;
+}
+
+.left > span > span {
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(var(--color), 0.9);
+    color: rgb(var(--bg));
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+}
+
+.mid {
+
+}
+
+.title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.description {
+    font-size: 14px;
+    opacity: 0.95;
+}
+
+.right {
+    display: grid;
+    align-items: center;
+}
+
+.right button {
+    width: 26px;
+    height: 26px;
+    background: transparent;
+    color: rgba(var(--color), 0.8);
+    transition: 0.3s;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.right button:hover {
+    background: rgba(var(--white), 0.8);
+    color: rgba(var(--black), 0.8);
+}
+
+.default {
+    --bg: 76, 88 ,160;
+    --iconBg: var(--darkBlue);
+    --color: var(--white);
+}
+
+.warning {
+    --bg: var(--yellow);
+    --iconBg: 230, 157, 11;
+    --color: var(--black);
+}
+
+.success {
+    --bg: 110, 197, 142;
+    --iconBg: 65, 156, 111;
+    --color: var(--black);
+}
+
+.danger {
+    --bg: 197, 81, 75;
+    --iconBg: 189, 45, 38;
+    --color: var(--white);
+}
+
+@media screen and (max-width: 799px) {
+    .alert {
+        left: var(--padding);
+        width: calc(100% - (2 * var(--padding)));
+    }
+}

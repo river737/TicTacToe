@@ -1,5 +1,8 @@
 .multiplayerSidebar {
     padding: 10px;
+    color: rgb(var(--black));
+    display: grid;
+    gap: 20px;
 }
 
 .controls {
@@ -38,5 +41,65 @@
 .controls > div span {
     font-size: 13px;
     text-align: center;
+    display: block;
+}
+
+.latest {
+    transition: 0.5s;
+    background: rgba(var(--darkBlue), 0.3);
+    transform: rotateY(180deg);
+}
+
+.status {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.players {
+    display: grid;
+    row-gap: 8px;
+}
+
+.player {
+    align-items: center;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    background: rgb(var(--white));
+    column-gap: 8px;
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.profilePic {
+    position: initial;
+    font-size: 24px;
+    aspect-ratio: 1;
+    width:100%;
+}
+
+.profilePic > span {
+    display: grid;
+    height: 100%;
+    width: 100%;
+    aspect-ratio: 1;
+    place-items: center;
+    background: #d2d2d2;
+    border-radius: 8px;
+}
+
+.playerDetails {
+
+}
+
+.username {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.extraInfo {
+    font-size: 14px;
+}
+
+.extraInfo > * {
     display: block;
 }

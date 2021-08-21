@@ -153,6 +153,8 @@ function joinRoom({io, socket, room}) {
 
 function leaveRoom({io, socket, room}) {
     const roomX = io.data.rooms[room]
+    if(!roomX) return
+
     delete roomX.players[socket.id]
     const playersID = Object.keys(roomX.players)
     if(playersID.length===0) {
