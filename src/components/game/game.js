@@ -13,12 +13,18 @@ const Game = forwardRef(({size= 20, display, sidebar, grids, type="multiplayer" 
   const [winner, setWinner] = useState(null);
 
   useEffect(()=>{
+    const audio = ref?.current?.parentNode?.previousElementSibling
+    audio?.play()
+    console.log(audio)
     const x = detector(grids, size, ref?.current?.childNodes);
     if(x.win !== null) setTimeout(() => setWinner(x.win), 1000);
   }, [grids]);
 
   return (
     <div className={styles.gameContainer}>
+      <audio>
+        <source src="https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-61905/zapsplat_multimedia_button_click_004_68776.mp3"/>
+      </audio>
       <div className={styles.grid}>
         <div className={styles.box} ref={ref} style={{'--column': size}}>
           {
@@ -41,5 +47,6 @@ const Game = forwardRef(({size= 20, display, sidebar, grids, type="multiplayer" 
     </div>
   )
 })
+Game.displayName = "Game"
 
 export default Game

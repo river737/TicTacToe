@@ -165,7 +165,7 @@ function leaveRoom({io, socket, room}) {
 
 function gamePhase({io, socket}) {
     socket.on('place_mark', data => {
-        const {room, pos, mark} = data
+        const {room, pos} = data
         const res = {}
         const {rooms} = io.data
         const {players={}} = rooms[room]
@@ -174,7 +174,6 @@ function gamePhase({io, socket}) {
         if(playersID.includes(socket.id)) { // check if the user is in the room
             res.success = true
             res.pos = pos
-            res.mark = mark
 
             const opponent = playersID[playersID.indexOf(socket.id) === 0 ? 1 : 0]
             socket.to(opponent).emit('place_mark_response', res)

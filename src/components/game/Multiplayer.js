@@ -7,53 +7,63 @@ import MultiplayerSidebar from "./MultiplayerSidebar"
 
 export default function Multiplayer({room, type}) {
     const size = 20
-    const [turn, setTurn] = useState('x');
+    const index = {me: 0, opponent: 1}
+    if(type!=='create') {
+        index.me = 1
+        index.opponent = 0
+    }
+
+    const [myTurn, setMyTurn] = useState(index.me === 0)
     const [moves, setMoves] = useState([])
     const [grids, setGrids] = useState(new Array(size).fill(new Array(size).fill('')))
     const {socket} = useContext(SocketContext)
-    const myIndex = type === 'create' ? 0 : 1
+    
 
     const gridWrapper = useRef()
 
-    const displayX = ({i=0, j=0, mark=''}) => {
-        // const {mark} = room.players[myIndex]
-        
-        setGrids(g => {
-            const arr = g.map(a => [...a])
-            arr[i][j] = mark
-            return arr
-        })
-        setTurn(turn => turn==='o' ? 'x' : 'o');
-    }
-
     const display = (i=0, j=0) => {
-        const isMyTurn = room.players[myIndex].mark === turn
-        if(grids[i][j]==='' && isMyTurn) {
-            displayX({i, j, mark: turn})
-            socket.emit('place_mark', {room: room.id, mark: turn, pos: {i, j}})
+        if(grids[i][j]==='' && myTurn) {
+            displayX({i, j})
+            socket.emit('place_mark', {room: room.id, pos: {i, j}})
         }
     }
 
+    const displayX = ({i=0, j=0}) => {
+        setMyTurn(b => {
+            const currentIndex = index[b ? 'me' : 'opponent']
+            const {mark} = room.players[currentIndex]
+            
+            setMoves(a => {
+                const arr = [...a]
+                arr.push({pos: {i, j}, currentIndex})
+                return arr
+            })
+            setGrids(g => {
+                const arr = g.map(a => [...a])
+                arr[i][j] = mark
+                return arr
+            })
+            return !b
+        })
+    }
     
     useEffect(()=>{
+        let mounted = true
         socket.on('place_mark_response', (res) => {
             if(res.success) {
                 const {i, j} = res.pos
-                displayX({i, j, mark: res.mark})
+                if(mounted) displayX({i, j})
             } else {
                 const {error} = res
                 alert(error.msg)
             }
         })
         return () => {
+            mounted = false
             socket.off('place_mark_response')
         }
-    }, [setGrids, socket])
+    }, [setGrids, socket, setMyTurn])
     
-    useEffect(()=>{
-        socket.emit('game_phase', {room: room.id})
-    }, [socket, room.id])
-
     useEffect(()=>{
         socket.on('opponent_left_room', ()=>{
             alert('opponent left the game')
@@ -62,6 +72,10 @@ export default function Multiplayer({room, type}) {
             socket.off('opponent_left_room')
         }
     }, [socket])
+
+    useEffect(()=>{
+        socket.emit('game_phase', {room: room.id})
+    }, [socket, room.id])
 
     const sidebar = <MultiplayerSidebar {...{room}}/>
     return (
