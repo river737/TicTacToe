@@ -8,9 +8,9 @@ export default function SocketFunctions({io, socket}){
         const ind = users.id.indexOf(socket.id)
         users.id.splice(ind, 1)
         
-        socket.rooms?.forEach(id => {
-            if(io.data.rooms[id]) {
-                leaveRoom({io, socket, room:id})
+        socket.rooms?.forEach(roomID => {
+            if(io.data.rooms[roomID]) {
+                leaveRoom({io, socket, roomID})
             }
         })
         if(socket.data?.username) {
@@ -127,18 +127,18 @@ function joinRoomPhase({io, socket, roomID}) {
     })
 }
 
-function leaveRoom({io, socket, room}) {
-    const roomX = io.data.rooms[room]
-    if(!roomX) return
+function leaveRoom({io, socket, roomID}) {
+    const room = io.data.rooms[roomID]
+    if(!room) return
 
-    delete roomX.players[socket.id]
-    const playersID = Object.keys(roomX.players)
+    delete room.players[socket.id]
+    const playersID = Object.keys(room.players)
     if(playersID.length===0) {
-        delete io.data.rooms[room]
+        delete io.data.rooms[roomID]
     } else {
         socket.to(playersID[0]).emit('opponent_left_room')
     }
-    socket.leave(room)
+    socket.leave(roomID)
 }
 
 function gamePhase({io, socket, roomID}) {
@@ -163,6 +163,6 @@ function gamePhase({io, socket, roomID}) {
 
     socket.on('leave_game', () => {
         lobbyPhase({io, socket})
-        leaveRoom({io, socket, room: roomID})
+        leaveRoom({io, socket, roomID})
     })
 }

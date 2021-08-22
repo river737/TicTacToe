@@ -85,10 +85,20 @@ export default function WaitingRoomHook({setStart, setRoom, type, roomData, room
             
         }
         socket.on('opponent_left_room', () => {
+            
+            setAlert({show: true, data: {
+                title: "Opponent left room", msg: `Your opponent has left the room`, theme: 'warning'
+            }})
             setRoom(r => {
                 const obj = {...r}
                 const index = type === 'create' ? 0 : 1
+
                 obj.players = [obj.players[index]]
+                return obj
+            })
+            setStart(s => {
+                const obj = {...s}
+                obj.phase = 0
                 return obj
             })
         })
