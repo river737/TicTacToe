@@ -100,25 +100,32 @@ function lobbyPhase({io, socket}) {
 function joinRoomPhase({io, socket, roomID}) {
     unmountEvents({socket})
     socket.join(roomID)
-    io.data.rooms[roomID].players[socket.id] = {username: socket.data.username, start: false}
 
+    const room = io.data.rooms[roomID]
+    room.players[socket.id] = {username: socket.data.username, start: false}
+
+    
     socket.on('leave_room', () => {
         leaveRoom({io, socket, roomID})
     })
 
     socket.on('start_game', () => {
-        const roomX = io.data.rooms[roomID]
-        const {players} = roomX
-        const playersID = Object.keys(roomX.players)
-        const ind = playersID.indexOf(socket.id)
-        
-        players[socket.id].start = true
-        
-        if(playersID.map(id => players[id].start).includes(false) && playersID.length===2) {
-            const opponentID = playersID[ind ===1 ? 0 : 1]
-            socket.to(opponentID).emit('opponent_start_game')
-        }  else {
-            io.to(roomID).emit('warp_to_game')
+        try {
+            const {players={}} = room
+            const playersID = Object.keys(room.players)
+            const ind = playersID.indexOf(socket.id)
+            
+            players[socket.id].start = true
+            
+            if(playersID.map(id => players[id].start).includes(false) && playersID.length===2) {
+                const opponentID = playersID[ind ===1 ? 0 : 1]
+                socket.to(opponentID).emit('opponent_start_game')
+            }  else {
+                io.to(roomID).emit('warp_to_game')
+            }
+        }
+        catch(err) {
+
         }
     })
 
@@ -144,7 +151,8 @@ function leaveRoom({io, socket, roomID}) {
 function gamePhase({io, socket, roomID}) {
     unmountEvents({socket})
 
-    const room = io.data.rooms[roomID]
+    let room = io.data.rooms[roomID]
+    if(!room) room = {}
     const {players={}} = room
     const playersID = Object.keys(players)
     const opponent = playersID[playersID.indexOf(socket.id) === 0 ? 1 : 0]

@@ -8,7 +8,7 @@ import styles from '../../../../styles/game/multiplayer/Sidebar.module.css'
 
 import highlightGrid from '../../../functions/highlightGrid'
 
-export default function Sidebar({myTurn, size=20, gridWrapper, index={me: 0, opponent: 1}, moves=[], room}) {
+export default function Sidebar({winner, myTurn, size=20, gridWrapper, index={me: 0, opponent: 1}, moves=[], room}) {
     const {setPage} = useContext(PageContext)
     const {socket} = useContext(SocketContext)
     const {setAlert} = useContext(AlertContext)
@@ -17,6 +17,10 @@ export default function Sidebar({myTurn, size=20, gridWrapper, index={me: 0, opp
 
     const latestHighlight = ({i, j}) => {
         highlightGrid(gridWrapper.current?.children[i * size + j], [styles.latest])
+    }
+    let status = myTurn ? "It's your turn" : "Opponent's turn"
+    if(winner) {
+        status = room.players[index.me].mark === winner.mark ? 'Hooray, You won!' : 'You lost :('
     }
     return (
         <div className={styles.multiplayerSidebar}>
@@ -70,9 +74,7 @@ export default function Sidebar({myTurn, size=20, gridWrapper, index={me: 0, opp
                 }
             </div>
             <div className={styles.status}>
-                {
-                    myTurn ? "It's your turn" : "Opponent's turn"
-                }
+                {status}
             </div>
             <div className={styles.players}>
                 {

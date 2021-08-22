@@ -25,7 +25,7 @@ export default function Multiplayer({room, type}) {
     const gridWrapper = useRef()
 
     const display = (i=0, j=0) => {
-        if(grids[i][j]==='' && myTurn) {
+        if(grids[i][j]==='' && myTurn && winner===null) {
             displayX({i, j, playerIndex: index.me})
             socket.emit('place_mark', {pos: {i, j}})
         }
@@ -49,6 +49,7 @@ export default function Multiplayer({room, type}) {
         setGrids(new Array(size).fill(new Array(size).fill('')))
         setMoves([])
         setMyTurn(index.me === 0)
+        setWinner(null)
     }
     
     useEffect(()=>{
@@ -112,7 +113,7 @@ export default function Multiplayer({room, type}) {
         socket.emit('game_phase', {room: room.id})
     }, [])
 
-    const sidebar = <Sidebar {...{myTurn, size, gridWrapper, index, moves, room}}/>
+    const sidebar = <Sidebar {...{winner, myTurn, size, gridWrapper, index, moves, room}}/>
     let lastMove = {...moves.slice(-1)[0]}
     lastMove.player = room.players[lastMove.playerIndex]
     
