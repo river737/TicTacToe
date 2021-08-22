@@ -47,9 +47,9 @@ export default function Alert() {
                     action.length > 0 ?
                         <div className={styles.footer}>
                             {
-                                action.map(({content, click}, i) => {
+                                action.map(({content, click, theme='primary'}, i) => {
                                     return (
-                                        <button onClick={click} key={i}>
+                                        <button className={styles[theme]} onClick={click} key={i}>
                                             {content}
                                         </button>
                                     )

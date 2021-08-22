@@ -73,6 +73,38 @@
     color: rgba(var(--black), 0.8);
 }
 
+.footer {
+    margin-top: 8px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    column-gap: 8px;
+}
+
+.footer button {
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.footer button.primary {
+    color: rgb(var(--iconBg));
+    background: rgba(var(--color), 0.95);
+}
+
+.footer button.primary:hover {
+    background: rgba(var(--color), 0.88);
+}
+
+.footer button.secondary {
+    color: rgb(var(--black));
+    background: rgba(var(--white), 0.9);
+}
+
+.footer button.secondary:hover {
+    background: rgba(var(--white), 0.85);
+}
+
 .default {
     --bg: 76, 88 ,160;
     --iconBg: var(--darkBlue);

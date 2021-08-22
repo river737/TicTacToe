@@ -10,7 +10,20 @@ export default function AlertContextProvider({children}) {
         data: {
             title: "Game Rendered", 
             msg: "Everything is rendered correctly in this website", 
-            theme: 'danger', action: []
+            theme: 'default', action: [
+                {
+                    content: "Reject",
+                    theme: 'secondary',
+                    click() {
+                        console.log("Clicked")
+                    }
+                }, 
+                {
+                    content: "Accept", theme: "primary", click() {
+                        
+                    }
+                }
+            ]
         }
     })
     return (

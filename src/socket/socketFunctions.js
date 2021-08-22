@@ -186,6 +186,34 @@ function gamePhase({io, socket}) {
             return
         }
     })
+    socket.on('restart_game', ({room: roomID}) => {
+        const room = io.data.rooms[roomID]
+        if(!room) {
+            socket.emit('restart_game_response', {success: false, error: {msg: "Room does not exist"}})
+            return
+        }
+        const {players = {}} = room
+        const playersID = Object.keys(players)
+
+        if(!playersID.includes(socket.id)) {
+            socket.emit('restart_game_response', {success:false, error: {msg: "User validation failed"}})
+            return
+        }
+        const opponent = playersID[playersID.indexOf(socket.id) === 0 ? 1 : 0]
+        if(opponent) socket.to(opponent).emit('opponent_request_restart_game')
+    })
+    socket.on('restart_game_response', (data) => {
+        const {success, room: roomID} = data
+        const room = io.data.rooms[roomID]
+        if(!room) return
+        
+        const {players = {}} = room
+        const playersID = Object.keys(players)
+
+        if(!playersID.includes(socket.id)) return
+        const opponent = playersID[playersID.indexOf(socket.id) === 0 ? 1 : 0]
+        if(opponent) socket.to(opponent).emit('restart_game_response', {success}) 
+    })
     socket.on('leave_game', ({room}) => {
         socket.off('leave_game', ()=>{})
         socket.off('place_mark', () => {})

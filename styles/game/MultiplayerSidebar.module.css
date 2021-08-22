@@ -98,8 +98,39 @@
 
 .extraInfo {
     font-size: 14px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-rows: 1fr;
 }
 
-.extraInfo > * {
-    display: block;
+.history {
+    background: rgb(var(--white));
+    border-radius: 10px;
+    padding: 8px;
+    max-height: 250px;
+    overflow: scroll;
+}
+
+.history table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.history th {
+    border: 1px dashed;
+    padding: 4px 8px;
+}
+
+.history td {
+    padding: 4px 8px;
+    text-align: center;
+}
+
+.history tbody tr {
+    border-bottom: 1px dashed rgba(var(--black), 0.3);
+}
+
+.history tbody tr:hover {
+    background: #f4f4f4;
 }

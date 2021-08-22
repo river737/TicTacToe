@@ -43,6 +43,12 @@ export default function Multiplayer({room, type}) {
 
         setMyTurn(b => !b)
     }
+
+    const restartGame = () => {
+        setGrids(new Array(size).fill(new Array(size).fill('')))
+        setMoves([])
+        setMyTurn(index.me === 0)
+    }
     
     useEffect(()=>{
         let mounted = true
@@ -55,6 +61,42 @@ export default function Multiplayer({room, type}) {
                 const {msg} = error
                 if(mounted) setAlert({show: true, data: {title: "An error occured", theme: "danger", msg}})
             }
+        })
+        socket.on('restart_game_response', res=> {
+            if(res.success) {
+                setAlert({show: true, data: {
+                    title: "Game is restarting", msg: `Your opponent, ${room.players[index.opponent].username}, accepted your request to restart the game`
+                }})
+                restartGame()
+            } else {
+                setAlert({show: true, data: {
+                    title: "Request rejected", msg: `Your opponent, ${room.players[index.opponent].username}, rejected your request to restart the game.`,
+                }})
+            }
+        })
+        socket.on('opponent_request_restart_game', () => {
+            setAlert({show: true, data: {
+                title: "Opponent request", msg: `Your opponent, ${room.players[index.opponent].username}, requested to restart the game.`,
+                action: [
+                    {
+                        content: "Reject",
+                        theme: 'secondary',
+                        click() {
+                            setAlert({show: false})
+                            socket.emit('restart_game_response', {room: room.id, success: false})
+                        }
+                    },
+                    {
+                        content: "Accept",
+                        theme: "primary",
+                        click() {
+                            setAlert({show: false})
+                            socket.emit('restart_game_response', {room: room.id, success: true})
+                            restartGame()
+                        }
+                    }
+                ]
+            }})
         })
         return () => {
             mounted = false
