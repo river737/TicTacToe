@@ -11,8 +11,8 @@ import Bot from '../game/bot.js'
 export default function Lobby() {
   const {socket} = useContext(SocketContext)
   const [page, setPage] = useState({opened: false, component: <></>, minimized: false})
-  const [gameCover, setGameCover] = useState(
-    {activeIndex: 0,
+  const [gameCover, setGameCover] = useState({
+    activeIndex: 0,
       content: [
         {
           iconClassName: "fa fa-robot",
@@ -28,12 +28,12 @@ export default function Lobby() {
             }
           }
         }
-     ]
+      ]
   })
 
   useEffect(()=>{
-    socket.emit('room_phase')
-  }, [socket])
+    socket.emit('lobby_phase')
+  }, [])
   return (
     <div className={styles.content}>
       <PageContext.Provider value={{setPage}}>

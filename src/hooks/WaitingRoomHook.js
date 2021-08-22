@@ -3,21 +3,30 @@ import { useEffect, useContext } from "react";
 import { SocketContext } from "../contexts/socketContext";
 import { InfoContext } from "../contexts/infoContext";
 import { PageContext } from "../contexts/pageContext";
+import { AlertContext } from "../contexts/alertContext";
 
 export default function WaitingRoomHook({setStart, setRoom, type, roomData, room}) {
     const {setPage} = useContext(PageContext)
     const {socket} = useContext(SocketContext)
     const {data} = useContext(InfoContext)
+    const {setAlert} = useContext(AlertContext)
     const {name} = data
 
     const back = () => {
-        socket.emit('leave_room', {room: room.id})
+        socket.emit('leave_room')
+        setPage({opened: false})
     }
     const minimize = () => {
 
     }
     const startGame = () => {
-        socket.emit('start_game', {room: room.id})
+        socket.emit('start_game')
+        setStart(s => {
+            const obj = {...s}
+            if(obj.phase ===1) obj.phase = 2
+            if(obj.phase===3) obj.phase = 4
+            return obj
+        })
     }
 
     useEffect(()=>{
@@ -46,7 +55,7 @@ export default function WaitingRoomHook({setStart, setRoom, type, roomData, room
                         })
                     }
                 } else {
-                    alert(res.error.msg)
+                    setAlert({show: true, data: {title: "An error occured", msg: res.error.msg, theme: 'danger'}})
                 }
             })
             socket.on('join_room_response', ({roomData}) => {
@@ -74,14 +83,7 @@ export default function WaitingRoomHook({setStart, setRoom, type, roomData, room
                 })
             })
             
-        } else if(type==='join') {
-            
         }
-        socket.on('leave_room_response', res => {
-            if(res.success) {
-                setPage({opened: false})
-            }
-        })
         socket.on('opponent_left_room', () => {
             setRoom(r => {
                 const obj = {...r}
@@ -99,16 +101,6 @@ export default function WaitingRoomHook({setStart, setRoom, type, roomData, room
                 return obj
             })
         })
-        socket.on('start_game_response', res => {
-            if(res.success) {
-                setStart(s => {
-                    const obj = {...s}
-                    if(obj.phase ===1) obj.phase = 2
-                    if(obj.phase===3) obj.phase = 4
-                    return obj
-                })
-            }
-        })
         socket.on('warp_to_game', () => {
             setStart(s => {
                 const obj = {...s}
@@ -120,14 +112,13 @@ export default function WaitingRoomHook({setStart, setRoom, type, roomData, room
         
         return () => {
             mounted = false
-            socket.off('leave_room_response')
             socket.off('create_room_response')
             socket.off('join_room_response')
             socket.off('opponent_left_room')
-            socket.off('start_game_response')
+            socket.off('opponent_start_game')
             socket.off('warp_to_game')
         }
-    }, [socket, setStart, setRoom, setPage, name, type])
+    }, [setStart, setRoom, setPage, name, type])
 
     useEffect(()=>{
         let mounted = true

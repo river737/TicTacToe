@@ -48,7 +48,7 @@ export default function Login() {
             }
         })
         return () => socket.off('submit_username_response')
-    }, [name, setRoute, socket])
+    }, [name, setRoute])
 
     const inputFocus = () => {
         setInput({active: true})

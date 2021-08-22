@@ -45,7 +45,7 @@ export default function MultiplayerSidebar({myTurn, size=20, gridWrapper, index=
                         {
                             icon: 'fa fa-redo', text: 'Restart',
                             action() {
-                                socket.emit('restart_game', {room:room.id})
+                                socket.emit('restart_game')
                                 setAlert({show: true, data: {
                                     title: "Success",
                                     msg: `A request to restart the game was successfully sent to your opponent, ${room.players[index.opponent].username}`,
@@ -56,7 +56,7 @@ export default function MultiplayerSidebar({myTurn, size=20, gridWrapper, index=
                         {
                             icon: 'fa fa-sign-out-alt', text: 'Quit', 
                             action() {
-                                socket.emit('leave_game', {room: room.id})
+                                socket.emit('leave_game')
                                 setPage({opened: false})
                             }
                         }
