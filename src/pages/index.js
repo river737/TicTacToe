@@ -1,7 +1,7 @@
 import {useState, useContext, useEffect} from 'react'
 
 import Login from '../components/login/login'
-import Lobby from '../components/lobby/Lobby'
+import Lobby from '../components/lobby/lobby'
 import LobbyHeader from '../components/lobby/Header'
 import Game from '../components/game/game'
 
@@ -18,7 +18,7 @@ export async function getServerSideProps(ctx) {
       route: {name: 'login'}
     }
   }
-  
+
   if(username===undefined || username === '' || username==='undefined') {
     return redirectLogin
   }
@@ -35,7 +35,7 @@ export async function getServerSideProps(ctx) {
           username
         }
       }
-      
+
     }
   }
 
@@ -48,7 +48,7 @@ export default function Home({route: routeX, username}) {
   const {setData} = useContext(InfoContext)
   const {socket} = useContext(SocketContext)
   const [route, setRoute] = useState({name: routeX.name})
-  
+
   useEffect(()=>{
     let mounted = true
     if(username) {
