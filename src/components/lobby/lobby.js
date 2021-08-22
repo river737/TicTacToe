@@ -6,7 +6,7 @@ import { PageContext } from "../../contexts/pageContext"
 import styles from '../../../styles/lobby/Lobby.module.css'
 
 import LobbyBody from './body/Body'
-import Bot from '../game/bot.js'
+import Bot from '../game/singleplayer/Bot.js'
 
 export default function Lobby() {
   const {socket} = useContext(SocketContext)

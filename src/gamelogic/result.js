@@ -1,33 +1,20 @@
-import styles from '../../styles/Game.module.css'
-import {useEffect, useRef, useContext} from 'react'
-import { RouteContext } from '../contexts/routeContext';
+import styles from '../../styles/game/singleplayer/Display.module.css'
+import {useContext} from 'react'
 
-export default function DisplayWinner({passdata}) {
-  const {setRoute} = useContext(RouteContext)
+import { PageContext } from '../contexts/pageContext';
+
+export default function DisplayWinner({winner, username}) {
+
+  const {setPage} = useContext(PageContext)
 
   function returnhome() {
-    passdata.setWin(null);
-    setRoute(obj => {
-      const objx = {...obj}
-      objx.name = 'lobby'
-      return objx
-    })
+    setPage({opened: false})
   }
 
   return (
     <div className={styles.display} >
-    {
-      passdata.type==='multiplayer' ?
-      <>
-        <h1>Congrats {passdata.name}! {passdata.win} win!</h1>
-        <button onClick={returnhome}>Return</button>
-      </> :
-      <>
-        <h1>Congrats {passdata.name}! {passdata.win} win!</h1>
-        <button onClick={returnhome}>Return</button>
-      </>
-    }
-
+      <h1>Congrats {username}! {winner.mark} won!</h1>
+      <button onClick={returnhome}>Return</button>
     </div>
   )
 }

@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState, useRef } from "react"
 
-import { SocketContext } from "../../contexts/socketContext"
-import { AlertContext } from "../../contexts/alertContext"
+import { SocketContext } from "../../../contexts/socketContext"
+import { AlertContext } from "../../../contexts/alertContext"
 
-import Game from "./game"
-import MultiplayerSidebar from "./MultiplayerSidebar"
+import Game from "../game"
+import Sidebar from "./Sidebar"
 
 export default function Multiplayer({room, type}) {
     const size = 20
@@ -17,6 +17,7 @@ export default function Multiplayer({room, type}) {
     const [myTurn, setMyTurn] = useState(index.me === 0)
     const [moves, setMoves] = useState([])
     const [grids, setGrids] = useState(new Array(size).fill(new Array(size).fill('')))
+    const [winner, setWinner] = useState(null)
     
     const {setAlert} = useContext(AlertContext)
     const {socket} = useContext(SocketContext)
@@ -100,8 +101,7 @@ export default function Multiplayer({room, type}) {
     
     useEffect(()=>{
         socket.on('opponent_left_room', ()=>{
-            setAlert({show: true, data: {title: 'Game Over', msg: 'Opponent has left the game', theme: 'warning'}})
-            
+            setAlert({show: true, data: {title: 'Game Over', msg: 'Opponent has left the game', theme: 'warning'}})            
         })
         return () => {
             socket.off('opponent_left_room')
@@ -112,11 +112,11 @@ export default function Multiplayer({room, type}) {
         socket.emit('game_phase', {room: room.id})
     }, [])
 
-    const sidebar = <MultiplayerSidebar {...{myTurn, size, gridWrapper, index, moves, room}}/>
+    const sidebar = <Sidebar {...{myTurn, size, gridWrapper, index, moves, room}}/>
     let lastMove = {...moves.slice(-1)[0]}
     lastMove.player = room.players[lastMove.playerIndex]
     
     return (
-        <Game {...{lastMove, clicks: moves.length, size, display, grids, sidebar, type: "multiplayer", ref: gridWrapper}}/>
+        <Game {...{winner, setWinner, lastMove, clicks: moves.length, size, display, grids, sidebar, type: "multiplayer", ref: gridWrapper}}/>
     )
 }

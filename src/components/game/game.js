@@ -1,24 +1,25 @@
-import {useState, useEffect, useContext, forwardRef} from 'react'
+import {useEffect, useContext, forwardRef} from 'react'
 
 import {InfoContext} from '../../contexts/infoContext.js'
 
-import styles from '../../../styles/Game.module.css'
+import styles from '../../../styles/game/Game.module.css'
 
 import detector from '../../gamelogic/rule.js'
 import DisplayWinner from '../../gamelogic/result.js'
 
-const Game = forwardRef(({lastMove={}, clicks=0, size= 20, display, sidebar, grids, type="multiplayer" || "bot"}, ref) => {
+const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, display, sidebar, grids, type="multiplayer" || "bot"}, ref) => {
   const {data} = useContext(InfoContext);
-  
-  const [winner, setWinner] = useState(null);
 
   useEffect(()=>{
     if(clicks>0) {
       ref?.current?.parentNode?.previousElementSibling?.play()
     }
-    const x = detector(grids, size, ref?.current?.childNodes);
-    if(x.win !== null) setTimeout(() => setWinner(x.win), 1000);
-  }, [grids]);
+    const x = detector(grids, size);
+    
+    if(x) {
+      setWinner(x)
+    }
+  }, [setWinner, grids]);
 
   return (
     <div className={styles.gameContainer}>
@@ -30,7 +31,15 @@ const Game = forwardRef(({lastMove={}, clicks=0, size= 20, display, sidebar, gri
           {
             grids.map((items, i) => {
               return items.map((mark, j) => {
-                return <div key={`${i}-${j}`} onClick={() => display(i, j)}>{mark}</div>
+                const attr = {
+                  onClick() {display(i, j)}
+                }
+                if(winner) {
+                  if(winner.pos.filter(val => val.i === i && val.j === j).length > 0) {
+                    attr.className = styles.winGrid
+                  }
+                }
+                return <div key={`${i}-${j}`} {...attr}>{mark}</div>
               })
             })
           }
@@ -43,7 +52,9 @@ const Game = forwardRef(({lastMove={}, clicks=0, size= 20, display, sidebar, gri
         </div>
 
       </div>
-      {(winner!==null) && <DisplayWinner passdata={{name: lastMove.player || data.name, win: winner, setWin: setWinner, type}} />}
+      {
+        type==='bot' && winner!==null ? <DisplayWinner {...{username: data.name, winner}} /> : ''
+      }
     </div>
   )
 })

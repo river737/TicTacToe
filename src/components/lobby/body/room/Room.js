@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import Multiplayer from '../../../game/Multiplayer'
+import Multiplayer from '../../../game/multiplayer/Multiplayer'
 import WaitingRoom from './WaitingRoom'
 
 export default function Room({type = "create", roomData={}}) {

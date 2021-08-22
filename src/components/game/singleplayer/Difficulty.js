@@ -1,4 +1,4 @@
-import styles from '../../../styles/mode/mode.module.css'
+import styles from '../../../../styles/mode/mode.module.css'
 export default function Difficulty({setDifficulty}) {
 
   function easy() {

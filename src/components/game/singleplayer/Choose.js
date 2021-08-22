@@ -1,4 +1,4 @@
-import style from '../../../styles/Choose/choose.module.css'
+import style from '../../../../styles/Choose/choose.module.css'
 export default function Choose({thissymb}) {
   return (
     <div className={style.page}>

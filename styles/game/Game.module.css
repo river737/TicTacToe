@@ -37,7 +37,7 @@
   text-transform: capitalize;
 }
 
-.box > div {
+.box > * {
   place-items: center;
   width: 100%;
   height: 100%;
@@ -45,22 +45,15 @@
   transition: 0.5s;
 }
 
-/* .box > div:hover {
-  background: rgba(var(--black), 0.2);
-} */
-
-.hint {
-  background: #73FF38;
-}
-
-.lastmove {
-  background: orange;
+.winGrid {
+  background-color: rgba(0, 128, 0, 0.8);
+  color: rgb(var(--white));
 }
 
 .sideway {
   display: grid;
   grid-template-columns: 1fr;
-  grid-gap: 20px;
+  gap: 20px;
   padding-top: 200px;
 }
 
@@ -78,55 +71,12 @@
 
 }
 
-.button {
-  height: max-content;
-  width: 200px;
-  padding: 10px 10px;
-  background: orange;
-  justify-self: center;
-}
-
-.button:hover {
-  background: #FFB638;
-}
-
 .clear {
   padding: 20px 20px;
   position: absolute;
   top: 100px;
   left: 10px;
   z-index: 5;
-}
-
-.display {
-  width: 80%;
-  height: 80%;
-  background: rgb(18, 227, 255);
-  position: absolute;
-  z-index: 10;
-  top: 10%;
-  left: 10%;
-  display: flex;
-  opacity: 1;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  animation: zoom 0.5s ease;
-}
-
-.display button {
-  padding: 20px 30px;
-  font-size: 25px;
-  color: black;
-  background: white;
-  border: 5px solid black;
-  transition: all 0.5s ease;
-}
-
-.display button:hover {
-  color: white;
-  background: black;
-  transition: all 0.5s ease;
 }
 
 @keyframes zoom {

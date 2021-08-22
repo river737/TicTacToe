@@ -1,0 +1,15 @@
+.highlight {
+    background: orange;
+}
+
+.button {
+    height: max-content;
+    width: 200px;
+    padding: 10px 10px;
+    background: orange;
+    justify-self: center;
+}
+  
+.button:hover {
+    background: #FFB638;
+}

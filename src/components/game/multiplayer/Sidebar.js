@@ -1,20 +1,19 @@
 import {useContext, useState} from 'react'
 
-import { SocketContext } from "../../contexts/socketContext"
-import { PageContext } from '../../contexts/pageContext'
-import { AlertContext } from '../../contexts/alertContext'
+import { SocketContext } from "../../../contexts/socketContext"
+import { PageContext } from '../../../contexts/pageContext'
+import { AlertContext } from '../../../contexts/alertContext'
 
-import styles from '../../../styles/game/MultiplayerSidebar.module.css'
+import styles from '../../../../styles/game/multiplayer/Sidebar.module.css'
 
-import highlightGrid from '../../functions/highlightGrid'
+import highlightGrid from '../../../functions/highlightGrid'
 
-export default function MultiplayerSidebar({myTurn, size=20, gridWrapper, index={me: 0, opponent: 1}, moves=[], room}) {
+export default function Sidebar({myTurn, size=20, gridWrapper, index={me: 0, opponent: 1}, moves=[], room}) {
     const {setPage} = useContext(PageContext)
     const {socket} = useContext(SocketContext)
     const {setAlert} = useContext(AlertContext)
 
     const [history, setHistory] = useState({show: false})
-    const [restart, setRestart] = useState({count: 0, date: new Date()}) // to prevent sending multiple restart requests to the server
 
     const latestHighlight = ({i, j}) => {
         highlightGrid(gridWrapper.current?.children[i * size + j], [styles.latest])
