@@ -12,9 +12,9 @@ export default function DisplayWinner({winner, username}) {
   }
 
   return (
-    <div className={styles.display} >
-      <h1>Congrats {username}! {winner.mark} won!</h1>
-      <button onClick={returnhome}>Return</button>
-    </div>
+      <div className={styles.display} >
+        <h1>Congrats {username}! {winner.mark} won!</h1>
+        <button onClick={returnhome}>Return</button>
+      </div>
   )
 }

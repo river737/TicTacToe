@@ -35,7 +35,7 @@ export default function Bot({setPage}) {
   const [grids, dispatch] = useReducer(reducer, arr);
 
   function display(i, j) {
-    
+
     if(grids[i][j]==='' && myturn) {
       setMyturn(false)
       dispatch({type:'add', append: {i, j}, symbol: symb});
@@ -43,18 +43,19 @@ export default function Bot({setPage}) {
       return
     }
   }
-  
+
 
   useEffect(()=>{
-    if(!myturn) {
-      const {i, j} = botmove(symb, grids, size, 'move');
-      dispatch({type:'add', append: {i, j}, symbol: symb==='o'?'x':'o'});
-      setMyturn(true);
-      setPrevbot({i, j});
+    if(!myturn && !winner) {
+      setTimeout(() => {
+        setMyturn(true);
+        const {i, j} = botmove(symb, grids, size, 'move', difficulty);
+        dispatch({type:'add', append: {i, j}, symbol: symb==='o'?'x':'o'});
+        setPrevbot({i, j});
+     }, 500);
     }
-
   }, [grids, symb]);
-  const sidebar = <Sidebar {...{grids, symb, setPage, botmove, gridwrapper, prevbot, size, prevplayer}}/>
+  const sidebar = <Sidebar {...{grids, symb, setPage, botmove, gridwrapper, prevbot, size, prevplayer, dispatch}}/>
   return (
     <>
       {

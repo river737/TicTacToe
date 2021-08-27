@@ -2,8 +2,8 @@ import styles from '../../../../styles/lobby/GameCover.module.css'
 
 export default function GameCover({iconClassName, title, description, gameNavClick, action}) {
 
-  const actionAttr = {}
-  if(action.click) actionAttr.onClick = action.click
+  // const actionAttr = {}
+  // if(action.click) actionAttr.onClick = action.click
   return (
     <>
       <div className={styles.gameCover}>
@@ -16,8 +16,8 @@ export default function GameCover({iconClassName, title, description, gameNavCli
           <span className={styles.coverDescription}>
               {description}
           </span>
-          
-          <button className={styles.gameStartBtn} {...actionAttr}>{action.text}</button>
+
+          <button className={styles.gameStartBtn} onClick={() => {if(action.click) action.click()} }>{action.text}</button>
 
           <button className={`${styles.gameNav} ${styles.left}`} onClick={() => gameNavClick(-1)}>
               <i className="fa fa-chevron-left"/>

@@ -1,4 +1,4 @@
-import {useEffect, useContext, forwardRef} from 'react'
+import {useEffect, useContext, forwardRef, useState} from 'react'
 
 import {InfoContext} from '../../contexts/infoContext.js'
 
@@ -9,15 +9,17 @@ import DisplayWinner from '../../gamelogic/result.js'
 
 const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, display, sidebar, grids, type="multiplayer" || "bot"}, ref) => {
   const {data} = useContext(InfoContext);
+  const [displaywinner, setdisplaywinner] = useState(null);
 
   useEffect(()=>{
     if(clicks>0) {
       ref?.current?.parentNode?.previousElementSibling?.play()
     }
     const x = detector(grids, size);
-    
+
     if(x) {
       setWinner(x)
+      setTimeout(()=>setdisplaywinner(true),800);
     }
   }, [setWinner, grids]);
 
@@ -53,7 +55,7 @@ const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, di
 
       </div>
       {
-        type==='bot' && winner!==null ? <DisplayWinner {...{username: data.name, winner}} /> : ''
+        type!=='' && displaywinner!==null ? <DisplayWinner {...{username: data.name, winner}} /> : ''
       }
     </div>
   )
