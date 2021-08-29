@@ -1,2 +1,2 @@
-# tic_tac_toe_project
-random project
+# Inferno
+Building a new tic tac toe experience.
