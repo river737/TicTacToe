@@ -8,9 +8,10 @@ import { InfoContext } from '../contexts/infoContext'
 import { SocketContext } from '../contexts/socketContext'
 import {RouteContext} from '../contexts/routeContext'
 
+import store from 'store-js'
+
 export async function getServerSideProps(ctx) {
-  const {req} = ctx
-  const {cookie} = req.headers
+  const {cookie} = ctx.req.headers
   const username = cookie?.split(';').find(row => row.startsWith('username='))?.split('=')[1]
   const redirectLogin = {
     props: {
@@ -23,11 +24,11 @@ export async function getServerSideProps(ctx) {
   }
 
   try {
-    const {res} = ctx
-    const {users} = res.socket.server.io.data
+    const users = store.get('users')
     if(users.username.includes(username)) {
       return redirectLogin
     } else {
+      
       return {
         props: {
           route: {name: 'lobby'},

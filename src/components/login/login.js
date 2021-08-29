@@ -26,13 +26,29 @@ export default function Login() {
         setError({verify: false})
     }
 
-    const submit = () => {
+    const submit = async () => {
         if(name !== '') { // prevent submit if the username is blank
             setData(obj => {
                 const objx = {...obj}
                 objx.identified= true
                 return objx
             });
+            try {
+                const fetchX = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({username: name})
+                })
+    
+                const res = await fetchX.json()
+                console.log(res)
+            }
+            catch(err) {
+                console.log("an erorr occured")
+            }
+            
             socket.emit('submit_username', {username: name})
         } else setError({verify: true, msg: `Error! Name cannot be empty!`})
     }

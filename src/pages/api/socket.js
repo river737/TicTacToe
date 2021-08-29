@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import {Server} from 'socket.io'
-
+import store from 'store-js'
 import SocketFunctions from '../../socket/socketFunctions'
 
 export default function handle(req, res) {
@@ -14,6 +14,8 @@ export default function handle(req, res) {
     })
     io.data = {users: {id: [], username: []}, rooms: {}}
 
+    store.set('users', {id: [], username: []})
+    store.set('rooms', {})
     /* 
       rooms: {
         "unique_room_id": {

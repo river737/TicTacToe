@@ -1,20 +1,24 @@
+import store from 'store-js'
+
+import {storeArray, storeObject} from '../store/storeFunctions'
+
 export default function SocketFunctions({io, socket}){
-    io.data.users.id.push(socket.id)
+    storeArray.update({name: 'users', keys: ['id'], type: 'push', value: [socket.id]})
 
     usernamePhase({io, socket})
     socket.on('disconnecting', () => {
+        const rooms = store.get('rooms')
         unmountEvents({socket})
-        const {users} = io.data
-        const ind = users.id.indexOf(socket.id)
-        users.id.splice(ind, 1)
+
+        storeArray.delete({name: 'users', keys: ['id'], value: [socket.id]})
         
         socket.rooms?.forEach(roomID => {
-            if(io.data.rooms[roomID]) {
+            if(rooms[roomID]) {
                 leaveRoom({io, socket, roomID})
             }
         })
         if(socket.data?.username) {
-            users.username.splice(users.username.indexOf(socket.data.username), 1)
+            storeArray.delete({name: 'users', keys: ['username'], value: [socket.data.username]})
         }
     })
 }
@@ -25,7 +29,7 @@ function unmountEvents({socket}) {
 
 function usernamePhase({io, socket}) {
     socket.on('submit_username', ({username, type}) => {
-        const {users} = io.data
+        const users = store.get('users')
         const res = {}
         if(socket.data?.username) {
             res.success = false
@@ -35,7 +39,7 @@ function usernamePhase({io, socket}) {
                 res.success = false
                 res.error = {msg: "Username is taken"}
             } else {
-                users.username.push(username)
+                storeArray.update({name: 'users', keys: ['username'], type: 'push', value: [username]})
                 socket.data.username = username
                 res.success = true
             }
@@ -53,13 +57,14 @@ function lobbyPhase({io, socket}) {
     unmountEvents({socket})
 
     socket.on('create_room', () => {
-        let roomID = require('crypto').randomBytes(5).toString('hex')
-        io.data.rooms[roomID] = {players: {}}
+        let roomID = require('crypto').randomBytes(4).toString('hex')
+        storeObject.update({name: 'rooms', keys: [roomID], value: {players: {}}})
+        
         joinRoomPhase({io, socket, roomID})
         socket.emit('create_room_response', {success: true, room: roomID})
     })
     socket.on('join_room', ({room: roomID}) => {
-        const room = io.data.rooms[roomID]
+        const room = store.get('rooms')[roomID]
         const eventName = 'join_room_response'
 
         if(!room) {
@@ -101,8 +106,8 @@ function joinRoomPhase({io, socket, roomID}) {
     unmountEvents({socket})
     socket.join(roomID)
 
-    const room = io.data.rooms[roomID]
-    room.players[socket.id] = {username: socket.data.username, start: false}
+    
+    storeObject.update({name: 'rooms', keys: [roomID, 'players', socket.id], value: {username: socket.data.username, start: false}})
 
     
     socket.on('leave_room', () => {
@@ -111,11 +116,13 @@ function joinRoomPhase({io, socket, roomID}) {
 
     socket.on('start_game', () => {
         try {
+            const {data: rooms} = storeObject.update({name: 'rooms', keys: [roomID, 'players', socket.id, 'start'], value: true})
+            const room = rooms[roomID]
+
             const {players={}} = room
             const playersID = Object.keys(room.players)
             const ind = playersID.indexOf(socket.id)
             
-            players[socket.id].start = true
             
             if(playersID.map(id => players[id].start).includes(false) && playersID.length===2) {
                 const opponentID = playersID[ind ===1 ? 0 : 1]
@@ -135,13 +142,16 @@ function joinRoomPhase({io, socket, roomID}) {
 }
 
 function leaveRoom({io, socket, roomID}) {
-    const room = io.data.rooms[roomID]
+    const rooms = store.get('rooms')
+    const room = rooms[roomID]
+
     if(!room) return
 
-    delete room.players[socket.id]
+    storeObject.delete({name: 'rooms', keys: [roomID, 'players', socket.id]})
+
     const playersID = Object.keys(room.players)
     if(playersID.length===0) {
-        delete io.data.rooms[roomID]
+        storeObject.delete({name: 'rooms', keys: [roomID]})
     } else {
         socket.to(playersID[0]).emit('opponent_left_room')
     }
@@ -151,7 +161,7 @@ function leaveRoom({io, socket, roomID}) {
 function gamePhase({io, socket, roomID}) {
     unmountEvents({socket})
 
-    let room = io.data.rooms[roomID]
+    let room = store.get('rooms')[roomID]
     if(!room) room = {}
     const {players={}} = room
     const playersID = Object.keys(players)
