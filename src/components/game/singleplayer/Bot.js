@@ -35,12 +35,11 @@ export default function Bot({setPage}) {
   const [grids, dispatch] = useReducer(reducer, arr);
 
   function display(i, j) {
-
     if(grids[i][j]==='' && myturn) {
       setMyturn(false)
       dispatch({type:'add', append: {i, j}, symbol: symb});
       setPrevplayer({i, j});
-      return
+      return {mark: symb}
     }
   }
 

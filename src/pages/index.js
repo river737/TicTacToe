@@ -3,7 +3,6 @@ import {useState, useContext, useEffect} from 'react'
 import Login from '../components/login/login'
 import Lobby from '../components/lobby/lobby'
 import LobbyHeader from '../components/lobby/Header'
-import Game from '../components/game/game'
 
 import { InfoContext } from '../contexts/infoContext'
 import { SocketContext } from '../contexts/socketContext'

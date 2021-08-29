@@ -28,6 +28,7 @@ export default function Multiplayer({room, type}) {
         if(grids[i][j]==='' && myTurn && winner===null) {
             displayX({i, j, playerIndex: index.me})
             socket.emit('place_mark', {pos: {i, j}})
+            return {mark: room.players[index.me].mark}
         }
     }
 
