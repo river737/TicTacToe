@@ -7,7 +7,7 @@ export default function Sidebar({grids, symb, setPage, botmove, gridwrapper, pre
     const highlight = ({index}) => {
         highlightGrid(gridwrapper.current.children[index], [styles.highlight])
     }
-    async function showhint() {
+    function showhint() {
         const {i, j} = botmove(symb, grids, size, 'move', 'hard');
         highlight({index: (i*size)+j})
     }
