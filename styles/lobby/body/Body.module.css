@@ -4,25 +4,25 @@
     display: grid;
     grid-template-columns: minmax(160px, 200px) 1fr minmax(160px, 200px);
   }
-  
+
   .bodyLeft {
     height: 100%;
     width: 100%;
     margin-left: 20px;
   }
-  
+
   .bodyMid {
     display: flex;
     justify-content: center;
   }
-  
+
   .bodyMid > div {
     display: grid;
     row-gap: 20px;
     max-width: 360px;
     width: 100%;
   }
-  
+
   .bodyRight {
     margin-right: 20px;
   }
