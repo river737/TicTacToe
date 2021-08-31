@@ -4,6 +4,7 @@ import pusherInit from '../pusher/init'
 
 //client
 import {useState, useContext, useEffect} from 'react'
+import Pusher from 'pusher-js'
 
 import Login from '../components/login/login'
 import Lobby from '../components/lobby/lobby'
@@ -25,8 +26,13 @@ export async function getServerSideProps(ctx) {
   const {cookie} = ctx.req.headers
   
   const username = cookie?.split(';').find(row => row.startsWith('username='))?.split('=')[1]
+  const {PUSHER_APP_CLUSTER, PUSHER_APP_KEY} = process.env
   const redirectLogin = {
     props: {
+      env: {
+        PUSHER_APP_CLUSTER, 
+        PUSHER_APP_KEY
+      },
       route: {name: 'login'}
     }
   }
@@ -43,6 +49,10 @@ export async function getServerSideProps(ctx) {
       
       return {
         props: {
+          env: {
+            PUSHER_APP_CLUSTER, 
+            PUSHER_APP_KEY
+          },
           route: {name: 'lobby'},
           username
         }
@@ -56,10 +66,43 @@ export async function getServerSideProps(ctx) {
   }
 }
 
-export default function Home({route: routeX, username=''}) {
+export default function Home({route: routeX, username='', env={}}) {
   const [route, setRoute] = useState({name: routeX.name})
-  const {socketId} = useContext(PusherContext)
   const {setData} = useContext(InfoContext)
+
+  const [socketId, setSocketId] = useState('')
+  const [personalChannel, setPersonalChannel] = useState()
+
+  const {PUSHER_APP_CLUSTER, PUSHER_APP_KEY} = env
+  
+  const pusher = new Pusher(PUSHER_APP_KEY, {
+      cluster: PUSHER_APP_CLUSTER,
+      encrypted: true
+  });
+
+  
+  useEffect(() => {
+      
+      try {
+          pusher.connection.bind('connected', () => {
+              const {socket_id} = pusher.connection
+              setPersonalChannel(pusher.subscribe(socket_id))
+              const disconnect = async (e) => {
+                  await globalFetch({path: 'api/pusher/disconnect', socketId: socket_id})
+              }
+              window.removeEventListener('beforeunload', disconnect)
+              window.addEventListener('beforeunload', disconnect)
+              console.log('Pusher Connected!', socket_id)
+              setSocketId(socket_id)
+          })
+      }
+      catch(err) {
+          console.log(err)
+      }
+      return ()=>{
+          pusher.disconnect()
+      }
+  }, [setSocketId])
 
   useEffect(() => {
     if(username!=='' && socketId !=='') {
@@ -74,15 +117,17 @@ export default function Home({route: routeX, username=''}) {
     }
   }, [setData, socketId])
   return (
-    <RouteContext.Provider value={{setRoute}}>
-      {
-        route.name !== 'login' ?
-          <>
-            <LobbyHeader />
-            <Lobby />
-          </>
-        : <Login />
-      }
-    </RouteContext.Provider>
+    <PusherContext.Provider value={{pusher, socketId, personalChannel}}>
+      <RouteContext.Provider value={{setRoute}}>
+        {
+          route.name !== 'login' ?
+            <>
+              <LobbyHeader />
+              <Lobby />
+            </>
+          : <Login />
+        }
+      </RouteContext.Provider>
+    </PusherContext.Provider>
   )
 }
