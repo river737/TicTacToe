@@ -20,16 +20,15 @@
 }
 
 .content {
-  width: 350px;
+  width: 600px;
   height: 400px;
   border: 3px solid black;
-  color: black;
   margin-top: 50px;
-  margin-left: calc(50% - 175px);
+  margin-left: calc(50% - 300px);
   border-radius: 20px;
   border-top: 20px solid black;
   border-bottom: 20px solid black;
-  background: linear-gradient(to top right, #005472, #5DC2E7);
+  background: none;
   color: white;
 }
 
@@ -38,9 +37,9 @@
   flex-direction: row;
   justify-content: center;
   position: fixed;
-  width: 350px;
+  width: 600px;
   top: 500px;
-  left: calc(50% - 175px);
+  left: calc(50% - 300px);
   gap: 30px;
 }
 
@@ -53,7 +52,11 @@
 }
 .content h1, .content h3 {
   text-align: center;
-  padding: 0px 25px;
+  padding: 0px 75px;
+}
+
+.content h1 {
+  font-size: 50px;
 }
 
 .content h3 {
@@ -71,12 +74,12 @@
   align-items: center;
 }
 .boxleft {
-  left: calc(50% - 225px);
+  left: calc(50% - 335px);
   top: 250px;
 }
 
 .boxright {
-  left: calc(50% + 155px);
+  left: calc(50% + 265px);
   top: 250px;
 }
 
