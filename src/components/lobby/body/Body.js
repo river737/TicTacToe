@@ -63,7 +63,6 @@ export default function LobbyBody({gameCover, setGameCover}) {
     return (
         <div className={styles.body}>
             <div className={styles.bodyLeft}>
-                
             </div>
             <div className={styles.bodyMid}>
             <div>

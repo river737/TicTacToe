@@ -1,0 +1,40 @@
+.container {
+  width: 300px;
+  height: 400px;
+  position: absolute;
+  margin-top: -100px;
+  left: calc(50% - 150px);
+  top: calc(50% - 150px);
+  background: white;
+  border: 5px solid black;
+  border-radius: 20px;
+}
+.container h3 {
+  margin-top: 120px;
+  color: black;
+  text-align: center;
+}
+.container div {
+  display: flex;
+  margin-top: 50px;
+  justify-content: center;
+  gap: 50px;
+}
+.container div button {
+  font-size: 20px;
+  padding: 10px 20px;
+  min-width: 100px;
+  background: rgb(50,255,50);
+  color: white;
+  border: 1px solid none;
+  border-radius: 10px;
+}
+.container div button:first-child {
+  background: red;
+}
+.container div button:hover {
+  background: rgba(0, 200, 0, 0.8);
+}
+.container div button:first-child:hover {
+  background: rgba(200, 0, 0, 0.8);
+}
