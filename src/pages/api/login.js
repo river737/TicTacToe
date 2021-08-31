@@ -9,21 +9,23 @@ export default function handle(req, res) {
 function post(req, res) {
     const users = store.get('users')
     console.log("users", users)
-    const {socketId, data} = req.body
-    const {username, check} = data
-    const success = () => {
-        storeObject.update({name: 'users', value: {username}, keys: [socketId]})
-        res?.setHeader('Set-Cookie',`username=${username}; path=/; Max-Age=86400; HttpOnly, SameSite=Strict`);
+    res.json({success: true})
 
-        res.json({success: true})
-    }
-    if(check) {
-        if(Object.keys(users).filter(id => users[id].username === username).length === 0) {
-            success()
-        } else {
-            res.json({success: false, error: {msg: "Username is taken"}})
-        }
-    } else {
-        success()
-    }
+    // const {socketId, data} = req.body
+    // const {username, check} = data
+    // const success = () => {
+    //     storeObject.update({name: 'users', value: {username}, keys: [socketId]})
+    //     res?.setHeader('Set-Cookie',`username=${username}; path=/; Max-Age=86400; HttpOnly, SameSite=Strict`);
+
+    //     res.json({success: true})
+    // }
+    // if(check) {
+    //     if(Object.keys(users).filter(id => users[id].username === username).length === 0) {
+    //         success()
+    //     } else {
+    //         res.json({success: false, error: {msg: "Username is taken"}})
+    //     }
+    // } else {
+    //     success()
+    // }
 }
