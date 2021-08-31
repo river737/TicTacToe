@@ -7,9 +7,14 @@ export default function handle(req, res) {
 }
 
 function post(req, res) {
-    const users = store.get('users')
-    console.log("users", users)
-    res.json({success: true})
+    let users = store.get('users')
+    if(!users) users = 'undefined'
+    let pusher = res?.socket?.server?.pusher ? 'ok' : 'undefined'
+    
+    const obj = {{success: true, data: {users, pusher}}}
+    
+
+    res.json(obj)
 
     // const {socketId, data} = req.body
     // const {username, check} = data
