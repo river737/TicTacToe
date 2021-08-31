@@ -57,7 +57,7 @@ export default function Lobby() {
           : tutorial ? <Tutorial {...{setTutorial}} />
           : <LobbyBody {...{gameCover, setGameCover}}/>
         }
-      <button className={styles.button} onClick={opentutorial} ref={button}>How to play <i class="far fa-arrow-alt-circle-right"></i></button>
+      <button className={styles.button} onClick={opentutorial} ref={button}>How to play <i className="far fa-arrow-alt-circle-right"></i></button>
       </PageContext.Provider>
 
     </div>
