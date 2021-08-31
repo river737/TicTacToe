@@ -1,41 +1,53 @@
 import { useContext, useState, useEffect } from 'react'
 
-import { SocketContext } from '../../../../contexts/socketContext'
+import { PusherContext } from '../../../../contexts/pusherContext'
 import { PageContext } from '../../../../contexts/pageContext'
 
 import Room from './Room'
 
 import styles from '../../../../../styles/lobby/body/room/JoinRoom.module.css'
 
+async function fetchX({query='', body, socketId})  {
+    const obj = {socketId}
+    if(body) obj.data = body
+    try {
+        const x = await fetch(`/api/multiplayer/room?${query}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify(obj)
+        })
+        const res = await x.json()
+
+        return res
+    }
+    catch(err) {
+        return {success: false}
+    }
+}
+
 export default function JoinRoom() {
     const {setPage} = useContext(PageContext)
-    const {socket} = useContext(SocketContext)
+    const {socketId} = useContext(PusherContext)
 
     const [roomID, setRoomID] = useState('')
 
     const back = () => {
         setPage({opened: false})
     }
-    const submit = () => {
-        socket.emit('join_room', {room: roomID})
-    }
-
-    useEffect(()=>{
-        socket.on('join_room_response', res => {
-            if(res.success) {
-                const {roomData} = res
-                setPage({
-                    opened: true,
-                    component: <Room {...{setPage, type: 'join', roomData}}/>
-                })
-            } else {
-                alert(res.error.msg)
-            }
-        })
-        return () => {
-            socket.off('join_room_response')
+    const submit = async () => {
+        const res = await fetchX({query: 'type=joinRoom', body: {roomID}, socketId})
+        if(res.success) {
+            const {roomData} = res
+            setPage({
+                opened: true,
+                component: <Room {...{setPage, type: 'join', roomData}}/>
+            })
+        } else {
+            alert(res.error.msg)
         }
-    }, [socket, setPage])
+    }
     
     return (
         <div className={styles.container}>

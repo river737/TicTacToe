@@ -1,6 +1,5 @@
 import {useContext, useState} from 'react'
 
-import { SocketContext } from "../../../contexts/socketContext"
 import { PageContext } from '../../../contexts/pageContext'
 import { AlertContext } from '../../../contexts/alertContext'
 
@@ -8,9 +7,10 @@ import styles from '../../../../styles/game/multiplayer/Sidebar.module.css'
 
 import highlightGrid from '../../../functions/highlightGrid'
 
-export default function Sidebar({winner, myTurn, size=20, gridWrapper, index={me: 0, opponent: 1}, moves=[], room}) {
+
+
+export default function Sidebar({fetchX, winner, myTurn, size=20, gridWrapper, index={me: 0, opponent: 1}, moves=[], room}) {
     const {setPage} = useContext(PageContext)
-    const {socket} = useContext(SocketContext)
     const {setAlert} = useContext(AlertContext)
 
     const [history, setHistory] = useState({show: false})
@@ -47,20 +47,20 @@ export default function Sidebar({winner, myTurn, size=20, gridWrapper, index={me
                         },
                         {
                             icon: 'fa fa-redo', text: 'Restart',
-                            action() {
-                                socket.emit('restart_game')
+                            async action() {
                                 setAlert({show: true, data: {
                                     title: "Success",
                                     msg: `A request to restart the game was successfully sent to your opponent, ${room.players[index.opponent].username}`,
                                     theme: "success",
                                 }})
+                                await fetchX({query: 'type=restartRequest'})
                             }
                         },
                         {
-                            icon: 'fa fa-sign-out-alt', text: 'Quit', 
-                            action() {
-                                socket.emit('leave_game')
+                            icon: 'fa fa-sign-out-alt', text: 'Quit',
+                            async action() {
                                 setPage({opened: false})
+                                await fetchX({query: 'type=quitGame'})
                             }
                         }
                     ].map(({icon, text, action}, i) => (

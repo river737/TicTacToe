@@ -1,21 +1,25 @@
-import {useState, useContext, useEffect} from 'react'
+import {useState, useContext} from 'react'
 
 
-import { SocketContext } from '../../contexts/socketContext'
+import { PusherContext } from '../../contexts/pusherContext'
 import { InfoContext } from '../../contexts/infoContext'
 import {RouteContext} from '../../contexts/routeContext'
+import { AlertContext } from '../../contexts/alertContext'
+
+import globalFetch from '../../functions/globalFetch'
 
 import styles from '../../../styles/login/Login.module.css'
 
 import Logo from '../Logo'
 
 export default function Login() {
+    const {setAlert} = useContext(AlertContext)
     const {setRoute} = useContext(RouteContext)
     const {data, setData} = useContext(InfoContext);
     const {name} = data
     const [input, setInput] = useState({active: false})
     const [error, setError] = useState({verify: false, msg: ''});
-    const {socket} = useContext(SocketContext)
+    const {socketId} = useContext(PusherContext)
 
     const inputChange = (e) => { // handles the username input change
         setData(obj => {
@@ -34,37 +38,23 @@ export default function Login() {
                 return objx
             });
             try {
-                const fetchX = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    body: JSON.stringify({username: name})
-                })
-    
-                const res = await fetchX.json()
-                console.log(res)
+                const res = await globalFetch({path: '/api/login', socketId, body: {check: true, username: name}})
+
+                if(res.success) {
+                    setRoute({name: 'lobby'})
+                } else {
+                    setError({verify: true, msg: res.error.msg});
+                }
             }
             catch(err) {
-                console.log("an erorr occured")
+                setAlert({show: true, data: {
+                    title: "An error occured",
+                    theme: "danger",
+                    msg: "Please refresh the page. An error occured unexpectedly."
+                }})
             }
-            
-            socket.emit('submit_username', {username: name})
         } else setError({verify: true, msg: `Error! Name cannot be empty!`})
     }
-
-    useEffect(()=>{
-        socket.on('submit_username_response', (res) => { // waiting for a response from the server after submitting
-            if(res.success) {
-                document.cookie = `username=${name};path=/;max-age=86400;sameSite=Strict;`
-                setRoute({name: 'lobby'})
-            } else { // an error occured
-                const {msg} = res.error
-                setError({verify: true, msg});
-            }
-        })
-        return () => socket.off('submit_username_response')
-    }, [name, setRoute])
 
     const inputFocus = () => {
         setInput({active: true})

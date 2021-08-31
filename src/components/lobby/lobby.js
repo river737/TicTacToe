@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react"
+import { useState } from "react"
 
-import { SocketContext } from "../../contexts/socketContext"
 import { PageContext } from "../../contexts/pageContext"
 
 import styles from '../../../styles/lobby/Lobby.module.css'
@@ -9,7 +8,6 @@ import LobbyBody from './body/Body'
 import Bot from '../game/singleplayer/Bot.js'
 
 export default function Lobby() {
-  const {socket} = useContext(SocketContext)
   const [page, setPage] = useState({opened: false, component: <></>, minimized: false})
   const [gameCover, setGameCover] = useState({
     activeIndex: 0,
@@ -31,9 +29,6 @@ export default function Lobby() {
       ]
   })
 
-  useEffect(()=>{
-    socket.emit('lobby_phase')
-  }, [])
   return (
     <div className={styles.content}>
       <PageContext.Provider value={{setPage}}>

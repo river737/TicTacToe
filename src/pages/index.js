@@ -1,17 +1,29 @@
+// server
+import store from 'store-js'
+import pusherInit from '../pusher/init'
+
+//client
 import {useState, useContext, useEffect} from 'react'
 
 import Login from '../components/login/login'
 import Lobby from '../components/lobby/lobby'
 import LobbyHeader from '../components/lobby/Header'
 
-import { InfoContext } from '../contexts/infoContext'
-import { SocketContext } from '../contexts/socketContext'
 import {RouteContext} from '../contexts/routeContext'
+import { InfoContext } from '../contexts/infoContext'
+import { PusherContext } from '../contexts/pusherContext'
 
-import store from 'store-js'
+import globalFetch from '../functions/globalFetch'
+
+
 
 export async function getServerSideProps(ctx) {
+  const users = store.get('users')
+  if(!(ctx.res.socket.server.pusher && users)) {
+    ctx.res.socket.server.pusher = pusherInit()
+  }
   const {cookie} = ctx.req.headers
+  
   const username = cookie?.split(';').find(row => row.startsWith('username='))?.split('=')[1]
   const redirectLogin = {
     props: {
@@ -24,8 +36,8 @@ export async function getServerSideProps(ctx) {
   }
 
   try {
-    const users = store.get('users')
-    if(users.username.includes(username)) {
+    
+    if(users?.username?.includes(username)) {
       return redirectLogin
     } else {
       
@@ -44,27 +56,23 @@ export async function getServerSideProps(ctx) {
   }
 }
 
-export default function Home({route: routeX, username}) {
-  const {setData} = useContext(InfoContext)
-  const {socket} = useContext(SocketContext)
+export default function Home({route: routeX, username=''}) {
   const [route, setRoute] = useState({name: routeX.name})
+  const {socketId} = useContext(PusherContext)
+  const {setData} = useContext(InfoContext)
 
-  useEffect(()=>{
-    let mounted = true
-    if(username) {
-      socket.emit('submit_username', {username, type: 'previous user'})
-      if(mounted)
-      setData(obj => {
-        const objx = {...obj}
-        objx.name = username
-        return objx
-      })
+  useEffect(() => {
+    if(username!=='' && socketId !=='') {
+      setData(d => {
+        const obj = {...d}
+        obj.name = username
+        return obj
+      });
+      (async ()=> {
+        await globalFetch({path: '/api/login', socketId, body: {check: false, username}})
+      })();
     }
-    return () => {
-      mounted = false
-      socket.off('submit_username')
-    }
-  }, [setData, username, socket])
+  }, [setData, socketId])
   return (
     <RouteContext.Provider value={{setRoute}}>
       {

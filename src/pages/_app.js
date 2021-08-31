@@ -1,12 +1,12 @@
 import '../../styles/globals.css'
-import SocketContextProvider from '../contexts/socketContext'
+import PusherContextProvider from '../contexts/pusherContext'
 import InfoProvider from '../contexts/infoContext'
 import AlertContextProvider from '../contexts/alertContext'
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <SocketContextProvider>
+      <PusherContextProvider>
         <InfoProvider>
           <AlertContextProvider>
             <div className='container'>
@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }) {
             </div>
           </AlertContextProvider>
         </InfoProvider>
-      </SocketContextProvider>
+      </PusherContextProvider>
     </>
   )
 }

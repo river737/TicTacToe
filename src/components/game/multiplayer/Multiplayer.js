@@ -1,10 +1,14 @@
 import { useContext, useEffect, useState, useRef } from "react"
 
-import { SocketContext } from "../../../contexts/socketContext"
+import { PusherContext } from "../../../contexts/pusherContext"
 import { AlertContext } from "../../../contexts/alertContext"
 
 import Game from "../game"
 import Sidebar from "./Sidebar"
+
+import globalFetch from '../../../functions/globalFetch'
+
+
 
 export default function Multiplayer({room, type}) {
     const size = 20
@@ -20,14 +24,18 @@ export default function Multiplayer({room, type}) {
     const [winner, setWinner] = useState(null)
     
     const {setAlert} = useContext(AlertContext)
-    const {socket} = useContext(SocketContext)
+    const {personalChannel, socketId} = useContext(PusherContext)
 
     const gridWrapper = useRef()
 
-    const display = (i=0, j=0) => {
+    const fetchX = async ({query='', body}) => {
+        return await globalFetch({path: '/api/multiplayer/game', query, body, socketId})
+    }
+
+    const display = async (i=0, j=0) => {
         if(grids[i][j]==='' && myTurn && winner===null) {
             displayX({i, j, playerIndex: index.me})
-            socket.emit('place_mark', {pos: {i, j}})
+            await fetchX({query: 'type=placeMark', body: {pos: {i, j}}})
             return {mark: room.players[index.me].mark}
         }
     }
@@ -52,69 +60,69 @@ export default function Multiplayer({room, type}) {
         setMyTurn(index.me === 0)
         setWinner(null)
     }
+
+    const placeMark = (res) => {
+        const {i, j} = res.pos
+        displayX({i, j, playerIndex: index.opponent})
+    }
+
+    const restartResponse = (res)=> {
+        if(res.success) {
+            setAlert({show: true, data: {
+                title: "Game is restarting", msg: `Your opponent, ${room.players[index.opponent].username}, accepted your request to restart the game`
+            }})
+            restartGame()
+        } else {
+            setAlert({show: true, data: {
+                title: "Request rejected", msg: `Your opponent, ${room.players[index.opponent].username}, rejected your request to restart the game.`,
+            }})
+        }
+    }
+
+    const restartRequest = () => {
+        setAlert({show: true, data: {
+            title: "Opponent request", msg: `Your opponent, ${room.players[index.opponent].username}, requested to restart the game.`,
+            action: [
+                {
+                    content: "Reject",
+                    theme: 'secondary',
+                    async click() {
+                        setAlert({show: false})
+                        await fetchX({query: 'type=restartResponse', body: {success: false}})
+                    }
+                },
+                {
+                    content: "Accept",
+                    theme: "primary",
+                    async click() {
+                        setAlert({show: false})
+                        restartGame()
+                        await fetchX({query: 'type=restartResponse', body: {success: true}})
+                    }
+                }
+            ]
+        }})
+    }
+
+    const quitGame = ()=>{
+        setAlert({show: true, data: {title: 'Game Over', msg: 'Opponent has left the game', theme: 'warning'}})            
+    }
     
     useEffect(()=>{
-        let mounted = true
-        socket.on('place_mark_response', (res) => {
-            const {i, j} = res.pos
-            if(mounted) displayX({i, j, playerIndex: index.opponent})
-        })
-        socket.on('restart_game_response', res=> {
-            if(res.success) {
-                setAlert({show: true, data: {
-                    title: "Game is restarting", msg: `Your opponent, ${room.players[index.opponent].username}, accepted your request to restart the game`
-                }})
-                restartGame()
-            } else {
-                setAlert({show: true, data: {
-                    title: "Request rejected", msg: `Your opponent, ${room.players[index.opponent].username}, rejected your request to restart the game.`,
-                }})
-            }
-        })
-        socket.on('opponent_request_restart_game', () => {
-            setAlert({show: true, data: {
-                title: "Opponent request", msg: `Your opponent, ${room.players[index.opponent].username}, requested to restart the game.`,
-                action: [
-                    {
-                        content: "Reject",
-                        theme: 'secondary',
-                        click() {
-                            setAlert({show: false})
-                            socket.emit('restart_game_response', {success: false})
-                        }
-                    },
-                    {
-                        content: "Accept",
-                        theme: "primary",
-                        click() {
-                            setAlert({show: false})
-                            socket.emit('restart_game_response', {success: true})
-                            restartGame()
-                        }
-                    }
-                ]
-            }})
-        })
+        const eventList = [
+            {name: 'placeMark', callback: placeMark},
+            {name: 'restartRequest', callback: restartRequest},
+            {name: 'restartResponse', callback: restartResponse},
+            {name: 'quitGame', callback: quitGame}
+        ]
+        eventList.forEach(val => personalChannel?.bind(val.name, val.callback))
+
         return () => {
-            mounted = false
-            socket.off('place_mark_response')
+            eventList.forEach(val => personalChannel?.unbind(val.name))
         }
     }, [setGrids, setMyTurn, setMoves])
-    
-    useEffect(()=>{
-        socket.on('opponent_left_room', ()=>{
-            setAlert({show: true, data: {title: 'Game Over', msg: 'Opponent has left the game', theme: 'warning'}})            
-        })
-        return () => {
-            socket.off('opponent_left_room')
-        }
-    }, [])
 
-    useEffect(()=>{
-        socket.emit('game_phase', {room: room.id})
-    }, [])
-
-    const sidebar = <Sidebar {...{winner, myTurn, size, gridWrapper, index, moves, room}}/>
+    const sidebar = <Sidebar {...{fetchX, winner, myTurn, size, gridWrapper, index, moves, room}}/>
     let lastMove = {...moves.slice(-1)[0]}
     lastMove.player = room.players[lastMove.playerIndex]
     
