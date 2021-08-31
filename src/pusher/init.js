@@ -12,17 +12,17 @@ export default function pusherInit() {
       cluster: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER,
       useTLS: true
     });
-    
+
     console.log("pusher initialized")
-    
-    
+
+
     store.set('users', {})
     store.set('rooms', {})
 
     return pusher
 }
 
-/* 
+/*
     users: {
         "socketId": {
             username: "",
@@ -36,7 +36,7 @@ export default function pusherInit() {
     }
 */
 
-/* 
+/*
       rooms: {
         "unique_room_id": {
           config: {

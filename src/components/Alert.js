@@ -11,7 +11,7 @@ export default function Alert() {
         setAlert({show: false})
     }
     const themeX = {}
-    
+
     switch(theme) {
         case 'success':
             themeX.icon="fa fa-check"
@@ -55,7 +55,7 @@ export default function Alert() {
                                     )
                                 })
                             }
-                            
+
                         </div>
                     : ''
                 }
