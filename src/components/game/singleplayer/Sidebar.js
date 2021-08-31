@@ -34,9 +34,9 @@ export default function Sidebar({grids, symb, setPage, botmove, gridwrapper, pre
     }
     return (
           <div className={styles.wrapper}>
-              <button onClick={showhint} className={styles.button}><i class="far fa-lightbulb"></i>Show hint</button>
-              <button onClick={lastmove} className={styles.button}><i class="fas fa-arrow-alt-circle-left"></i>Show last move</button>
-              <button onClick={undo} className={styles.button}><i class="fas fa-history"></i>Undo move</button>
+              <button onClick={showhint} className={styles.button}><i className="far fa-lightbulb"></i>Show hint</button>
+              <button onClick={lastmove} className={styles.button}><i className="fas fa-arrow-alt-circle-left"></i>Show last move</button>
+              <button onClick={undo} className={styles.button}><i className="fas fa-history"></i>Undo move</button>
               <button onClick={back} className={styles.button}>Terminate game</button>
               <button onClick={restart} className={styles.button}>Restart game</button>
           </div>

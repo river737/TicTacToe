@@ -11,8 +11,6 @@ export default function DisplayWinner({winner, username, type, symb}) {
     setPage({opened: false})
   }
 
-  console.log(symb, winner.mark)
-
   return (
       <div className={styles.display} >
         {

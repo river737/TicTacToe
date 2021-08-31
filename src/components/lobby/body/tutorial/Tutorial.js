@@ -17,9 +17,9 @@ export default function Tutorial({setTutorial}) {
   }, [num])
   return (
     <div className={styles.page}>
-      <button className={styles.back} onClick={()=>setTutorial(false)}><i class="fas fa-arrow-left fa-2x"></i></button>
+      <button className={styles.back} onClick={()=>setTutorial(false)}><i className="fas fa-arrow-left fa-2x"></i></button>
       <div className={styles.content}>
-          <h1>How to play <i class="fas fa-gamepad"></i></h1>
+          <h1>How to play <i className="fas fa-gamepad"></i></h1>
           <h3>{content[`content${num}`]}</h3>
           <div ref={box}>
             <div className={styles.box1}></div>
@@ -30,10 +30,10 @@ export default function Tutorial({setTutorial}) {
           </div>
       </div>
       <button className={styles.boxright} onClick={()=>setNum(num+1>4?num:num+1)}>
-        <i class="fas fa-chevron-right fa-3x"></i>
+        <i className="fas fa-chevron-right fa-3x"></i>
       </button>
       <button className={styles.boxleft} onClick={()=>setNum(num-1<0?num:num-1)}>
-        <i class="fas fa-chevron-left fa-3x"></i>
+        <i className="fas fa-chevron-left fa-3x"></i>
       </button>
     </div>
   )
