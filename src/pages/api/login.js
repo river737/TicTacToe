@@ -11,7 +11,7 @@ function post(req, res) {
     if(!users) users = 'undefined'
     let pusher = res?.socket?.server?.pusher ? 'ok' : 'undefined'
     
-    const obj = {{success: true, data: {users, pusher}}}
+    const obj = {success: true, data: {users, pusher}}
     
 
     res.json(obj)
