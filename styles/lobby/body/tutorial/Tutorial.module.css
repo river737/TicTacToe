@@ -28,7 +28,7 @@
   border-radius: 20px;
   border-top: 20px solid black;
   border-bottom: 20px solid black;
-  background: none;
+  background: linear-gradient(to top right, #55008A,#55008A,#00608A);
   color: white;
 }
 

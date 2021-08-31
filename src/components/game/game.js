@@ -7,7 +7,7 @@ import styles from '../../../styles/game/Game.module.css'
 import detector from '../../gamelogic/rule.js'
 import DisplayWinner from '../../gamelogic/result.js'
 
-const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, display, sidebar, grids, type="multiplayer" || "bot"}, ref) => {
+const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, display, sidebar, grids, type="multiplayer" || "bot", symb}, ref) => {
   const {data} = useContext(InfoContext);
   const [displaywinner, setdisplaywinner] = useState(null);
   const [focus, setFocus] = useState({}) // {pos: {i: 0, j: 0}}
@@ -18,9 +18,9 @@ const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, di
       c = c.replace('Arrow', '')
 
       const {i, j} = focus.pos
-      
+
       if((c==='Left' && j === 0) || (c==='Right' && j===size)) return
-      
+
       const num = {Left: -1, Right: 1, Down: size, Up: -size}
 
       if(num[c]) {
@@ -70,7 +70,7 @@ const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, di
                     setFocus({pos: {i, j}, mark: markX})
                   }
                 }
-                
+
                 if(winner) {
                   if(winner.pos.filter(val => val.i === i && val.j === j).length > 0) {
                     classList.push(styles.winGrid)
@@ -78,7 +78,7 @@ const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, di
                 }
 
                 if(focus?.mark!=='' && focus?.mark === mark) classList.push(styles.markHighlight)
-                
+
 
                 if(classList.length > 0) attr.className = classList.join(' ')
                 return <button key={`${i}-${j}`} {...attr}>{mark}</button>
@@ -95,7 +95,7 @@ const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, di
 
       </div>
       {
-        type!=='' && displaywinner!==null ? <DisplayWinner {...{username: data.name, winner}} /> : ''
+        type!=='' && displaywinner!==null ? <DisplayWinner {...{username: data.name, winner, type, symb}} /> : ''
       }
     </div>
   )

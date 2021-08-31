@@ -3,7 +3,7 @@ import {useContext} from 'react'
 
 import { PageContext } from '../contexts/pageContext';
 
-export default function DisplayWinner({winner, username}) {
+export default function DisplayWinner({winner, username, type, symb}) {
 
   const {setPage} = useContext(PageContext)
 
@@ -11,9 +11,14 @@ export default function DisplayWinner({winner, username}) {
     setPage({opened: false})
   }
 
+  console.log(symb, winner.mark)
+
   return (
       <div className={styles.display} >
-        <h1>Congrats {username}! {winner.mark} won!</h1>
+        {
+          type==='bot' ? symb===winner.mark ? <h1>Congrats {username}! {winner.mark} won!</h1> : <h1>Don't worry {username}! You will win next time!</h1>
+          : <h1>{winner.mark} won!</h1>
+        }
         <button onClick={returnhome}>Return</button>
       </div>
   )

@@ -1,7 +1,7 @@
-.display {
+  .display {
     width: 80%;
     height: 80%;
-    background: rgb(18, 227, 255);
+    background: radial-gradient(#21D3D4, transparent);
     position: absolute;
     z-index: 10;
     top: 10%;
@@ -28,7 +28,7 @@
     background: black;
     transition: all 0.5s ease;
   }
-  
+
   @keyframes zoom {
     from {transform: scale(0, 0);}
     to {transform: scale(1, 1);}

@@ -84,7 +84,7 @@ export default function Bot({setPage}) {
         difficulty==='' ?
           <Difficulty {...{setDifficulty}} />
         : symb!=='' ?
-          <Game {...{size, grids, display, sidebar, type: 'bot', ref: gridwrapper, winner, setWinner}}/>
+          <Game {...{size, grids, display, sidebar, type: 'bot', ref: gridwrapper, winner, setWinner, symb}}/>
         :
           <Choose {...{thissymb, setMyturn}}/>
       }

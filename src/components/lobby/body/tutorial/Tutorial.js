@@ -5,14 +5,14 @@ export default function Tutorial({setTutorial}) {
   const box = useRef();
   let content = {
     content0: 'Each player begins with x or o',
-    content1: 'Each player will take turns for each symbol the person marks',
+    content1: 'Each player will take turns for each symbol the player marks',
     content2: 'The block that has been marked cannot be changed',
     content3: 'The first player to make a row of 5 same symbols or a column of 5 same symbols or a diagonal of 5 same symbols wins',
     content4: 'You can play with bot to practice or play an online match with a random player or with your friends',
   }
 
   useEffect(()=>{
-    box.current.children[num].style.background='purple';
+    box.current.children[num].style.background='blue';
     Object.keys(box.current.children).filter(x => parseInt(x)!== num).forEach(i => box.current.children[parseInt(i)].style.background='none');
   }, [num])
   return (
