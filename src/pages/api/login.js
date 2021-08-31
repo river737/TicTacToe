@@ -8,6 +8,7 @@ export default function handle(req, res) {
 
 function post(req, res) {
     const users = store.get('users')
+    console.log("users", users)
     const {socketId, data} = req.body
     const {username, check} = data
     const success = () => {
