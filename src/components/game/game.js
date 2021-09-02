@@ -7,7 +7,7 @@ import styles from '../../../styles/game/Game.module.css'
 import detector from '../../gamelogic/rule.js'
 import DisplayWinner from '../../gamelogic/result.js'
 
-const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, display, sidebar, grids, type="multiplayer" || "bot", symb}, ref) => {
+const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, display, sidebar, grids, type="multiplayer" || "bot", symb, botturn, setBotturn}, ref) => {
   const {data} = useContext(InfoContext);
   const [displaywinner, setdisplaywinner] = useState(null);
   const [focus, setFocus] = useState({}) // {pos: {i: 0, j: 0}}
@@ -37,8 +37,13 @@ const Game = forwardRef(({winner, setWinner, lastMove={}, clicks=0, size= 20, di
     const x = detector(grids, size);
 
     if(x) {
+      botturn.check = false;
+      setBotturn(botturn);
       setWinner(x)
       setTimeout(()=>setdisplaywinner(true),800);
+    } else {
+      botturn.check = true;
+      setBotturn(botturn);
     }
   }, [setWinner, grids]);
 

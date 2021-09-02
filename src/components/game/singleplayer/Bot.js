@@ -38,6 +38,7 @@ export default function Bot({setPage}) {
   const [winner, setWinner] = useState(null);
   const [firstmove, setFirstmove] = useState(0);
   const [restartgame, setRestartgame] = useState({restart: false, alert: false});
+  const [botturn, setBotturn] = useState({turn: false, check: false});
 
   const gridwrapper = useRef();
 
@@ -56,25 +57,35 @@ export default function Bot({setPage}) {
       })
       dispatch({type:'add', append: {i, j}, symbol: symb});
       setPrevplayer({i, j});
-      return {mark: symb}
+      botturn.turn = true;
+      setBotturn(botturn);
+      return {mark: symb};
     }
   }
 
 
   useEffect(()=>{
-    if(!myturn && !winner) {
-      setTimeout(() => {
-        setMyturn(true);
-        const {i, j} = botmove(symb, grids, size, 'move', difficulty, firstmove);
-        dispatch({type:'add', append: {i, j}, symbol: symb==='o'?'x':'o'});
-        setPrevbot({i, j});
-     }, 500);
+    if(!myturn && botturn.turn && botturn.check) {
+      botmark(firstmove);
     }
     if(restartgame.restart) {
       dispatch({type:'restart', append: '', symbol: ''});
-      setRestartgame({restart: false, alert: false})
+      setRestartgame({restart: false, alert: false});
+      if(symb==="o") {
+        botmark(0);
+      }
     }
   }, [grids, symb, restartgame]);
+
+  function botmark(x) {
+    setTimeout(() => {
+      setMyturn(true);
+      setBotturn({turn: false, check: false});
+      const {i, j} = botmove(symb, grids, size, 'move', difficulty, x);
+      dispatch({type:'add', append: {i, j}, symbol: symb==='o'?'x':'o'});
+      setPrevbot({i, j});
+    }, 500);
+  }
 
 
   const sidebar = <Sidebar {...{grids, symb, setPage, botmove, gridwrapper, prevbot, size, prevplayer, dispatch, setFirstmove, setRestartgame}}/>
@@ -84,9 +95,9 @@ export default function Bot({setPage}) {
         difficulty==='' ?
           <Difficulty {...{setDifficulty}} />
         : symb!=='' ?
-          <Game {...{size, grids, display, sidebar, type: 'bot', ref: gridwrapper, winner, setWinner, symb}}/>
+          <Game {...{size, grids, display, sidebar, type: 'bot', ref: gridwrapper, winner, setWinner, symb, botturn, setBotturn}}/>
         :
-          <Choose {...{thissymb, setMyturn}}/>
+          <Choose {...{thissymb, setMyturn, setBotturn}}/>
       }
       {
         restartgame.alert && <Alert {...{setRestartgame}} />

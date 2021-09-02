@@ -1,5 +1,5 @@
 import style from '../../../../styles/Choose/choose.module.css'
-export default function Choose({thissymb, setMyturn}) {
+export default function Choose({thissymb, setMyturn, setBotturn}) {
   return (
     <div className={style.page}>
        <div className={style.box1}>
@@ -10,7 +10,7 @@ export default function Choose({thissymb, setMyturn}) {
        <div className={style.box2}>
          <i className="fas fa-dice fa-3x"></i>
          <h1>Bot will begin first as x</h1>
-         <button onClick={()=>{thissymb('o'); setMyturn(false);}}>Choose o</button>
+         <button onClick={()=>{thissymb('o'); setMyturn(false); setBotturn({turn: true, check: true});}}>Choose o</button>
        </div>
     </div>
   )

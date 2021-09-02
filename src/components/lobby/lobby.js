@@ -10,8 +10,10 @@ import Bot from '../game/singleplayer/Bot.js'
 
 export default function Lobby() {
   const button = useRef();
+  const menubar = useRef();
   const [tutorial, setTutorial] = useState(false);
   const [page, setPage] = useState({opened: false, component: <></>, minimized: false})
+  const [menu, setMenu] = useState(false);
   const [gameCover, setGameCover] = useState({
     activeIndex: 0,
       content: [
@@ -36,10 +38,14 @@ export default function Lobby() {
     setTutorial(true);
   }
 
+  function showmenu() {
+    menu ? setMenu(false) : setMenu(true)
+  }
+
   useEffect(()=>{
-    tutorial ? button.current.style.display="none" : button.current.style.display="block";
+    if(menu) tutorial ? button.current.style.display="none" : button.current.style.display="block";
     if(page.opened) {
-      button.current.style.display="none"
+      if(menu) button.current.style.display="none";
     }
   }, [tutorial, page]);
 
@@ -52,7 +58,15 @@ export default function Lobby() {
           : tutorial ? <Tutorial {...{setTutorial}} />
           : <LobbyBody {...{gameCover, setGameCover}}/>
         }
-      <button className={styles.button} onClick={opentutorial} ref={button}>How to play <i className="far fa-arrow-alt-circle-right"></i></button>
+        {
+          !tutorial && !page.opened && <button className={styles.menu} onClick={showmenu} ref={menubar}><i className="fas fa-bars fa-3x"></i></button>
+        }
+        {
+          menu &&
+          <div className={styles.menubar} ref={button}>
+            <button className={styles.button} onClick={opentutorial}>How to play <i className="far fa-arrow-alt-circle-right"></i></button>
+          </div>
+        }
       </PageContext.Provider>
 
     </div>
